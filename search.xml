@@ -15,7 +15,7 @@
   <entry>
     <title><![CDATA[linux下jupyter_notebook的使用出现的问题]]></title>
     <url>%2Flinux%E4%B8%8Bjupyter-notebook%E7%9A%84%E4%BD%BF%E7%94%A8%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98%2F</url>
-    <content type="text"><![CDATA[针对鱼linux,首先这个jupyter ntebook新建一个python3的文件出现error,可能是由于防火墙的原因，关闭防火墙，或者开放8888端口 1systemctl stop firewall.service]]></content>
+    <content type="text"><![CDATA[针对鱼linux,首先这个jupyter ntebook新建一个python3的文件出现error,可能是由于防火墙的原因，关闭防火墙，或者开放8888端口 1systemctl stop firewall.service 啊啊啊啊啊啊啊啊]]></content>
       <categories>
         <category>Python数据分析</category>
         <category>配置问题</category>
