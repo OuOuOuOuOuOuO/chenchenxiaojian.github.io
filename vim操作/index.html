@@ -114,7 +114,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="vim操作">
 <meta property="og:url" content="http://chenchenxiaojian.github.io/vim操作/index.html">
-<meta property="og:site_name" content="陈小坚(｀・ω・´)">
+<meta property="og:site_name" content="陈小坚の博客">
 <meta property="og:description" content="vim 文本编辑器 三种模式 命令模式：默认进入的模式，复制，粘贴，删除等操作 插入模式：由命令模式进入，进行文本编辑，按ESC键退回命令模式 底行模式：在命名模式下按：键进入。进行文本的保存，退出，按ESC键退回命令模式   gg 和G 将光标跳转到首行和尾行 yy复制一行 nyy （n为数字）复制多行 p粘贴 u撤销 支持多次\ x删除一个字符 dd删除一行字符 进入插入模式 i 在光标前插入">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2019-09-08T00:24:17.109Z">
@@ -138,7 +138,7 @@
   };
 </script>
 
-  <title>vim操作 | 陈小坚(｀・ω・´)</title>
+  <title>vim操作 | 陈小坚の博客</title>
   
 
 
@@ -198,10 +198,14 @@
     <div class="custom-logo-site-title">
       <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">陈小坚(｀・ω・´)</span>
+        <span class="site-title">陈小坚の博客</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
+    
+      
+        <p class="site-subtitle">记录学习生活的点点滴滴</p>
+      
     
     
   </div>
@@ -380,7 +384,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="陈小坚(｀・ω・´)">
+      <meta itemprop="name" content="陈小坚の博客">
     </span>
 
     
@@ -678,6 +682,10 @@
 
           </div>
           
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
 
   
 
@@ -1214,7 +1222,39 @@ show_date_time();
 
 
   
+    
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '',
+          clientSecret: '',
+          repo: 'comment',
+          owner: '',
+          admin: [''],
+          id: location.pathname,
+          distractionFreeMode: ''
+        })
+        gitalk.render('gitalk-container')           
+       </script>
 
+  
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '',
+          clientSecret: '',
+          repo: 'comment',
+          owner: '',
+          admin: [''],
+          id: location.pathname,
+          distractionFreeMode: ''
+        })
+        gitalk.render('gitalk-container')           
+       </script>
 
 
   

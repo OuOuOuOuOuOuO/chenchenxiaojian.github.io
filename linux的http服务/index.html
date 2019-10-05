@@ -114,7 +114,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="linux的http服务">
 <meta property="og:url" content="http://chenchenxiaojian.github.io/linux的http服务/index.html">
-<meta property="og:site_name" content="陈小坚(｀・ω・´)">
+<meta property="og:site_name" content="陈小坚の博客">
 <meta property="og:description" content="http服务 配置文件：/etc/httpd/conf/httpd.conf   配置文件内容：  ServerRoot “/etc/httpd”  表示主要配置文件  DocumentRoot “/var/www/html”  表示访问主目录的路径  Listen 80    监听端口  &amp;lt;Directory “/var/www/html”&amp;gt; AllowOverride None">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2019-09-27T15:32:30.435Z">
@@ -138,7 +138,7 @@
   };
 </script>
 
-  <title>linux的http服务 | 陈小坚(｀・ω・´)</title>
+  <title>linux的http服务 | 陈小坚の博客</title>
   
 
 
@@ -198,10 +198,14 @@
     <div class="custom-logo-site-title">
       <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">陈小坚(｀・ω・´)</span>
+        <span class="site-title">陈小坚の博客</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
+    
+      
+        <p class="site-subtitle">记录学习生活的点点滴滴</p>
+      
     
     
   </div>
@@ -380,7 +384,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="陈小坚(｀・ω・´)">
+      <meta itemprop="name" content="陈小坚の博客">
     </span>
 
     
@@ -646,6 +650,10 @@
 
           </div>
           
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
 
   
 
@@ -1182,7 +1190,39 @@ show_date_time();
 
 
   
+    
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '',
+          clientSecret: '',
+          repo: 'comment',
+          owner: '',
+          admin: [''],
+          id: location.pathname,
+          distractionFreeMode: ''
+        })
+        gitalk.render('gitalk-container')           
+       </script>
 
+  
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '',
+          clientSecret: '',
+          repo: 'comment',
+          owner: '',
+          admin: [''],
+          id: location.pathname,
+          distractionFreeMode: ''
+        })
+        gitalk.render('gitalk-container')           
+       </script>
 
 
   

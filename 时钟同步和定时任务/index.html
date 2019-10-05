@@ -114,7 +114,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="时钟同步和定时任务">
 <meta property="og:url" content="http://chenchenxiaojian.github.io/时钟同步和定时任务/index.html">
-<meta property="og:site_name" content="陈小坚(｀・ω・´)">
+<meta property="og:site_name" content="陈小坚の博客">
 <meta property="og:description" content="时钟同步日志，多系统协作，分布式 NTP（网络时钟协议）使用图形化连接到时钟服务器  安装软件包 yum -y install system-config-date 运行system-config-date system-config-date  使用命令行连接到时钟服务器 vim /etc/chrony.conf consider joining the pool (http://www.poo">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2019-09-27T14:24:29.508Z">
@@ -138,7 +138,7 @@
   };
 </script>
 
-  <title>时钟同步和定时任务 | 陈小坚(｀・ω・´)</title>
+  <title>时钟同步和定时任务 | 陈小坚の博客</title>
   
 
 
@@ -198,10 +198,14 @@
     <div class="custom-logo-site-title">
       <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">陈小坚(｀・ω・´)</span>
+        <span class="site-title">陈小坚の博客</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
+    
+      
+        <p class="site-subtitle">记录学习生活的点点滴滴</p>
+      
     
     
   </div>
@@ -380,7 +384,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="陈小坚(｀・ω・´)">
+      <meta itemprop="name" content="陈小坚の博客">
     </span>
 
     
@@ -682,6 +686,10 @@
 
           </div>
           
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
 
   
 
@@ -1218,7 +1226,39 @@ show_date_time();
 
 
   
+    
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '',
+          clientSecret: '',
+          repo: 'comment',
+          owner: '',
+          admin: [''],
+          id: location.pathname,
+          distractionFreeMode: ''
+        })
+        gitalk.render('gitalk-container')           
+       </script>
 
+  
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '',
+          clientSecret: '',
+          repo: 'comment',
+          owner: '',
+          admin: [''],
+          id: location.pathname,
+          distractionFreeMode: ''
+        })
+        gitalk.render('gitalk-container')           
+       </script>
 
 
   

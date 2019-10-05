@@ -114,7 +114,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="LVM逻辑卷">
 <meta property="og:url" content="http://chenchenxiaojian.github.io/LVM逻辑卷/index.html">
-<meta property="og:site_name" content="陈小坚(｀・ω・´)">
+<meta property="og:site_name" content="陈小坚の博客">
 <meta property="og:description" content="逻辑卷管理器LVM MBR磁盘分区方式的局限性   LVM的原理   LVM机制的基本概念  PV –物理卷 默认包括许多大小为4MB的PE块   VG –卷组 一个或多个物理卷组合而成的整体   LV –逻辑卷 从卷组汇总分割出的一块空间，用于建立文件系统     LVM的管理命令    功能 物理卷管理 卷组管理 逻辑卷管理    Scan 扫描 pvscan vgscan lvscan">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://i.loli.net/2019/10/03/ADx6qKG489wsYSU.png">
@@ -141,7 +141,7 @@
   };
 </script>
 
-  <title>LVM逻辑卷 | 陈小坚(｀・ω・´)</title>
+  <title>LVM逻辑卷 | 陈小坚の博客</title>
   
 
 
@@ -201,10 +201,14 @@
     <div class="custom-logo-site-title">
       <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">陈小坚(｀・ω・´)</span>
+        <span class="site-title">陈小坚の博客</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
+    
+      
+        <p class="site-subtitle">记录学习生活的点点滴滴</p>
+      
     
     
   </div>
@@ -383,7 +387,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="陈小坚(｀・ω・´)">
+      <meta itemprop="name" content="陈小坚の博客">
     </span>
 
     
@@ -777,6 +781,10 @@
 
           </div>
           
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
 
   
 
@@ -1313,7 +1321,39 @@ show_date_time();
 
 
   
+    
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '',
+          clientSecret: '',
+          repo: 'comment',
+          owner: '',
+          admin: [''],
+          id: location.pathname,
+          distractionFreeMode: ''
+        })
+        gitalk.render('gitalk-container')           
+       </script>
 
+  
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '',
+          clientSecret: '',
+          repo: 'comment',
+          owner: '',
+          admin: [''],
+          id: location.pathname,
+          distractionFreeMode: ''
+        })
+        gitalk.render('gitalk-container')           
+       </script>
 
 
   

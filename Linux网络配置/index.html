@@ -114,7 +114,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux网络配置">
 <meta property="og:url" content="http://chenchenxiaojian.github.io/Linux网络配置/index.html">
-<meta property="og:site_name" content="陈小坚(｀・ω・´)">
+<meta property="og:site_name" content="陈小坚の博客">
 <meta property="og:description" content="网络配置device 设备：有物理设备（ens33） 虚拟设备 （virbr0）一个设备可以有多个connect（连接），但是同一个时间只能激活一个连接，相当于一个网卡可以切换不同的网络配置  网络管理 NetworkManager工具有nmcli , nmtui, nm-connection-editor使用这些工具的前提是NetworkManager这个服务有开着systemctl statu">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2019-09-22T12:29:20.655Z">
@@ -138,7 +138,7 @@
   };
 </script>
 
-  <title>Linux网络配置 | 陈小坚(｀・ω・´)</title>
+  <title>Linux网络配置 | 陈小坚の博客</title>
   
 
 
@@ -198,10 +198,14 @@
     <div class="custom-logo-site-title">
       <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">陈小坚(｀・ω・´)</span>
+        <span class="site-title">陈小坚の博客</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
+    
+      
+        <p class="site-subtitle">记录学习生活的点点滴滴</p>
+      
     
     
   </div>
@@ -380,7 +384,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="陈小坚(｀・ω・´)">
+      <meta itemprop="name" content="陈小坚の博客">
     </span>
 
     
@@ -705,6 +709,10 @@
 
           </div>
           
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
 
   
 
@@ -1241,7 +1249,39 @@ show_date_time();
 
 
   
+    
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '',
+          clientSecret: '',
+          repo: 'comment',
+          owner: '',
+          admin: [''],
+          id: location.pathname,
+          distractionFreeMode: ''
+        })
+        gitalk.render('gitalk-container')           
+       </script>
 
+  
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '',
+          clientSecret: '',
+          repo: 'comment',
+          owner: '',
+          admin: [''],
+          id: location.pathname,
+          distractionFreeMode: ''
+        })
+        gitalk.render('gitalk-container')           
+       </script>
 
 
   

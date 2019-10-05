@@ -114,7 +114,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="python生成器与迭代器">
 <meta property="og:url" content="http://chenchenxiaojian.github.io/python生成器与迭代器/index.html">
-<meta property="og:site_name" content="陈小坚(｀・ω・´)">
+<meta property="og:site_name" content="陈小坚の博客">
 <meta property="og:description" content="生成器 定义：调用一次，只生成一个值的特殊函数； 如果一个函数中含有yiled关键字，这个函数就成了生成器，只会在next方法的调用下执行，遇到yelid结束函数，并返回yiled后面所跟的值  产生生成器的方法_next_()，send()，都是启动生成器，但是send会yield返回一个值，即是yield=send的参数，而__next__方法则不会传值，或者传None; 注意yield在一个">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2019-08-20T02:27:54.822Z">
@@ -138,7 +138,7 @@
   };
 </script>
 
-  <title>python生成器与迭代器 | 陈小坚(｀・ω・´)</title>
+  <title>python生成器与迭代器 | 陈小坚の博客</title>
   
 
 
@@ -198,10 +198,14 @@
     <div class="custom-logo-site-title">
       <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">陈小坚(｀・ω・´)</span>
+        <span class="site-title">陈小坚の博客</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
+    
+      
+        <p class="site-subtitle">记录学习生活的点点滴滴</p>
+      
     
     
   </div>
@@ -380,7 +384,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="陈小坚(｀・ω・´)">
+      <meta itemprop="name" content="陈小坚の博客">
     </span>
 
     
@@ -640,6 +644,10 @@
 
           </div>
           
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
 
   
 
@@ -1176,7 +1184,39 @@ show_date_time();
 
 
   
+    
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '',
+          clientSecret: '',
+          repo: 'comment',
+          owner: '',
+          admin: [''],
+          id: location.pathname,
+          distractionFreeMode: ''
+        })
+        gitalk.render('gitalk-container')           
+       </script>
 
+  
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '',
+          clientSecret: '',
+          repo: 'comment',
+          owner: '',
+          admin: [''],
+          id: location.pathname,
+          distractionFreeMode: ''
+        })
+        gitalk.render('gitalk-container')           
+       </script>
 
 
   
