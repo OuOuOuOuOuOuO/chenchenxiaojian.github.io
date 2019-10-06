@@ -529,16 +529,16 @@
 <h3 id="输入格式"><a href="#输入格式" class="headerlink" title="输入格式"></a>输入格式</h3><p>每个数据一个数字，表示图腾的大小（此大小非彼大小） n&lt;=10</p>
 <h3 id="输出格式"><a href="#输出格式" class="headerlink" title="输出格式"></a>输出格式</h3><p>这个大小的图腾</p>
 <h3 id="输入输出样例"><a href="#输入输出样例" class="headerlink" title="输入输出样例"></a>输入输出样例</h3><p><strong>输入 #1</strong> </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2</span><br></pre></td></tr></table></figure>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2</span></span><br></pre></td></tr></table></figure>
 
 <p><strong>输出 #1</strong> </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">   /\</span><br><span class="line">  /__\</span><br><span class="line"> /\  /\</span><br><span class="line">/__\/__\</span><br></pre></td></tr></table></figure>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">   /<span class="string">\</span></span><br><span class="line">  /__<span class="string">\</span></span><br><span class="line"> <span class="regexp">/\  /</span><span class="string">\</span></span><br><span class="line">/__<span class="string">\/__\</span></span><br></pre></td></tr></table></figure>
 
 <p><strong>输入 #2</strong> </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3</span><br></pre></td></tr></table></figure>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">3</span></span><br></pre></td></tr></table></figure>
 
 <p><strong>输出 #2</strong> </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">       /\</span><br><span class="line">      /__\</span><br><span class="line">     /\  /\</span><br><span class="line">    /__\/__\</span><br><span class="line">   /\      /\</span><br><span class="line">  /__\    /__\</span><br><span class="line"> /\  /\  /\  /\</span><br><span class="line">/__\/__\/__\/__\</span><br></pre></td></tr></table></figure>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">       /<span class="tag">\</span></span><br><span class="line">      /__<span class="tag">\</span></span><br><span class="line">     /<span class="tag">\<span class="name"> </span></span> /<span class="tag">\</span></span><br><span class="line">    /__<span class="tag">\<span class="name">/</span></span>__<span class="tag">\</span></span><br><span class="line">   /<span class="tag">\<span class="name"> </span></span>     /<span class="tag">\</span></span><br><span class="line">  /__<span class="tag">\<span class="name"> </span></span>   /__<span class="tag">\</span></span><br><span class="line"> /<span class="tag">\<span class="name"> </span></span> /<span class="tag">\<span class="name"> </span></span> /<span class="tag">\<span class="name"> </span></span> /<span class="tag">\</span></span><br><span class="line">/__<span class="tag">\<span class="name">/</span></span>__<span class="tag">\<span class="name">/</span></span>__<span class="tag">\<span class="name">/</span></span>__<span class="tag">\</span></span><br></pre></td></tr></table></figure>
 
 <h3 id="第一种思路："><a href="#第一种思路：" class="headerlink" title="第一种思路："></a>第一种思路：</h3><p>可以用一个二维数组存放1024行的杨辉三角的值，然后让他们对2取模，然后输出杨辉三角的时如果碰到一个1，就是输出/\，如果碰到两个1，就是输出/__,如果碰到0就输出两个空格；</p>
 <p><font color="red">但是这种思路有个严重的bug,就是用long long存放不下杨辉三角1024行的数的值</font></p>
@@ -1052,7 +1052,7 @@ show_date_time();
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">120k</span>
+    <span title="站点总字数">125k</span>
   
 
   
@@ -1061,7 +1061,7 @@ show_date_time();
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">1:49</span>
+    <span title="站点阅读时长">1:54</span>
   
 </div>
 
