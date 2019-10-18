@@ -1864,7 +1864,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #ffd0b6;
+  background: #364a83;
 }
 .feed-link,
 .chat {
@@ -2279,6 +2279,10 @@ pre .javascript .function {
 }
 .highlight-wrap {
   position: relative;
+}
+.has-jax {
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 .gt-header a,
 .gt-comments a,
