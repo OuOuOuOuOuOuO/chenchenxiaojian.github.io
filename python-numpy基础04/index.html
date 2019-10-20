@@ -117,7 +117,7 @@
 <meta property="og:site_name" content="陈小坚の博客">
 <meta property="og:description" content="矩阵创建矩阵的方式 字符串作为参数 矩阵作为参数 数组作为参数  1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465import numpy as np a  = np.mat([1,2,3])print(a">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-20T02:58:45.927Z">
+<meta property="og:updated_time" content="2019-10-20T03:25:03.925Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="python-numpy基础04">
 <meta name="twitter:description" content="矩阵创建矩阵的方式 字符串作为参数 矩阵作为参数 数组作为参数  1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465import numpy as np a  = np.mat([1,2,3])print(a">
@@ -433,7 +433,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-10-20 10:58:45" itemprop="dateModified" datetime="2019-10-20T10:58:45+08:00">2019-10-20</time>
+                <time title="修改时间：2019-10-20 11:25:03" itemprop="dateModified" datetime="2019-10-20T11:25:03+08:00">2019-10-20</time>
               </span>
             
           
@@ -577,7 +577,7 @@
 <h4 id="矢量积"><a href="#矢量积" class="headerlink" title="矢量积"></a>矢量积</h4><blockquote>
 <p>vector Product，又可以称为叉积（cross Product），外积（outer Product），其运算结果是一个矢量，且矢量的方向与原来的两个矢量所构成的平面垂直</p>
 </blockquote>
-<h5 id="代数理解"><a href="#代数理解" class="headerlink" title="代数理解"></a>代数理解</h5><p>以三维坐标系中的两个矢量为例：$ \vec a=a_x\vec i+a_y\vec j + a_z\vec k$，和$ \vec b = b_x\vec i + b_y\vec j + b_z\vec k$，则<br>$$<br>\vec a \times \vec b = \begin{bmatrix} \vec i &amp; \vec j &amp; \vec k \ a_x &amp; a_y &amp; a_z\ b_x &amp; b_y &amp; b_z \end{bmatrix} = (a_yb_z - a_zb_y)\vec i + (a_zb_x-a_xb_z)\vec j + (a_xb_y-a_yb_x)\vec k<br>$$<br><font color="red">注意：</font>$\vec j的系数是a_zb_x-a_xb_z$，</p>
+<h5 id="代数理解"><a href="#代数理解" class="headerlink" title="代数理解"></a>代数理解</h5><p>以三维坐标系中的两个矢量为例：$ \vec a=a_x\vec i+a_y\vec j + a_z\vec k$，和$ \vec b = b_x\vec i + b_y\vec j + b_z\vec k$，则(数学公式矩阵换行是3个”\\\“)<br>$$<br>\vec a \times \vec b = \begin{bmatrix} \vec i &amp; \vec j &amp; \vec k \\ a_x &amp; a_y &amp; a_z \\ b_x &amp; b_y &amp; b_z \end{bmatrix} = (a_yb_z - a_zb_y)\vec i + (a_zb_x-a_xb_z)\vec j + (a_xb_y-a_yb_x)\vec k<br>$$<br><font color="red">注意：</font>$\vec j的系数是a_zb_x-a_xb_z$，</p>
 <h5 id="几何理解"><a href="#几何理解" class="headerlink" title="几何理解"></a>几何理解</h5><p>平面直角坐标系的两个矢量$\vec a 和\vec b$，他们的夹角为$\theta$，那么这两个向量的矢量积的大小为$\vec a \times \vec b=\mid\vec a \mid \mid \vec b \mid \sin\theta$</p>
 <h5 id="numpy函数计算矢量积"><a href="#numpy函数计算矢量积" class="headerlink" title="numpy函数计算矢量积"></a>numpy函数计算矢量积</h5><h6 id="numpy-cross"><a href="#numpy-cross" class="headerlink" title="numpy.cross()"></a>numpy.cross()</h6><blockquote>
 <p>定义：The cross product of a and b in 三维坐标系 is a vector perpendicular to both a and b. If a and b are arrays of vectors, the vectors are defined by the last axis of a and b by default, and these axes can have dimensions 2 or 3. Where the dimension of either a or bis 2, the third component of the input vector is assumed to be zero and the cross product calculated accordingly. In cases where both input vectors have dimension 2, the z-component of the cross product is returned.</p>
