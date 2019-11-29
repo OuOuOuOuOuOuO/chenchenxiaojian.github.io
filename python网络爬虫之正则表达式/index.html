@@ -117,7 +117,7 @@
 <meta property="og:site_name" content="陈小坚の博客">
 <meta property="og:description" content="常用的正则表达式符号   符号 含义 例子 匹配结果    * 匹配前面的字符，子表达式或者括号里的字符0次或者多次 a*b* aaaaaa, aaabbbb,bbbbb   + 匹配前面的字符，子表达式或者括号里的字符至少一次 a+b+ aaaaaaaaaaabb,aaabbbbb,abbbbbb   [] 匹配中括号内的任意一个字符（相当于任选一个） [A-Z]* APPLE, CAPITAL">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-18T04:00:10.255Z">
+<meta property="og:updated_time" content="2019-11-25T03:58:50.636Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="python网络爬虫之正则表达式">
 <meta name="twitter:description" content="常用的正则表达式符号   符号 含义 例子 匹配结果    * 匹配前面的字符，子表达式或者括号里的字符0次或者多次 a*b* aaaaaa, aaabbbb,bbbbb   + 匹配前面的字符，子表达式或者括号里的字符至少一次 a+b+ aaaaaaaaaaabb,aaabbbbb,abbbbbb   [] 匹配中括号内的任意一个字符（相当于任选一个） [A-Z]* APPLE, CAPITAL">
@@ -276,7 +276,7 @@
       
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">21</span></a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">22</span></a>
 
   </li>
         
@@ -294,7 +294,7 @@
       
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">41</span></a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">43</span></a>
 
   </li>
         
@@ -312,7 +312,7 @@
       
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">54</span></a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">55</span></a>
 
   </li>
         
@@ -469,7 +469,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-11-18 12:00:10" itemprop="dateModified" datetime="2019-11-18T12:00:10+08:00">2019-11-18</time>
+                <time title="修改时间：2019-11-25 11:58:50" itemprop="dateModified" datetime="2019-11-25T11:58:50+08:00">2019-11-25</time>
               </span>
             
           
@@ -530,7 +530,7 @@
               
                 <span class="post-meta-item-text">本文字数：</span>
               
-              <span title="本文字数">1.2k</span>
+              <span title="本文字数">3.2k</span>
             </span>
           
 
@@ -542,7 +542,7 @@
               
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
               
-              <span title="阅读时长">1 分钟</span>
+              <span title="阅读时长">3 分钟</span>
             </span>
           
 
@@ -596,7 +596,7 @@
 </tr>
 <tr>
 <td>{m,n}</td>
-<td>匹配前面的字符，子表达式或者括号里的字符m到n次（包含m或者n次）</td>
+<td>匹配前面的字符，子表达式或者括号里的字符m到n次（包含m或者n次） <font color="red">{m}允许前一个字符只能出现m次</font></td>
 <td>a{2,3}b{2,3}</td>
 <td>aabbb, aaabbb,aabb, aaabb</td>
 </tr>
@@ -614,7 +614,7 @@
 </tr>
 <tr>
 <td>.</td>
-<td>匹配任意单个字符（包括符号，数字和空格）</td>
+<td>匹配任意单个字符（包括符号，数字和空格）除了换行符</td>
 <td>b.d</td>
 <td>b d, bad, b&amp;d</td>
 </tr>
@@ -643,6 +643,83 @@
 <td>no-caps-here</td>
 </tr>
 </tbody></table>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>()</td>
+<td>匹配括号内的表达式， 也表示一个组</td>
+</tr>
+<tr>
+<td>\s</td>
+<td>匹配空白字符</td>
+</tr>
+<tr>
+<td>\S</td>
+<td>匹配任何非空白字符</td>
+</tr>
+<tr>
+<td>\d</td>
+<td>匹配数字， 等价于[0-9]</td>
+</tr>
+<tr>
+<td>\D</td>
+<td>匹配任何非数字，等价于[^0-9]</td>
+</tr>
+<tr>
+<td>\w</td>
+<td>匹配字母数字，等价于[A-Za-z0-9]</td>
+</tr>
+<tr>
+<td>\W</td>
+<td>匹配非字母数字，等价于[^A-za-z0-9]</td>
+</tr>
+<tr>
+<td>[]</td>
+<td>用力表示一组字符</td>
+</tr>
+<tr>
+<td>?</td>
+<td>匹配前一个字符0次或者1次</td>
+</tr>
+</tbody></table>
+<h3 id="正则表达式的贪婪模式和非贪婪模式"><a href="#正则表达式的贪婪模式和非贪婪模式" class="headerlink" title="正则表达式的贪婪模式和非贪婪模式"></a>正则表达式的贪婪模式和非贪婪模式</h3><blockquote>
+<p>贪婪模式：顾名思义，就是尽可能匹配多的字符，例如”baaaaac”, pattern = re.compile(‘ba+’)就是等于baaaaa</p>
+</blockquote>
+<blockquote>
+<p>非贪婪模式：顾名思义，就是在匹配成功的前提下，匹配尽量少的字符， 实现的方法也很简单<font color="red">就是在正则表达式的量词后面加上? </font>, 例如：“baaaaac”, pattern = re.compile(‘ba+?’)，那么pattern就是ba</p>
+</blockquote>
+<h3 id="python正则表达式的3种用法"><a href="#python正则表达式的3种用法" class="headerlink" title="python正则表达式的3种用法"></a>python正则表达式的3种用法</h3><p><font color="red">官方文档：</font><a href="https://docs.python.org/zh-cn/3/library/re.html" target="_blank" rel="noopener">https://docs.python.org/zh-cn/3/library/re.html</a></p>
+<ul>
+<li>re.match()</li>
+<li>re.search()</li>
+<li>re.findall()</li>
+</ul>
+<h4 id="re-match"><a href="#re-match" class="headerlink" title="re.match()"></a>re.match()</h4><blockquote>
+<p> 只能从字符串起始位置匹配一个模式，如果从起始位置匹配不了，就返回none，否则就返回一个<font color="red">匹配对象</font></p>
+</blockquote>
+<p>re.match()的语法为：re.match(pattern, string, flags=0),其中pattern是正则表达式， string是要匹配的字符串， flags用来控制正则表达式的匹配方式，如是否区分大小写，多行匹配等</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line">m = re.match(<span class="string">'www'</span>, <span class="string">'www.baidu.com'</span>)</span><br><span class="line">print(<span class="string">"匹配的结果为："</span>,m)</span><br><span class="line">print(<span class="string">"匹配的起点和终点："</span>, m.span())</span><br><span class="line">print(<span class="string">"起点为："</span>, m.start())</span><br><span class="line">print(<span class="string">"终点为："</span>, m.end())</span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">匹配的结果为： &lt;re.Match object; span=(0, 3), match='www'&gt;</span></span><br><span class="line"><span class="string">匹配的起点和终点： (0, 3)</span></span><br><span class="line"><span class="string">起点为： 0</span></span><br><span class="line"><span class="string">终点为： 3</span></span><br><span class="line"><span class="string">请按任意键继续. . ."""</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">line = <span class="string">"Fat cats are smarter than dogs, is it right?"</span></span><br><span class="line">m = re.match(<span class="string">r'(.*) are (.*?) '</span>, line)</span><br><span class="line">print(<span class="string">"匹配的整句话："</span>, m.group(<span class="number">0</span>))</span><br><span class="line">print(<span class="string">"【匹配的第一个结果为："</span>, m.group(<span class="number">1</span>))</span><br><span class="line">print(<span class="string">"匹配的第二个结果："</span>, m.group(<span class="number">2</span>))</span><br><span class="line">print(<span class="string">"匹配结果的元组："</span>, m.groups())</span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">匹配的整句话： Fat cats are smarter</span></span><br><span class="line"><span class="string">【匹配的第一个结果为： Fat cats</span></span><br><span class="line"><span class="string">匹配的第二个结果： smarter</span></span><br><span class="line"><span class="string">匹配结果的元组： ('Fat cats', 'smarter')</span></span><br><span class="line"><span class="string">"""</span></span><br></pre></td></tr></table></figure>
+
+<p><font color="red">在match的模式前面加上r，</font>r的意思表示的是raw string, 代表纯粹的字符串，使用它就不会对引号内的反斜杠进行特殊处理, <font color="blue">字符转义可以在前面加上r, 正则转义就得要在正则表达式内添加转义字符 \</font></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">'hello\n world'</span>)</span><br><span class="line">print(<span class="string">r'hello\nworld'</span>)</span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">hello</span></span><br><span class="line"><span class="string"> world</span></span><br><span class="line"><span class="string">hello\nworld</span></span><br><span class="line"><span class="string">"""</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="re-search"><a href="#re-search" class="headerlink" title="re.search()"></a>re.search()</h4><blockquote>
+<p>扫描整个字符串并返回第一个成功的匹配</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">m_match = re.match(<span class="string">'com'</span>, <span class="string">'www.baidu.com'</span>)</span><br><span class="line">m_search = re.search(<span class="string">'com'</span>, <span class="string">'www.baidu.com'</span>)</span><br><span class="line">print(m_match)</span><br><span class="line">print(m_search)</span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">None</span></span><br><span class="line"><span class="string">&lt;re.Match object; span=(10, 13), match='com'&gt;</span></span><br><span class="line"><span class="string">"""</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="re-findall"><a href="#re-findall" class="headerlink" title="re.findall()"></a>re.findall()</h4><blockquote>
+<p>match和search方法只能找到一个匹配所写的模式，findall可以找到所有的匹配， 返回匹配结果的列表</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">re_string = <span class="string">'12345 is the first number, 23456 is the second number'</span></span><br><span class="line">m_match = re.match(<span class="string">'[0-9]+'</span>, re_string)</span><br><span class="line">m_search = re.search(<span class="string">'[0-9]+'</span>, re_string)</span><br><span class="line">m_findall = re.findall(<span class="string">'[0-9]+'</span>, re_string)</span><br><span class="line">print(m_match.group())</span><br><span class="line">print(m_search.group())</span><br><span class="line">print(m_findall)</span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">12345</span></span><br><span class="line"><span class="string">12345</span></span><br><span class="line"><span class="string">['12345', '23456']</span></span><br><span class="line"><span class="string">"""</span></span><br></pre></td></tr></table></figure>
+
 <h3 id="BeautifulSoup对象"><a href="#BeautifulSoup对象" class="headerlink" title="BeautifulSoup对象"></a>BeautifulSoup对象</h3><ul>
 <li>BeautifulSoup对象  </li>
 </ul>
@@ -839,7 +916,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">54</span>
+                    <span class="site-state-item-count">55</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -938,7 +1015,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">41</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">43</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -997,7 +1078,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">21</span>
+                      
+                    
+                    <span class="site-state-item-count">22</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1157,7 +1240,7 @@ show_date_time();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#常用的正则表达式符号"><span class="nav-number">1.</span> <span class="nav-text">常用的正则表达式符号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BeautifulSoup对象"><span class="nav-number">2.</span> <span class="nav-text">BeautifulSoup对象</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#常用的正则表达式符号"><span class="nav-number">1.</span> <span class="nav-text">常用的正则表达式符号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#正则表达式的贪婪模式和非贪婪模式"><span class="nav-number">2.</span> <span class="nav-text">正则表达式的贪婪模式和非贪婪模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#python正则表达式的3种用法"><span class="nav-number">3.</span> <span class="nav-text">python正则表达式的3种用法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#re-match"><span class="nav-number">3.1.</span> <span class="nav-text">re.match()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#re-search"><span class="nav-number">3.2.</span> <span class="nav-text">re.search()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#re-findall"><span class="nav-number">3.3.</span> <span class="nav-text">re.findall()</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BeautifulSoup对象"><span class="nav-number">4.</span> <span class="nav-text">BeautifulSoup对象</span></a></li></ol></div>
             
 
           </div>
@@ -1197,7 +1280,7 @@ show_date_time();
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">160k</span>
+    <span title="站点总字数">166k</span>
   
 
   
@@ -1206,7 +1289,7 @@ show_date_time();
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">2:26</span>
+    <span title="站点阅读时长">2:31</span>
   
 </div>
 
