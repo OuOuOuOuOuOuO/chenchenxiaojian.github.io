@@ -1,0 +1,1719 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link rel="stylesheet" href="/lib/pace/pace-theme-flash.min.css?v=1.0.2">
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/fancybox/source/jquery.fancybox.css">
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.2.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: true,
+    fancybox: true,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="实验内容： 为Linux系统设计一个简单的二级文件系统。要求做到以下几点： （1）可以实现下列几条命令 login  用户登录 dir   列文件目录 create  创建文件 delete  删除文件 open   打开文件 close  关闭文件 read   读文件 write  写文件 （2）列目录时要列出文件名、物理地址、保护码和文件长度； （3）源文件可以进行读写保护。  二级文件系统">
+<meta name="keywords" content="操作系统">
+<meta property="og:type" content="article">
+<meta property="og:title" content="二级文件系统的实现">
+<meta property="og:url" content="http://chenchenxiaojian.github.io/二级文件系统的实现/index.html">
+<meta property="og:site_name" content="陈小坚の博客">
+<meta property="og:description" content="实验内容： 为Linux系统设计一个简单的二级文件系统。要求做到以下几点： （1）可以实现下列几条命令 login  用户登录 dir   列文件目录 create  创建文件 delete  删除文件 open   打开文件 close  关闭文件 read   读文件 write  写文件 （2）列目录时要列出文件名、物理地址、保护码和文件长度； （3）源文件可以进行读写保护。  二级文件系统">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2019/12/27/jmovbqcuGeN5yZ2.png">
+<meta property="og:updated_time" content="2019-12-27T02:18:54.857Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="二级文件系统的实现">
+<meta name="twitter:description" content="实验内容： 为Linux系统设计一个简单的二级文件系统。要求做到以下几点： （1）可以实现下列几条命令 login  用户登录 dir   列文件目录 create  创建文件 delete  删除文件 open   打开文件 close  关闭文件 read   读文件 write  写文件 （2）列目录时要列出文件名、物理地址、保护码和文件长度； （3）源文件可以进行读写保护。  二级文件系统">
+<meta name="twitter:image" content="https://i.loli.net/2019/12/27/jmovbqcuGeN5yZ2.png">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://chenchenxiaojian.github.io/二级文件系统的实现/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>二级文件系统的实现 | 陈小坚の博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/chenchenxiaojian" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">陈小坚の博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">记录学习生活的点点滴滴</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">22</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">44</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">56</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-schedule">
+
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/schedule/" rel="section"><i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>日程表</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://chenchenxiaojian.github.io/二级文件系统的实现/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="陈小坚(｀・ω・´)">
+      <meta itemprop="description" content="你我只是个普通人，活着就好">
+      <meta itemprop="image" content="/images/头像.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="陈小坚の博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">二级文件系统的实现
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-12-27 10:14:11 / 修改时间：10:18:54" itemprop="dateCreated datePublished" datetime="2019-12-27T10:14:11+08:00">2019-12-27</time>
+            </span>
+          
+
+          
+            
+
+            
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/操作系统/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/操作系统/文件系统/" itemprop="url" rel="index"><span itemprop="name">文件系统</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/二级文件系统的实现/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/二级文件系统的实现/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+                 阅读次数： 
+                <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+              </span>
+            </span>
+          
+
+          <br>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">本文字数：</span>
+              
+              <span title="本文字数">23k</span>
+            </span>
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              
+              <span title="阅读时长">20 分钟</span>
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="实验内容："><a href="#实验内容：" class="headerlink" title="实验内容："></a>实验内容：</h4><blockquote>
+<p>为Linux系统设计一个简单的二级文件系统。要求做到以下几点：</p>
+<p>（1）可以实现下列几条命令</p>
+<p>login  用户登录</p>
+<p>dir   列文件目录</p>
+<p>create  创建文件</p>
+<p>delete  删除文件</p>
+<p>open   打开文件</p>
+<p>close  关闭文件</p>
+<p>read   读文件</p>
+<p>write  写文件</p>
+<p>（2）列目录时要列出文件名、物理地址、保护码和文件长度；</p>
+<p>（3）源文件可以进行读写保护。</p>
+</blockquote>
+<h4 id="二级文件系统"><a href="#二级文件系统" class="headerlink" title="二级文件系统"></a>二级文件系统</h4><p><img src="https://i.loli.net/2019/12/27/jmovbqcuGeN5yZ2.png" alt="图片.png"></p>
+<h4 id="代码："><a href="#代码：" class="headerlink" title="代码："></a>代码：</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br><span class="line">407</span><br><span class="line">408</span><br><span class="line">409</span><br><span class="line">410</span><br><span class="line">411</span><br><span class="line">412</span><br><span class="line">413</span><br><span class="line">414</span><br><span class="line">415</span><br><span class="line">416</span><br><span class="line">417</span><br><span class="line">418</span><br><span class="line">419</span><br><span class="line">420</span><br><span class="line">421</span><br><span class="line">422</span><br><span class="line">423</span><br><span class="line">424</span><br><span class="line">425</span><br><span class="line">426</span><br><span class="line">427</span><br><span class="line">428</span><br><span class="line">429</span><br><span class="line">430</span><br><span class="line">431</span><br><span class="line">432</span><br><span class="line">433</span><br><span class="line">434</span><br><span class="line">435</span><br><span class="line">436</span><br><span class="line">437</span><br><span class="line">438</span><br><span class="line">439</span><br><span class="line">440</span><br><span class="line">441</span><br><span class="line">442</span><br><span class="line">443</span><br><span class="line">444</span><br><span class="line">445</span><br><span class="line">446</span><br><span class="line">447</span><br><span class="line">448</span><br><span class="line">449</span><br><span class="line">450</span><br><span class="line">451</span><br><span class="line">452</span><br><span class="line">453</span><br><span class="line">454</span><br><span class="line">455</span><br><span class="line">456</span><br><span class="line">457</span><br><span class="line">458</span><br><span class="line">459</span><br><span class="line">460</span><br><span class="line">461</span><br><span class="line">462</span><br><span class="line">463</span><br><span class="line">464</span><br><span class="line">465</span><br><span class="line">466</span><br><span class="line">467</span><br><span class="line">468</span><br><span class="line">469</span><br><span class="line">470</span><br><span class="line">471</span><br><span class="line">472</span><br><span class="line">473</span><br><span class="line">474</span><br><span class="line">475</span><br><span class="line">476</span><br><span class="line">477</span><br><span class="line">478</span><br><span class="line">479</span><br><span class="line">480</span><br><span class="line">481</span><br><span class="line">482</span><br><span class="line">483</span><br><span class="line">484</span><br><span class="line">485</span><br><span class="line">486</span><br><span class="line">487</span><br><span class="line">488</span><br><span class="line">489</span><br><span class="line">490</span><br><span class="line">491</span><br><span class="line">492</span><br><span class="line">493</span><br><span class="line">494</span><br><span class="line">495</span><br><span class="line">496</span><br><span class="line">497</span><br><span class="line">498</span><br><span class="line">499</span><br><span class="line">500</span><br><span class="line">501</span><br><span class="line">502</span><br><span class="line">503</span><br><span class="line">504</span><br><span class="line">505</span><br><span class="line">506</span><br><span class="line">507</span><br><span class="line">508</span><br><span class="line">509</span><br><span class="line">510</span><br><span class="line">511</span><br><span class="line">512</span><br><span class="line">513</span><br><span class="line">514</span><br><span class="line">515</span><br><span class="line">516</span><br><span class="line">517</span><br><span class="line">518</span><br><span class="line">519</span><br><span class="line">520</span><br><span class="line">521</span><br><span class="line">522</span><br><span class="line">523</span><br><span class="line">524</span><br><span class="line">525</span><br><span class="line">526</span><br><span class="line">527</span><br><span class="line">528</span><br><span class="line">529</span><br><span class="line">530</span><br><span class="line">531</span><br><span class="line">532</span><br><span class="line">533</span><br><span class="line">534</span><br><span class="line">535</span><br><span class="line">536</span><br><span class="line">537</span><br><span class="line">538</span><br><span class="line">539</span><br><span class="line">540</span><br><span class="line">541</span><br><span class="line">542</span><br><span class="line">543</span><br><span class="line">544</span><br><span class="line">545</span><br><span class="line">546</span><br><span class="line">547</span><br><span class="line">548</span><br><span class="line">549</span><br><span class="line">550</span><br><span class="line">551</span><br><span class="line">552</span><br><span class="line">553</span><br><span class="line">554</span><br><span class="line">555</span><br><span class="line">556</span><br><span class="line">557</span><br><span class="line">558</span><br><span class="line">559</span><br><span class="line">560</span><br><span class="line">561</span><br><span class="line">562</span><br><span class="line">563</span><br><span class="line">564</span><br><span class="line">565</span><br><span class="line">566</span><br><span class="line">567</span><br><span class="line">568</span><br><span class="line">569</span><br><span class="line">570</span><br><span class="line">571</span><br><span class="line">572</span><br><span class="line">573</span><br><span class="line">574</span><br><span class="line">575</span><br><span class="line">576</span><br><span class="line">577</span><br><span class="line">578</span><br><span class="line">579</span><br><span class="line">580</span><br><span class="line">581</span><br><span class="line">582</span><br><span class="line">583</span><br><span class="line">584</span><br><span class="line">585</span><br><span class="line">586</span><br><span class="line">587</span><br><span class="line">588</span><br><span class="line">589</span><br><span class="line">590</span><br><span class="line">591</span><br><span class="line">592</span><br><span class="line">593</span><br><span class="line">594</span><br><span class="line">595</span><br><span class="line">596</span><br><span class="line">597</span><br><span class="line">598</span><br><span class="line">599</span><br><span class="line">600</span><br><span class="line">601</span><br><span class="line">602</span><br><span class="line">603</span><br><span class="line">604</span><br><span class="line">605</span><br><span class="line">606</span><br><span class="line">607</span><br><span class="line">608</span><br><span class="line">609</span><br><span class="line">610</span><br><span class="line">611</span><br><span class="line">612</span><br><span class="line">613</span><br><span class="line">614</span><br><span class="line">615</span><br><span class="line">616</span><br><span class="line">617</span><br><span class="line">618</span><br><span class="line">619</span><br><span class="line">620</span><br><span class="line">621</span><br><span class="line">622</span><br><span class="line">623</span><br><span class="line">624</span><br><span class="line">625</span><br><span class="line">626</span><br><span class="line">627</span><br><span class="line">628</span><br><span class="line">629</span><br><span class="line">630</span><br><span class="line">631</span><br><span class="line">632</span><br><span class="line">633</span><br><span class="line">634</span><br><span class="line">635</span><br><span class="line">636</span><br><span class="line">637</span><br><span class="line">638</span><br><span class="line">639</span><br><span class="line">640</span><br><span class="line">641</span><br><span class="line">642</span><br><span class="line">643</span><br><span class="line">644</span><br><span class="line">645</span><br><span class="line">646</span><br><span class="line">647</span><br><span class="line">648</span><br><span class="line">649</span><br><span class="line">650</span><br><span class="line">651</span><br><span class="line">652</span><br><span class="line">653</span><br><span class="line">654</span><br><span class="line">655</span><br><span class="line">656</span><br><span class="line">657</span><br><span class="line">658</span><br><span class="line">659</span><br><span class="line">660</span><br><span class="line">661</span><br><span class="line">662</span><br><span class="line">663</span><br><span class="line">664</span><br><span class="line">665</span><br><span class="line">666</span><br><span class="line">667</span><br><span class="line">668</span><br><span class="line">669</span><br><span class="line">670</span><br><span class="line">671</span><br><span class="line">672</span><br><span class="line">673</span><br><span class="line">674</span><br><span class="line">675</span><br><span class="line">676</span><br><span class="line">677</span><br><span class="line">678</span><br><span class="line">679</span><br><span class="line">680</span><br><span class="line">681</span><br><span class="line">682</span><br><span class="line">683</span><br><span class="line">684</span><br><span class="line">685</span><br><span class="line">686</span><br><span class="line">687</span><br><span class="line">688</span><br><span class="line">689</span><br><span class="line">690</span><br><span class="line">691</span><br><span class="line">692</span><br><span class="line">693</span><br><span class="line">694</span><br><span class="line">695</span><br><span class="line">696</span><br><span class="line">697</span><br><span class="line">698</span><br><span class="line">699</span><br><span class="line">700</span><br><span class="line">701</span><br><span class="line">702</span><br><span class="line">703</span><br><span class="line">704</span><br><span class="line">705</span><br><span class="line">706</span><br><span class="line">707</span><br><span class="line">708</span><br><span class="line">709</span><br><span class="line">710</span><br><span class="line">711</span><br><span class="line">712</span><br><span class="line">713</span><br><span class="line">714</span><br><span class="line">715</span><br><span class="line">716</span><br><span class="line">717</span><br><span class="line">718</span><br><span class="line">719</span><br><span class="line">720</span><br><span class="line">721</span><br><span class="line">722</span><br><span class="line">723</span><br><span class="line">724</span><br><span class="line">725</span><br><span class="line">726</span><br><span class="line">727</span><br><span class="line">728</span><br><span class="line">729</span><br><span class="line">730</span><br><span class="line">731</span><br><span class="line">732</span><br><span class="line">733</span><br><span class="line">734</span><br><span class="line">735</span><br><span class="line">736</span><br><span class="line">737</span><br><span class="line">738</span><br><span class="line">739</span><br><span class="line">740</span><br><span class="line">741</span><br><span class="line">742</span><br><span class="line">743</span><br><span class="line">744</span><br><span class="line">745</span><br><span class="line">746</span><br><span class="line">747</span><br><span class="line">748</span><br><span class="line">749</span><br><span class="line">750</span><br><span class="line">751</span><br><span class="line">752</span><br><span class="line">753</span><br><span class="line">754</span><br><span class="line">755</span><br><span class="line">756</span><br><span class="line">757</span><br><span class="line">758</span><br><span class="line">759</span><br><span class="line">760</span><br><span class="line">761</span><br><span class="line">762</span><br><span class="line">763</span><br><span class="line">764</span><br><span class="line">765</span><br><span class="line">766</span><br><span class="line">767</span><br><span class="line">768</span><br><span class="line">769</span><br><span class="line">770</span><br><span class="line">771</span><br><span class="line">772</span><br><span class="line">773</span><br><span class="line">774</span><br><span class="line">775</span><br><span class="line">776</span><br><span class="line">777</span><br><span class="line">778</span><br><span class="line">779</span><br><span class="line">780</span><br><span class="line">781</span><br><span class="line">782</span><br><span class="line">783</span><br><span class="line">784</span><br><span class="line">785</span><br><span class="line">786</span><br><span class="line">787</span><br><span class="line">788</span><br><span class="line">789</span><br><span class="line">790</span><br><span class="line">791</span><br><span class="line">792</span><br><span class="line">793</span><br><span class="line">794</span><br><span class="line">795</span><br><span class="line">796</span><br><span class="line">797</span><br><span class="line">798</span><br><span class="line">799</span><br><span class="line">800</span><br><span class="line">801</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="comment">//假设一个磁盘的每个物理块大小为512个字节</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">MFD</span>   // 16个用户</span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="built_in">string</span> username;</span><br><span class="line">	<span class="built_in">string</span> password;</span><br><span class="line">	<span class="comment">//int pufd; //用户目录文件所在的物理块</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">USER_UFD</span>   * <span class="title">next</span>;</span>  <span class="comment">//指向用户目录</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">UFD</span>  //一个用户可以用16个文件夹，然后每个文件夹下可以有16个文件</span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">file_message</span></span></span><br><span class="line"><span class="class">	&#123;</span></span><br><span class="line">		<span class="built_in">string</span> filename;</span><br><span class="line">		<span class="keyword">int</span> protect_code; <span class="comment">//保护码</span></span><br><span class="line">		<span class="keyword">int</span> length; <span class="comment">//文件长度</span></span><br><span class="line">		<span class="keyword">int</span> addr; <span class="comment">//存放该文件的物理块的第一个的快号</span></span><br><span class="line">	&#125;ufd[<span class="number">16</span>];</span><br><span class="line">	<span class="built_in">string</span> directname; <span class="comment">//用户目录名</span></span><br><span class="line">	<span class="keyword">int</span> cur_file_size = <span class="number">0</span>; <span class="comment">//不能在结构体内附初始值。好像不能成功</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">UOF</span>  //假设一个用户最多打开16个文件</span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">uof</span></span></span><br><span class="line"><span class="class">	&#123;</span></span><br><span class="line">		<span class="built_in">string</span> filename;</span><br><span class="line">		<span class="keyword">int</span> pointer; <span class="comment">//文件的读写指针,其实就是文件的大小</span></span><br><span class="line">		<span class="keyword">int</span> protect_code; <span class="comment">//2表示可读可写,1表示可读不可写， 0表示不可读不可写</span></span><br><span class="line">		<span class="keyword">int</span> addr; <span class="comment">//存放文件的第一个磁盘块号</span></span><br><span class="line">	&#125;uof[<span class="number">16</span>];</span><br><span class="line">	<span class="keyword">int</span> cur_openfilesize = <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">fat</span>  //文件分配表   用一块物理块存放，那么最多可以记录64块数据块的信息。</span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="keyword">int</span> next = <span class="number">-1</span>; <span class="comment">//下一个磁盘块号 </span></span><br><span class="line">	<span class="keyword">int</span> used = <span class="number">0</span>; <span class="comment">//1表示被使用，</span></span><br><span class="line"><span class="comment">//	int self; //自己的快号</span></span><br><span class="line">&#125;fat[<span class="number">64</span>];</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">USER_UFD</span>  </span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">UFD</span> <span class="title">direct</span>[16];</span> <span class="comment">//每个用户最多有16个目录</span></span><br><span class="line">	<span class="keyword">int</span> cur_user_direct_size = <span class="number">0</span>; <span class="comment">//当前用户的目录数</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">USER_UFD</span> <span class="title">cur_user_all_direct_array</span>[16];</span>  <span class="comment">//16个用户的所有目录的对象</span></span><br><span class="line"><span class="keyword">int</span> max_usersize = <span class="number">16</span>;</span><br><span class="line"><span class="keyword">int</span> max_userfilesize = <span class="number">16</span>;</span><br><span class="line"><span class="keyword">int</span> max_openfilesize = <span class="number">16</span>;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">MFD</span>  <span class="title">cur_user</span>;</span> <span class="comment">//当前用户</span></span><br><span class="line"><span class="comment">//struct UFD cur_user_dirtect[16]; //用户目录</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">UOF</span> * <span class="title">cur_opentable</span>;</span> <span class="comment">//当前文件打开表</span></span><br><span class="line"><span class="keyword">char</span> *fdisk; <span class="comment">//虚拟磁盘的起始位置</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">UOF</span> <span class="title">openfile</span>[16];</span> <span class="comment">//每一个用户对应一个文件打开表对象，只能设置为全局变量</span></span><br><span class="line">MFD mfd[<span class="number">16</span>]; <span class="comment">//16个用户</span></span><br><span class="line"><span class="keyword">int</span> cur_user_size = <span class="number">0</span>; <span class="comment">//记录当前用户的人数</span></span><br><span class="line"><span class="built_in">string</span> path; <span class="comment">//记录当前用户的路径</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//函数声明</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">open</span><span class="params">(<span class="built_in">string</span> name)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">register_user</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">remove</span><span class="params">(<span class="built_in">string</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">create</span><span class="params">(<span class="built_in">string</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">open</span><span class="params">(<span class="built_in">string</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">close</span><span class="params">(<span class="built_in">string</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">del</span><span class="params">(<span class="built_in">string</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">read</span><span class="params">(<span class="built_in">string</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">write</span><span class="params">(<span class="built_in">string</span>, <span class="keyword">char</span> *, <span class="keyword">int</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dir</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">login</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">cd</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">mkdir</span><span class="params">(<span class="built_in">string</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">input_operation</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">register_user</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">remove</span><span class="params">(<span class="built_in">string</span> name)</span></span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">create</span><span class="params">(<span class="built_in">string</span> name)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">//cout &lt;&lt; cur_user.next-&gt;cur_file_size &lt;&lt; endl;</span></span><br><span class="line">	<span class="comment">//system("pause");</span></span><br><span class="line">	<span class="keyword">int</span> index; <span class="comment">//标识当前目录在direct数组中第几个</span></span><br><span class="line">	<span class="keyword">for</span> (index = <span class="number">0</span>; index &lt; cur_user.next-&gt;cur_user_direct_size; index++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (path == cur_user.next-&gt;direct[index].directname)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> i;</span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; cur_user.next-&gt;direct[index].cur_file_size; i++)   <span class="comment">//遍历当前目录，查看是否有文件重名</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (name == cur_user.next-&gt;direct[index].ufd[i].filename)</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (i &lt; cur_user.next-&gt;direct[index].cur_file_size) <span class="comment">//判断文件名是否重复</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"文件名重复"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (cur_user.next-&gt;direct[index].cur_file_size == <span class="number">16</span>)  <span class="comment">//判断当前目录的文件到达16个</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"用户文件已经达到16个"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> j;</span><br><span class="line">	<span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; <span class="number">64</span>; j++)  <span class="comment">//判断是否有空的空闲块。</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (fat[j].used == <span class="number">0</span>)</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (j &gt;= <span class="number">64</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"磁盘没有空闲块了"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	cur_user.next-&gt;direct[index].ufd[cur_user.next-&gt;direct[index].cur_file_size].filename = name;</span><br><span class="line">	cur_user.next-&gt;direct[index].ufd[cur_user.next-&gt;direct[index].cur_file_size].addr = j; <span class="comment">//文件起始盘块号</span></span><br><span class="line">	cur_user.next-&gt;direct[index].ufd[cur_user.next-&gt;direct[index].cur_file_size].length = <span class="number">0</span>;</span><br><span class="line">	cur_user.next-&gt;direct[index].ufd[cur_user.next-&gt;direct[index].cur_file_size].protect_code = <span class="number">2</span>; <span class="comment">//表示可读可写</span></span><br><span class="line">	cur_user.next-&gt;direct[index].cur_file_size++;<span class="comment">//用户文件数量加1</span></span><br><span class="line">	fat[j].used = <span class="number">1</span>; <span class="comment">//被使用</span></span><br><span class="line">	fat[j].next = <span class="number">-1</span>; <span class="comment">//只是个空文件,所有没有后序的块</span></span><br><span class="line">	<span class="comment">//写入文件打开表中,就是调用open（）</span></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"文件创建成功"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="keyword">int</span> fd = open(name);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> fd;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">open</span><span class="params">(<span class="built_in">string</span> name)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> index; <span class="comment">//标识当前目录在direct数组中第几个</span></span><br><span class="line">	<span class="keyword">for</span> (index = <span class="number">0</span>; index &lt; cur_user.next-&gt;cur_user_direct_size; index++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (path == cur_user.next-&gt;direct[index].directname)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> i;</span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; cur_user.next-&gt;direct[index].cur_file_size; i++) <span class="comment">//当前目录有没有这个文件，没有就自然不能打开</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (name == cur_user.next-&gt;direct[index].ufd[i].filename)</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (i &gt; cur_user.next-&gt;direct[index].cur_file_size)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"i的值为"</span> &lt;&lt; i &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"该用户没有这个文件"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (cur_opentable-&gt;cur_openfilesize == max_openfilesize) <span class="comment">//如果打开文件的数量达到最大值，那么就无法打开</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"文件打开数量已经达到最大值"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; cur_opentable-&gt;cur_openfilesize; j++) <span class="comment">//如果文件已经打开，就无需打开</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (cur_opentable-&gt;uof[j].filename == name)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">cout</span> &lt;&lt; <span class="string">"文件已经打开"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">			<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> k;</span><br><span class="line">	<span class="keyword">for</span> (k = <span class="number">0</span>; k &lt; cur_user.next-&gt;direct[index].cur_file_size; k++) <span class="comment">//找到要打开的文件在文件数组中的第几个</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (cur_user.next-&gt;direct[index].ufd[k].filename == name)</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	cur_opentable-&gt;uof[cur_opentable-&gt;cur_openfilesize].filename = name;</span><br><span class="line">	cur_opentable-&gt;uof[cur_opentable-&gt;cur_openfilesize].protect_code = cur_user.next-&gt;direct[index].ufd[k].protect_code;</span><br><span class="line">	cur_opentable-&gt;uof[cur_opentable-&gt;cur_openfilesize].pointer = cur_user.next-&gt;direct[index].ufd[k].length;</span><br><span class="line">	cur_opentable-&gt;uof[cur_opentable-&gt;cur_openfilesize].addr = cur_user.next-&gt;direct[index].ufd[k].addr;</span><br><span class="line">	cur_opentable-&gt;cur_openfilesize++; <span class="comment">//文件打开数量加1</span></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"文件打开成功"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="keyword">return</span> k; <span class="comment">//返回文件在文件打开表中的第几项</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">close</span><span class="params">(<span class="built_in">string</span> name)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> fd;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; cur_opentable-&gt;cur_openfilesize; i++)  <span class="comment">//找到要关闭的文件在表中的第几项</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (cur_opentable-&gt;uof[i].filename == name)</span><br><span class="line">		&#123;</span><br><span class="line">			fd = i;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (fd &gt;= cur_opentable-&gt;cur_openfilesize)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"没有这个文件或者文件没有打开"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//将要删除的项目与最后一个项目交换,因为是数组存放，。。</span></span><br><span class="line">	cur_opentable-&gt;uof[fd].filename = cur_opentable-&gt;uof[cur_opentable-&gt;cur_openfilesize - <span class="number">1</span>].filename;</span><br><span class="line">	cur_opentable-&gt;uof[fd].pointer = cur_opentable-&gt;uof[cur_opentable-&gt;cur_openfilesize - <span class="number">1</span>].pointer;</span><br><span class="line">	cur_opentable-&gt;uof[fd].protect_code = cur_opentable-&gt;uof[cur_opentable-&gt;cur_openfilesize - <span class="number">1</span>].protect_code;</span><br><span class="line">	cur_opentable-&gt;uof[fd].addr = cur_opentable-&gt;uof[cur_opentable-&gt;cur_openfilesize - <span class="number">1</span>].addr;</span><br><span class="line">	<span class="comment">//cur_opentable-&gt;cur_openfilesize--;</span></span><br><span class="line">	cur_opentable-&gt;cur_openfilesize--;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"文件关闭成功"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">del</span><span class="params">(<span class="built_in">string</span> name)</span> <span class="comment">//删除文件打开表的文件数量不用减一，因为文件打开就不能删除文件</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> index; <span class="comment">//标识当前目录在direct数组中第几个</span></span><br><span class="line">	<span class="keyword">for</span> (index = <span class="number">0</span>; index &lt; cur_user.next-&gt;cur_user_direct_size; index++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (path == cur_user.next-&gt;direct[index].directname)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> i;</span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; cur_user.next-&gt;direct[index].cur_file_size; i++)  <span class="comment">//判断当前目录下有没有这个文件</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (cur_user.next-&gt;direct[index].ufd[i].filename == name)</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (i &gt;= cur_user.next-&gt;direct[index].cur_file_size)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"没有这个文件"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">int</span> j;</span><br><span class="line">	<span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; cur_opentable-&gt;cur_openfilesize; j++)  <span class="comment">//判断该文件是否被打开</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (cur_opentable-&gt;uof[j].filename == name)</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (j &lt; cur_opentable-&gt;cur_openfilesize) <span class="comment">//说明文件被打开了</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"这个文件被打开了，请先关闭"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//更新当前用户目录下文件数组信息,就是将最后一个文件的信息替换到要删除的文件的位置</span></span><br><span class="line">	fat[cur_user.next-&gt;direct[index].ufd[i].addr].used = <span class="number">0</span>; <span class="comment">//没有使用</span></span><br><span class="line">	cur_user.next-&gt;direct[index].ufd[i].filename = cur_user.next-&gt;direct[index].ufd[cur_user.next-&gt;direct[index].cur_file_size - <span class="number">1</span>].filename;</span><br><span class="line">	cur_user.next-&gt;direct[index].ufd[i].addr = cur_user.next-&gt;direct[index].ufd[cur_user.next-&gt;direct[index].cur_file_size - <span class="number">1</span>].addr;</span><br><span class="line">	cur_user.next-&gt;direct[index].ufd[i].length = cur_user.next-&gt;direct[index].ufd[cur_user.next-&gt;direct[index].cur_file_size - <span class="number">1</span>].length;</span><br><span class="line">	cur_user.next-&gt;direct[index].ufd[i].protect_code = cur_user.next-&gt;direct[index].ufd[cur_user.next-&gt;direct[index].cur_file_size - <span class="number">1</span>].protect_code;</span><br><span class="line">	cur_user.next-&gt;direct[index].cur_file_size--; <span class="comment">//用户文件数量减1</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//回收磁盘</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">int</span> temp = fat[cur_user.next-&gt;direct[index].ufd[i].addr].next;</span><br><span class="line">	<span class="keyword">while</span> (temp != <span class="number">-1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		fat[temp].used = <span class="number">0</span>;</span><br><span class="line">		temp = fat[temp].next;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"删除文件成功"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">read</span><span class="params">(<span class="built_in">string</span> name)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> index1; <span class="comment">//标识当前目录在direct数组中第几个</span></span><br><span class="line">	<span class="keyword">for</span> (index1 = <span class="number">0</span>; index1 &lt; cur_user.next-&gt;cur_user_direct_size; index1++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (path == cur_user.next-&gt;direct[index1].directname)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> a;</span><br><span class="line">	<span class="keyword">for</span> (a = <span class="number">0</span>; a &lt; cur_user.next-&gt;direct[index1].cur_file_size; a++)    <span class="comment">//判断文件是否存在</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (cur_user.next-&gt;direct[index1].ufd[a].filename == name)</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (a &gt;= cur_user.next-&gt;direct[index1].cur_file_size)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"没有这个文件"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> i;</span><br><span class="line">	<span class="comment">//判读文件是否打开</span></span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; cur_opentable-&gt;cur_openfilesize; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (cur_opentable-&gt;uof[i].filename == name)</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (i &gt;= cur_opentable-&gt;cur_openfilesize)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"文件没有打开， 无法读取"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> fd = i; <span class="comment">//获取文件描述字</span></span><br><span class="line">	<span class="comment">//判断读文件的合法性</span></span><br><span class="line">	<span class="keyword">if</span> (cur_opentable-&gt;uof[fd].protect_code == <span class="number">0</span>) <span class="comment">//我们创建的文件都是默认可读可写的。。。</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"文件不可读"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">int</span> len = cur_opentable-&gt;uof[fd].pointer; <span class="comment">//文件的长度</span></span><br><span class="line">		<span class="keyword">int</span> block_size = len / <span class="number">512</span>; <span class="comment">//磁盘的个数</span></span><br><span class="line">		<span class="keyword">int</span> offset = len % <span class="number">512</span>; <span class="comment">//偏移量</span></span><br><span class="line">		<span class="keyword">if</span> (offset != <span class="number">0</span>)</span><br><span class="line">			block_size++;</span><br><span class="line">		<span class="comment">//如果我用一个文件表示磁盘的引导块，用另一个文件表示磁盘的数据块，那么我们计算文件的起始位置就不用加上磁盘的引导块了吧。。</span></span><br><span class="line">		<span class="comment">//关于文件的存放文件，我们char *fdisk表示一整个磁盘，然后不同文件的内容存放在这个指针所指向的不同字符段</span></span><br><span class="line">		<span class="keyword">char</span> * first = fdisk + cur_opentable-&gt;uof[fd].addr * <span class="number">512</span>; <span class="comment">//文件的起始地址</span></span><br><span class="line">		<span class="keyword">char</span> * buf = (<span class="keyword">char</span> *)<span class="built_in">malloc</span>(<span class="number">512</span> * <span class="keyword">sizeof</span>(<span class="keyword">char</span>)); <span class="comment">//缓冲区</span></span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"文件的内容为 :"</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; block_size; k++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (k == block_size - <span class="number">1</span>)  <span class="comment">//则是最后一个磁盘块</span></span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; len - k * <span class="number">512</span>; j++)  <span class="comment">//赋值文件剩余的字符，其实就是偏移量</span></span><br><span class="line">				&#123;</span><br><span class="line">					buf[j + k * <span class="number">512</span>] = first[j];</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">for</span> (<span class="keyword">int</span> u = <span class="number">0</span>; u &lt; len - k * <span class="number">512</span>; u++)</span><br><span class="line">				&#123;</span><br><span class="line">					<span class="built_in">cout</span> &lt;&lt; buf[u + k * <span class="number">512</span>]; <span class="comment">//输出剩余长度，之所以这样输出，printf()，将整个buf的内容全部输出，如果没有读满就出现乱码啦。。</span></span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span> <span class="comment">//不在最后一个磁盘块，也就是在其他已经读满的磁盘块</span></span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; len - i * <span class="number">512</span>; j++)</span><br><span class="line">					buf[j + k * <span class="number">512</span>] = first[j]; <span class="comment">//缓冲区读满就输出内容</span></span><br><span class="line">				<span class="built_in">printf</span>(<span class="string">"%s\n"</span>, buf); <span class="comment">//输出文件的内容</span></span><br><span class="line">				<span class="keyword">int</span> next_block = fat[cur_opentable-&gt;uof[fd].addr].next; <span class="comment">//读完一个磁盘块后，在接着读下一个磁盘块</span></span><br><span class="line">				first = fdisk + next_block * <span class="number">512</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"文件读取成功"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		<span class="built_in">free</span>(buf); <span class="comment">//释放缓冲区</span></span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//类似于文件拷贝实验，每次赋值缓冲区到虚拟磁盘中, </span></span><br><span class="line"><span class="comment">//待完成问题：更新表的文件长度</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">write</span><span class="params">(<span class="built_in">string</span> name, <span class="keyword">char</span> * buf, <span class="keyword">int</span> len)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> index1; <span class="comment">//标识当前目录在direct数组中第几个</span></span><br><span class="line">	<span class="keyword">for</span> (index1 = <span class="number">0</span>; index1 &lt; cur_user.next-&gt;cur_user_direct_size; index1++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (path == cur_user.next-&gt;direct[index1].directname)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> i;</span><br><span class="line">	<span class="comment">//判读文件是否打开</span></span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; cur_opentable-&gt;cur_openfilesize; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (cur_opentable-&gt;uof[i].filename == name)</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (i &gt;= cur_opentable-&gt;cur_openfilesize)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"文件没有打开， 无法读取"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> fd = i; <span class="comment">//获取文件描述字</span></span><br><span class="line">	<span class="comment">//判断读文件的合法性</span></span><br><span class="line">	<span class="keyword">if</span> (cur_opentable-&gt;uof[fd].protect_code != <span class="number">2</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"文件不可写"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">int</span> temp; <span class="comment">//保存当前所写的文件在用户文件目录表的第几项，为了后面修改文件的大小</span></span><br><span class="line">		<span class="keyword">int</span> first_block = cur_opentable-&gt;uof[fd].addr; <span class="comment">//用户文件存放的第一个磁盘块</span></span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; cur_user.next-&gt;direct[index1].cur_file_size; k++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (cur_user.next-&gt;direct[index1].ufd[k].addr == first_block)</span><br><span class="line">			&#123;</span><br><span class="line">				temp = k;</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//追加写</span></span><br><span class="line">		<span class="comment">//找到该文件存放的最后一个磁盘块</span></span><br><span class="line">		<span class="keyword">while</span> (fat[first_block].next != <span class="number">-1</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			first_block = fat[first_block].next;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//计算该文件存放的最后一个地址</span></span><br><span class="line">		<span class="keyword">char</span>  * first;</span><br><span class="line">		first = fdisk + first_block * <span class="number">512</span> + cur_opentable-&gt;uof[fd].pointer % <span class="number">512</span>;</span><br><span class="line">		<span class="comment">//如果最后一个文件剩下的空间大于要写入的长度</span></span><br><span class="line">		<span class="keyword">if</span> (len &lt;= <span class="number">512</span> - cur_opentable-&gt;uof[fd].pointer % <span class="number">512</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="comment">//strcpy(first, buf);  这句代码出现问题，可能是由于buf没有读满，后面的值被访问了，非法！</span></span><br><span class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; i++)</span><br><span class="line">			&#123;</span><br><span class="line">				first[i] = buf[i];<span class="comment">//将缓冲区的内容写入虚拟磁盘中</span></span><br><span class="line">			&#125;</span><br><span class="line">			cur_opentable-&gt;uof[fd].pointer = cur_opentable-&gt;uof[fd].pointer + len;  <span class="comment">//更新文件打开表</span></span><br><span class="line">			cur_user.next-&gt;direct[index1].ufd[temp].length = cur_user.next-&gt;direct[index1].ufd[temp].length + len; <span class="comment">//更新用户目录文件表</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span>  <span class="comment">//如果剩下的空间不足写入</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">512</span> - cur_opentable-&gt;uof[fd].pointer % <span class="number">512</span>; i++)</span><br><span class="line">			&#123; <span class="comment">//写入一部分的内容到最后一个磁盘块的剩余空间</span></span><br><span class="line">				first[i] = buf[i];</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="comment">//计算分配完最后一个磁盘的剩余空间后，还剩下多少字节没有存储</span></span><br><span class="line">			<span class="keyword">int</span> last_size = len - (<span class="number">512</span> - cur_opentable-&gt;uof[fd].pointer % <span class="number">512</span>);</span><br><span class="line">			<span class="keyword">int</span> need_block_size = last_size / <span class="number">512</span>;</span><br><span class="line">			<span class="keyword">int</span> need_offset_size = last_size % <span class="number">512</span>;</span><br><span class="line">			<span class="keyword">if</span> (need_offset_size &gt; <span class="number">0</span>)</span><br><span class="line">				need_block_size++; <span class="comment">//总共需要这么磁盘块</span></span><br><span class="line">			<span class="keyword">int</span> unused_block_size = <span class="number">0</span>; <span class="comment">//记录没有使用过的磁盘块的个数</span></span><br><span class="line">			<span class="comment">//int first_unused_block; //记录第一个没有被使用过的磁盘</span></span><br><span class="line">			<span class="keyword">int</span> flag = <span class="number">0</span>;</span><br><span class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">64</span>; i++)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">if</span> (fat[i].used == <span class="number">0</span>)</span><br><span class="line">				&#123;</span><br><span class="line">					unused_block_size++;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (unused_block_size &lt; need_block_size)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="built_in">cout</span> &lt;&lt; <span class="string">"磁盘没有空间存放了-=-="</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">				<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">int</span> item = cur_opentable-&gt;uof[fd].addr;</span><br><span class="line">				<span class="keyword">for</span> (<span class="keyword">int</span> p = <span class="number">0</span>; p &lt; need_block_size; p++) <span class="comment">//执行多次寻找空闲磁盘的操作，</span></span><br><span class="line">				&#123;</span><br><span class="line">					<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">64</span>; i++)</span><br><span class="line">					&#123;</span><br><span class="line">						<span class="keyword">if</span> (fat[i].used == <span class="number">0</span>) <span class="comment">//没有被使用</span></span><br><span class="line">						&#123;</span><br><span class="line">							first = fdisk + i * <span class="number">512</span>; <span class="comment">//当前要写入的磁盘块的起始地址</span></span><br><span class="line">							fat[i].used = <span class="number">1</span>; <span class="comment">//标记被使用</span></span><br><span class="line">							fat[item].next = i; <span class="comment">//标记下一个磁盘</span></span><br><span class="line">							item = i;</span><br><span class="line">							<span class="keyword">break</span>;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">					<span class="keyword">if</span> (p == need_block_size - <span class="number">1</span>)</span><br><span class="line">					&#123;</span><br><span class="line">						<span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; need_offset_size; k++)  <span class="comment">//将文件的偏移量写入最后一个文件中</span></span><br><span class="line">							first[k] = buf[k];</span><br><span class="line">						<span class="comment">//更新最后一个磁盘块的next值</span></span><br><span class="line">						fat[i].next = <span class="number">-1</span>;</span><br><span class="line">					&#125;</span><br><span class="line">					<span class="keyword">else</span>  <span class="comment">//如果不是最后一个空闲块</span></span><br><span class="line">					&#123; <span class="comment">//待解决问题，就是如果更新fat的next值</span></span><br><span class="line">						<span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; <span class="number">512</span>; k++)</span><br><span class="line">							first[k] = buf[k];</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">				cur_opentable-&gt;uof[fd].pointer = cur_opentable-&gt;uof[fd].pointer + last_size;  <span class="comment">//更新文件打开表</span></span><br><span class="line">				cur_user.next-&gt;direct[index1].ufd[temp].length = cur_user.next-&gt;direct[index1].ufd[temp].length + last_size; <span class="comment">//更新用户目录文件表</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"文件写入成功"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dir</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> index1; <span class="comment">//标识当前目录在direct数组中第几个</span></span><br><span class="line">	<span class="keyword">for</span> (index1 = <span class="number">0</span>; index1 &lt; cur_user.next-&gt;cur_user_direct_size; index1++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (path == cur_user.next-&gt;direct[index1].directname)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (path == <span class="string">""</span>) <span class="comment">//表示此时路径在用户的目录表，显示文件目录</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"目录名"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; cur_user.next-&gt;cur_user_direct_size; i++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">cout</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; cur_user.next-&gt;direct[i].directname &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span>  <span class="comment">//显示目录下的文件</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"文件名"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"文件保护码"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"文件长度"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt;<span class="string">"文件起始盘块号"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; cur_user.next-&gt;direct[index1].cur_file_size; i++)  <span class="comment">//输出文件的信息</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">cout</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; cur_user.next-&gt;direct[index1].ufd[i].filename &lt;&lt; <span class="string">"\t"</span> &lt;&lt; cur_user.next-&gt;direct[index1].ufd[i].protect_code &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; cur_user.next-&gt;direct[index1].ufd[i].length &lt;&lt;<span class="string">"\t"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; cur_user.next-&gt;direct[index1].ufd[i].addr  &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">login</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">string</span> name;</span><br><span class="line">	<span class="built_in">string</span> password;</span><br><span class="line">	<span class="comment">//UFD user;</span></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"请输入你的姓名"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="built_in">cin</span> &gt;&gt; name;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"请输入你的密码"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="built_in">cin</span> &gt;&gt; password;</span><br><span class="line">	<span class="keyword">int</span> i;</span><br><span class="line">	<span class="keyword">for</span> ( i = <span class="number">0</span>; i &lt; cur_user_size; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (mfd[i].username == name &amp;&amp; mfd[i].password == password)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (i &gt;= cur_user_size)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"没有这个用户或者用户名密码错误"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	mfd[i].next = &amp; (cur_user_all_direct_array[i]); <span class="comment">//用户指向自己的所有目录的结构</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//初始化当前用户的信息</span></span><br><span class="line">	cur_user = mfd[i];</span><br><span class="line">    cur_user.next-&gt;cur_user_direct_size = mfd[i].next-&gt;cur_user_direct_size; <span class="comment">//</span></span><br><span class="line">	</span><br><span class="line">	cur_user_size++; <span class="comment">//用户人数++</span></span><br><span class="line">	cur_opentable = &amp;openfile[cur_user_size]; <span class="comment">//指针指向文件打开表对象</span></span><br><span class="line">	cur_opentable-&gt;cur_openfilesize = <span class="number">0</span>; <span class="comment">//设初始值</span></span><br><span class="line">	path = <span class="string">""</span>; <span class="comment">//指定当前路径为用户的全部目录处</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">cd</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">string</span> temp_path;</span><br><span class="line">	<span class="built_in">cin</span> &gt;&gt; temp_path;</span><br><span class="line">	<span class="keyword">if</span> (temp_path == <span class="string">".."</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		path = <span class="string">""</span>;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span> i;</span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; cur_user.next-&gt;cur_user_direct_size; i++)  <span class="comment">//判断path是否存在</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (temp_path == cur_user.next-&gt;direct[i].directname)</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (i &gt;= cur_user.next-&gt;cur_user_direct_size)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"没有这个目录"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	path = temp_path;</span><br><span class="line">	<span class="keyword">return</span>;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">mkdir</span><span class="params">(<span class="built_in">string</span> name)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (cur_user.next-&gt;cur_user_direct_size == <span class="number">16</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"用户目录已经达到最大值，不能在创建目录了"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> i;</span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; cur_user.next-&gt;cur_user_direct_size; i++)  <span class="comment">//判断创建的目录是否存在</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (cur_user.next-&gt;direct[i].directname == name)</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (i &lt; cur_user.next-&gt;cur_user_direct_size)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"该目录已经存在了"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	cur_user.next-&gt;direct[cur_user.next-&gt;cur_user_direct_size].directname = name;</span><br><span class="line">	cur_user.next-&gt;direct[cur_user.next-&gt;cur_user_direct_size].cur_file_size = <span class="number">0</span>; <span class="comment">//新创建的目录里面的文件个数为0</span></span><br><span class="line">	cur_user.next-&gt;cur_user_direct_size++; <span class="comment">//用户的目录数加1</span></span><br><span class="line"></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"创建目录成功"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="keyword">return</span>;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">input_operation</span><span class="params">()</span>  <span class="comment">//用户输入命令</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (cur_user.username == <span class="string">""</span>)</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"localhost :"</span>;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; cur_user.username &lt;&lt; <span class="string">"@localhost  home/"</span> &lt;&lt;path &lt;&lt; <span class="string">"："</span>;</span><br><span class="line">	<span class="built_in">string</span> operation;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">cin</span> &gt;&gt; operation;</span><br><span class="line">	<span class="keyword">if</span> (operation == <span class="string">"login"</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		login();</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (operation == <span class="string">"dir"</span>)</span><br><span class="line">		dir();</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (operation == <span class="string">"create"</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">string</span> filename;</span><br><span class="line">		<span class="built_in">cin</span> &gt;&gt; filename;</span><br><span class="line">		create(filename);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (operation == <span class="string">"del"</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">string</span> filename;</span><br><span class="line">		<span class="built_in">cin</span> &gt;&gt; filename;</span><br><span class="line">		del(filename);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (operation == <span class="string">"open"</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">string</span> name;</span><br><span class="line">		<span class="built_in">cin</span> &gt;&gt; name;</span><br><span class="line">		open(name);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (operation == <span class="string">"close"</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">string</span> name;</span><br><span class="line">		<span class="built_in">cin</span> &gt;&gt; name;</span><br><span class="line">		close(name);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (operation == <span class="string">"read"</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">string</span> name;</span><br><span class="line">		<span class="built_in">cin</span> &gt;&gt; name;</span><br><span class="line">		read(name);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (operation == <span class="string">"write"</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">string</span> content;</span><br><span class="line">		<span class="built_in">string</span> name;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"请输入要写入的文件："</span>;</span><br><span class="line">		<span class="built_in">cin</span> &gt;&gt; name;</span><br><span class="line">		<span class="built_in">cin</span>.ignore(); <span class="comment">//清空缓冲区的内容，不然getline读到上一个回车直接结束。。。</span></span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"请输入文件要写入的内容: "</span> &lt;&lt; <span class="built_in">endl</span>;;</span><br><span class="line">		getline(<span class="built_in">cin</span>, content); <span class="comment">//读入一整行内容</span></span><br><span class="line">		<span class="comment">//cout &lt;&lt; content &lt;&lt; endl;</span></span><br><span class="line">		<span class="comment">//system("pause");</span></span><br><span class="line">		<span class="comment">//cin &gt;&gt; content;</span></span><br><span class="line">		<span class="keyword">char</span> buf[<span class="number">512</span>];</span><br><span class="line"></span><br><span class="line">		<span class="keyword">int</span> times = content.length() / <span class="number">512</span>;</span><br><span class="line">		<span class="keyword">int</span> offset = content.length() % <span class="number">512</span>;</span><br><span class="line">		<span class="keyword">if</span> (offset != <span class="number">0</span>)</span><br><span class="line">			times++;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; times; i++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (i == times - <span class="number">1</span>) <span class="comment">//注意这里不能写成times-- o.o!!!</span></span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; offset; j++)</span><br><span class="line">					buf[j] = content[j];</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">512</span>; j++)</span><br><span class="line">					buf[j] = content[j];</span><br><span class="line">			&#125;</span><br><span class="line">			write(name, buf, content.length());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (operation == <span class="string">"exit"</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (operation == <span class="string">"cd"</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		cd();</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (operation == <span class="string">"mkdir"</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">string</span> name;</span><br><span class="line">		<span class="built_in">cin</span> &gt;&gt; name;</span><br><span class="line">		mkdir(name);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (operation == <span class="string">"register"</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		register_user();</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (operation == <span class="string">"remove"</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">string</span> name;</span><br><span class="line">		<span class="built_in">cin</span> &gt;&gt; name;</span><br><span class="line">		remove(name);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"你的命令错误，重新输入"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">register_user</span><span class="params">()</span>  <span class="comment">//注册用户</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"请输入用户名："</span>;</span><br><span class="line">	<span class="built_in">string</span> username;</span><br><span class="line">	<span class="built_in">cin</span> &gt;&gt; username;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"请输入密码："</span>;</span><br><span class="line">	<span class="built_in">string</span> password;</span><br><span class="line">	<span class="built_in">cin</span> &gt;&gt; password;</span><br><span class="line">	<span class="keyword">int</span> i;</span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">16</span>; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (mfd[i].username == username)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (i &lt; <span class="number">16</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"该用户已经存在"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	mfd[cur_user_size].username = username;</span><br><span class="line">	mfd[cur_user_size].password = password;</span><br><span class="line">	cur_user_size++; <span class="comment">//用户人数加1</span></span><br><span class="line"></span><br><span class="line">	</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"用户注册成功！"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">remove</span><span class="params">(<span class="built_in">string</span> name)</span>  <span class="comment">//删除目录</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> index;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; cur_user.next-&gt;cur_user_direct_size; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (name == cur_user.next-&gt;direct[i].directname)</span><br><span class="line">		&#123;</span><br><span class="line">			index = i;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; cur_user.next-&gt;direct[index].cur_file_size; i++)   <span class="comment">//删除目录里面的文件</span></span><br><span class="line">	&#123;<span class="comment">//直接释这些文件所占的磁盘块</span></span><br><span class="line">		fat[cur_user.next-&gt;direct[index].ufd[i].addr].used = <span class="number">0</span>; <span class="comment">//没有使用</span></span><br><span class="line">		<span class="keyword">int</span> temp = fat[cur_user.next-&gt;direct[index].ufd[i].addr].next;</span><br><span class="line">		<span class="keyword">while</span> (temp != <span class="number">-1</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			fat[temp].used = <span class="number">0</span>;</span><br><span class="line">			temp = fat[temp].next;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//删除目录项，就是将两个目录项的内容进行交换</span></span><br><span class="line"></span><br><span class="line">	cur_user.next-&gt;direct[index].cur_file_size = cur_user.next-&gt;direct[cur_user.next-&gt;cur_user_direct_size<span class="number">-1</span>].cur_file_size;  <span class="comment">//注意这里需要减一，由于本身结构的限制</span></span><br><span class="line">	cur_user.next-&gt;direct[index].directname = cur_user.next-&gt;direct[cur_user.next-&gt;cur_user_direct_size<span class="number">-1</span>].directname;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; cur_user.next-&gt;direct[cur_user.next-&gt;cur_user_direct_size<span class="number">-1</span>].cur_file_size; i++)  <span class="comment">//注意这里的减一</span></span><br><span class="line">	&#123;</span><br><span class="line">		cur_user.next-&gt;direct[index].ufd[i].addr = cur_user.next-&gt;direct[cur_user.next-&gt;cur_user_direct_size<span class="number">-1</span>].ufd[i].addr;</span><br><span class="line">		cur_user.next-&gt;direct[index].ufd[i].filename = cur_user.next-&gt;direct[cur_user.next-&gt;cur_user_direct_size<span class="number">-1</span>].ufd[i].filename;</span><br><span class="line">		cur_user.next-&gt;direct[index].ufd[i].length = cur_user.next-&gt;direct[cur_user.next-&gt;cur_user_direct_size<span class="number">-1</span>].ufd[i].length;</span><br><span class="line">		cur_user.next-&gt;direct[index].ufd[i].protect_code = cur_user.next-&gt;direct[cur_user.next-&gt;cur_user_direct_size<span class="number">-1</span>].ufd[i].protect_code;</span><br><span class="line">	&#125;</span><br><span class="line">	cur_user.next-&gt;cur_user_direct_size--; <span class="comment">//目录数量减1</span></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"删除目录成功"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	cur_user.username = <span class="string">""</span>; <span class="comment">//初始化当前用户的用户名为空</span></span><br><span class="line">	path = <span class="string">""</span>;</span><br><span class="line">	<span class="comment">//用内存模拟外存，申请内存空间</span></span><br><span class="line">	fdisk = (<span class="keyword">char</span> *)<span class="built_in">malloc</span>(<span class="number">1024</span> * <span class="number">1024</span> * <span class="keyword">sizeof</span>(<span class="keyword">char</span>)); <span class="comment">//初始换fdisk</span></span><br><span class="line"></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"***************欢迎来到二级文件系统******************"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"命令"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"功能"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"register"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"注册"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"login"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"登录"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"create"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"创建文件"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"mkdir"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"创建目录"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"cd"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"切换目录"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"open"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"打开文件"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"close"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"关闭文件"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"read"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"读文件"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"write"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"写文件"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"del"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"删除文件"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"exit"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"\t"</span> &lt;&lt; <span class="string">"退出系统"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"*****************************************************"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="keyword">while</span> (<span class="literal">true</span>)</span><br><span class="line">		input_operation();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//有个问题，循环的界值要更新。--》》解决</span></span><br><span class="line"><span class="comment">//出现问题：指向一些空指针的问题--&gt;解决</span></span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div id="reward-container">
+  <div>你可以对我打赏de~阿里嘎多~</div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+
+    
+      
+      
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/微信收款码.jpg" alt="陈小坚(｀・ω・´) 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+      
+      
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/支付宝收款码.jpg" alt="陈小坚(｀・ω・´) 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+    <div>
+        <p id="div-border-left-red">
+       <b>本文基于<a target="_blank" title="Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)" href="http://creativecommons.org/licenses/by-sa/4.0/"> 知识共享署名-相同方式共享 4.0 </a>国际许可协议发布</b><br>
+        <span>
+        <b>本文地址：</b><a href="/二级文件系统的实现/" title="二级文件系统的实现">http://chenchenxiaojian.github.io/二级文件系统的实现/</a><br><b>转载请注明出处，谢谢！</b>
+        </span>
+        </p>
+    </div>
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/操作系统/" rel="tag"><i class="fa fa-google"></i> 操作系统</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/读者写者问题-读者优先/" rel="next" title="读者写者问题">
+                <i class="fa fa-chevron-left"></i> 读者写者问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+            <a href="/">
+              <img class="site-author-image" itemprop="image" src="/images/头像.jpg" alt="陈小坚(｀・ω・´)">
+                </a>
+            
+              <p class="site-author-name" itemprop="name">陈小坚(｀・ω・´)</p>
+              <div class="site-description motion-element" itemprop="description">你我只是个普通人，活着就好</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">56</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">44</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/chenchenxiaojian" title="GitHub &rarr; https://github.com/chenchenxiaojian" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://me.csdn.net/weixin_42100456" title="CSDN &rarr; https://me.csdn.net/weixin_42100456" rel="noopener" target="_blank"><i class="fa fa-fw fa-copyright"></i>CSDN</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://github.com/chenchenxiaojian" title="https://github.com/chenchenxiaojian" rel="noopener" target="_blank">github链接</a>
+                  </li>
+                
+              </ul>
+          <div id="days"></div>
+<script>
+function show_date_time(){
+    window.setTimeout("show_date_time()", 1000);
+    BirthDay=new Date("07/09/2019 15:13:14");
+    today=new Date();
+    timeold=(today.getTime()-BirthDay.getTime());
+    sectimeold=timeold/1000
+    secondsold=Math.floor(sectimeold);
+    msPerDay=24*60*60*1000
+    e_daysold=timeold/msPerDay
+    daysold=Math.floor(e_daysold);
+    e_hrsold=(e_daysold-daysold)*24;
+    hrsold=setzero(Math.floor(e_hrsold));
+    e_minsold=(e_hrsold-hrsold)*60;
+    minsold=setzero(Math.floor((e_hrsold-hrsold)*60));
+    seconds=setzero(Math.floor((e_minsold-minsold)*60));
+    document.getElementById('days').innerHTML="已运行 "+daysold+" 天 "+hrsold+" 小时 "+minsold+" 分 "+seconds+" 秒";
+}
+function setzero(i) {
+    if (i<10) {
+        i="0" + i
+    };
+    return i;
+}
+show_date_time();
+</script>
+
+            </div>
+          
+
+           <div id="days"></div>
+<script>
+function show_date_time(){
+    window.setTimeout("show_date_time()", 1000);
+    BirthDay=new Date("07/09/2019 15:13:14");
+    today=new Date();
+    timeold=(today.getTime()-BirthDay.getTime());
+    sectimeold=timeold/1000
+    secondsold=Math.floor(sectimeold);
+    msPerDay=24*60*60*1000
+    e_daysold=timeold/msPerDay
+    daysold=Math.floor(e_daysold);
+    e_hrsold=(e_daysold-daysold)*24;
+    hrsold=setzero(Math.floor(e_hrsold));
+    e_minsold=(e_hrsold-hrsold)*60;
+    minsold=setzero(Math.floor((e_hrsold-hrsold)*60));
+    seconds=setzero(Math.floor((e_minsold-minsold)*60));
+    document.getElementById('days').innerHTML="已运行 "+daysold+" 天 "+hrsold+" 小时 "+minsold+" 分 "+seconds+" 秒";
+}
+function setzero(i) {
+    if (i<10) {
+        i="0" + i
+    };
+    return i;
+}
+show_date_time();
+</script>
+
+          
+            
+          
+          <div id="days"></div>
+<script>
+function show_date_time(){
+    window.setTimeout("show_date_time()", 1000);
+    BirthDay=new Date("07/09/2019 15:13:14");
+    today=new Date();
+    timeold=(today.getTime()-BirthDay.getTime());
+    sectimeold=timeold/1000
+    secondsold=Math.floor(sectimeold);
+    msPerDay=24*60*60*1000
+    e_daysold=timeold/msPerDay
+    daysold=Math.floor(e_daysold);
+    e_hrsold=(e_daysold-daysold)*24;
+    hrsold=setzero(Math.floor(e_hrsold));
+    e_minsold=(e_hrsold-hrsold)*60;
+    minsold=setzero(Math.floor((e_hrsold-hrsold)*60));
+    seconds=setzero(Math.floor((e_minsold-minsold)*60));
+    document.getElementById('days').innerHTML="已运行 "+daysold+" 天 "+hrsold+" 小时 "+minsold+" 分 "+seconds+" 秒";
+}
+function setzero(i) {
+    if (i<10) {
+        i="0" + i
+    };
+    return i;
+}
+show_date_time();
+</script>
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#实验内容："><span class="nav-number">1.</span> <span class="nav-text">实验内容：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二级文件系统"><span class="nav-number">2.</span> <span class="nav-text">二级文件系统</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#代码："><span class="nav-number">3.</span> <span class="nav-text">代码：</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈小坚(｀・ω・´)</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">189k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">2:52</span>
+  
+</div>
+
+
+
+
+
+
+
+
+<span id="busuanzi_container_site_uv">
+  本站访问次数：<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+</span>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.2.0"></script>
+
+  <script src="/js/motion.js?v=7.2.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.2.0"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.2.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.2.0"></script>
+<script src="/js/post-details.js?v=7.2.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.2.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'I6YGjUHQLjiei2DzlORmqtUI-gzGzoHsz',
+    appKey: '6PIjsl6GHSsO2HM0dSIcTXcS',
+    placeholder: 'gogogogo!!!',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn'
+  });
+</script>
+
+
+
+
+  
+
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+        // ref: https://github.com/ForbesLindesay/unescape-html
+        var unescapeHtml = function(html) {
+          return String(html)
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, '\'')
+            .replace(/&#x3A;/g, ':')
+            // replace all the other &#x; chars
+            .replace(/&#(\d+);/g, function (m, p) { return String.fromCharCode(p); })
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&amp;/g, '&');
+        };
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                content = unescapeHtml(content);
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+  <script>
+    
+    
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+<script>
+  $('.highlight').not('.gist .highlight').each(function(i, e) {
+    var $wrap = $('<div>').addClass('highlight-wrap');
+    $(e).after($wrap);
+    $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+      var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+        return $(e).text();
+      }).toArray().join('\n');
+      var ta = document.createElement('textarea');
+      var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+      ta.style.top = yPosition + 'px'; // Prevent page scroll
+      ta.style.position = 'absolute';
+      ta.style.opacity = '0';
+      ta.readOnly = true;
+      ta.value = code;
+      document.body.appendChild(ta);
+      const selection = document.getSelection();
+      const selected = selection.rangeCount > 0 ? selection.getRangeAt(0) : false;
+      ta.select();
+      ta.setSelectionRange(0, code.length);
+      ta.readOnly = false;
+      var result = document.execCommand('copy');
+      
+        if (result) $(this).text('复制成功');
+        else $(this).text('复制失败');
+      
+      ta.blur(); // For iOS
+      $(this).blur();
+      if (selected) {
+        selection.removeAllRanges();
+        selection.addRange(selected);
+      }
+    })).on('mouseleave', function(e) {
+      var $b = $(this).find('.copy-btn');
+      setTimeout(function() {
+        $b.text('复制');
+      }, 300);
+    }).append(e);
+  })
+</script>
+
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
