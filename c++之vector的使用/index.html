@@ -117,7 +117,7 @@
 <meta property="og:site_name" content="陈小坚の博客">
 <meta property="og:description" content="内置函数 at(size_type n)函数 返回对向量中为位置n处元素的引用,reference或者如果向量中元素为const，则返回const reference. 12345678910// vector的函数at返回一个容器内容对象的引用vector &amp;lt;int&amp;gt;a(8); for (int i = 0;i &amp;lt; 8;i++)&amp;#123;    a.at(i) = i;&amp;#1">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-01-05T01:55:55.748Z">
+<meta property="og:updated_time" content="2020-01-08T13:55:25.456Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="c++之vector的使用">
 <meta name="twitter:description" content="内置函数 at(size_type n)函数 返回对向量中为位置n处元素的引用,reference或者如果向量中元素为const，则返回const reference. 12345678910// vector的函数at返回一个容器内容对象的引用vector &amp;lt;int&amp;gt;a(8); for (int i = 0;i &amp;lt; 8;i++)&amp;#123;    a.at(i) = i;&amp;#1">
@@ -276,7 +276,7 @@
       
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">23</span></a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">25</span></a>
 
   </li>
         
@@ -312,7 +312,7 @@
       
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">62</span></a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">64</span></a>
 
   </li>
         
@@ -454,13 +454,23 @@
                 
               
 
-              <time title="创建时间：2020-01-05 09:50:12 / 修改时间：09:55:55" itemprop="dateCreated datePublished" datetime="2020-01-05T09:50:12+08:00">2020-01-05</time>
+              <time title="创建时间：2020-01-05 09:50:12" itemprop="dateCreated datePublished" datetime="2020-01-05T09:50:12+08:00">2020-01-05</time>
             </span>
           
 
           
             
 
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-01-08 21:55:25" itemprop="dateModified" datetime="2020-01-08T21:55:25+08:00">2020-01-08</time>
+              </span>
             
           
 
@@ -520,7 +530,7 @@
               
                 <span class="post-meta-item-text">本文字数：</span>
               
-              <span title="本文字数">287</span>
+              <span title="本文字数">492</span>
             </span>
           
 
@@ -555,12 +565,19 @@
 <li><p><strong>at(size_type n)函数</strong></p>
 <p><code>返回对向量中为位置n处元素的引用,reference或者如果向量中元素为const，则返回const reference.</code></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vector的函数at返回一个容器内容对象的引用</span></span><br><span class="line"><span class="built_in">vector</span> &lt;<span class="keyword">int</span>&gt;a(<span class="number">8</span>); </span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; <span class="number">8</span>;i++)</span><br><span class="line">&#123;</span><br><span class="line">    a.at(i) = i;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i&lt; a.size();i++)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; a.at(i) &lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>初始化</strong></p>
+<ul>
+<li><p>用数组初始化</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> Tree_pre[<span class="number">8</span>] = &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">7</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">8</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> Tree_vin[<span class="number">8</span>] = &#123;<span class="number">4</span>,<span class="number">7</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">5</span>,<span class="number">3</span>,<span class="number">8</span>,<span class="number">6</span>&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;pre(Tree_pre, Tree_pre+<span class="number">8</span>); <span class="comment">//用数组初始化向量</span></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;vin(Tree_vin, Tree_vin+<span class="number">8</span>);</span><br></pre></td></tr></table></figure>
 
 
 
 </li>
+</ul>
+</li>
 </ol>
-<ol start="2">
+<ol start="3">
 <li></li>
 </ol>
 
@@ -732,7 +749,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">62</span>
+                    <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -904,7 +921,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">23</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">25</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1104,7 +1125,7 @@ show_date_time();
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">197k</span>
+    <span title="站点总字数">203k</span>
   
 
   
@@ -1113,7 +1134,7 @@ show_date_time();
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">2:59</span>
+    <span title="站点阅读时长">3:04</span>
   
 </div>
 

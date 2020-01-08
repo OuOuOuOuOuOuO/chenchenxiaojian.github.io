@@ -117,7 +117,7 @@
 <meta property="og:site_name" content="陈小坚の博客">
 <meta property="og:description" content="题目描述请实现一个函数，将一个字符串中的每个空格替换成“%20”。例如，当字符串为We Are Happy.则经过替换之后的字符串为We%20Are%20Happy。 思路如果从前面开始遍历然后替换，这样会导致后面的字符被替换，所以要将后面的字符往后移动2个单位，替换一个空格，假设后面移动的字符为n，那么复杂度为O(n)，如果有N个空格，那么复杂度就是O(N*n); 如果从后面开始遍历然后替换，先">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-01-06T02:52:20.294Z">
+<meta property="og:updated_time" content="2020-01-06T07:36:53.548Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="剑指offer-替换空格">
 <meta name="twitter:description" content="题目描述请实现一个函数，将一个字符串中的每个空格替换成“%20”。例如，当字符串为We Are Happy.则经过替换之后的字符串为We%20Are%20Happy。 思路如果从前面开始遍历然后替换，这样会导致后面的字符被替换，所以要将后面的字符往后移动2个单位，替换一个空格，假设后面移动的字符为n，那么复杂度为O(n)，如果有N个空格，那么复杂度就是O(N*n); 如果从后面开始遍历然后替换，先">
@@ -276,7 +276,7 @@
       
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">23</span></a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">25</span></a>
 
   </li>
         
@@ -312,7 +312,7 @@
       
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">62</span></a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">64</span></a>
 
   </li>
         
@@ -454,7 +454,7 @@
                 
               
 
-              <time title="创建时间：2020-01-06 10:36:04 / 修改时间：10:52:20" itemprop="dateCreated datePublished" datetime="2020-01-06T10:36:04+08:00">2020-01-06</time>
+              <time title="创建时间：2020-01-06 10:36:04 / 修改时间：15:36:53" itemprop="dateCreated datePublished" datetime="2020-01-06T10:36:04+08:00">2020-01-06</time>
             </span>
           
 
@@ -566,6 +566,8 @@
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
 <li><p>对于字符串的操作，要判断是不是空的，要学会转换视角</p>
 </li>
+<li><p>如<strong>果要合并两个数组或者字符串，如果从前往后会重复移动多个数字，那么可以考虑从后往前进行合并</strong></p>
+</li>
 <li><p>对于字符串的一些新的认识</p>
 </li>
 <li><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span>  <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> str1[] = <span class="string">"hello"</span>;</span><br><span class="line">    <span class="keyword">char</span> str2[] = <span class="string">"hello"</span>;</span><br><span class="line">    <span class="keyword">char</span> * str3 = <span class="string">"hello"</span>;</span><br><span class="line">    <span class="keyword">char</span> * str4 = <span class="string">"hello"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (str1 == str2)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"yes"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"no"</span> &lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (str3 == str4)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"yes"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"no"</span> &lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">// c++中为了节省内存，将常量字符串放在单独的一个内存区域，当几个指针赋值给相同的常量字符串，他们实际上会指向相同的内存地址</span></span><br><span class="line"><span class="comment">// str1 str2是两个字符串数组，为他们分配了6个字节，注意每个字符串后面有\0结束标志，然后把hello赋值到数组中，这是两个初始地址不同的数组，所以str1和str2是两个不同的值</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -662,6 +664,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/键值offer之从尾到头打印链表/" rel="prev" title="键值offer之从尾到头打印链表">
+                键值offer之从尾到头打印链表 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -737,7 +743,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">62</span>
+                    <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -909,7 +915,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">23</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">25</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1109,7 +1119,7 @@ show_date_time();
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">197k</span>
+    <span title="站点总字数">203k</span>
   
 
   
@@ -1118,7 +1128,7 @@ show_date_time();
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">2:59</span>
+    <span title="站点阅读时长">3:04</span>
   
 </div>
 
