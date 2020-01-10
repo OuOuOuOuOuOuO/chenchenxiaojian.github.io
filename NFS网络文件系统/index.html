@@ -312,7 +312,7 @@
       
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">69</span></a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">71</span></a>
 
   </li>
         
@@ -605,7 +605,7 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">192.168.18.131:/nfs on /mnt/nfs type nfs4 (rw,relatime,vers=4.1,rsize=262144,wsize=262144,namlen=255,hard,proto=tcp,timeo=600,retrans=2,sec=sys,clientaddr=192.168.18.131,local_lock=none,addr=192.168.18.131)</span><br><span class="line">[root@chenxiaojian nfs]#</span><br></pre></td></tr></table></figure>
 
 <p>例如：hard表示就是请求nfs服务时，会等到响应才结束，可以设置soft （已解决）</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@chenxiaojian nfs]# cat /etc/fstab</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span></span><br><span class="line"><span class="meta">#</span> /etc/fstab</span><br><span class="line"><span class="meta">#</span> Created by anaconda on Sun Sep 15 21:47:41 2019</span><br><span class="line"><span class="meta">#</span></span><br><span class="line"><span class="meta">#</span> Accessible filesystems, by reference, are maintained under '/dev/disk'</span><br><span class="line"><span class="meta">#</span> See man pages fstab(5), findfs(8), mount(8) and/or blkid(8) for more info</span><br><span class="line"><span class="meta">#</span></span><br><span class="line">/dev/mapper/centos_chenxiaojian-root /                       xfs     defaults        0 0</span><br><span class="line">UUID=cad510ce-5467-4544-89aa-efd687b4ac39 /boot                   xfs     defaults        0 0</span><br><span class="line">/dev/mapper/cetos_chenxiaojian-swap swap                    swap    defaults        0 0</span><br><span class="line">192.168.18.131:/nfs /mnt/nfs 	nfs  rw,soft		defaults  0 0</span><br><span class="line"><span class="meta">#</span> 对文件系统挂载表进行配置就可以了...</span><br><span class="line"><span class="meta">#</span> 此外，修改完成后，有些需要重启才能看得到效果 (注意加逗号，配置soft软挂载)</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@chenxiaojian nfs]# cat /etc/fstab</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> /etc/fstab</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Created by anaconda on Sun Sep 15 21:47:41 2019</span></span><br><span class="line"><span class="meta">#</span><span class="bash"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Accessible filesystems, by reference, are maintained under <span class="string">'/dev/disk'</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> See man pages fstab(5), findfs(8), mount(8) and/or blkid(8) <span class="keyword">for</span> more info</span></span><br><span class="line"><span class="meta">#</span><span class="bash"></span></span><br><span class="line">/dev/mapper/centos_chenxiaojian-root /                       xfs     defaults        0 0</span><br><span class="line">UUID=cad510ce-5467-4544-89aa-efd687b4ac39 /boot                   xfs     defaults        0 0</span><br><span class="line">/dev/mapper/cetos_chenxiaojian-swap swap                    swap    defaults        0 0</span><br><span class="line">192.168.18.131:/nfs /mnt/nfs 	nfs  rw,soft		defaults  0 0</span><br><span class="line"><span class="meta">#</span><span class="bash"> 对文件系统挂载表进行配置就可以了...</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 此外，修改完成后，有些需要重启才能看得到效果 (注意加逗号，配置soft软挂载)</span></span><br></pre></td></tr></table></figure>
 
 </li>
 </ol>
@@ -818,7 +818,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">69</span>
+                    <span class="site-state-item-count">71</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1196,7 +1196,7 @@ show_date_time();
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">224k</span>
+    <span title="站点总字数">225k</span>
   
 
   
@@ -1205,7 +1205,7 @@ show_date_time();
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">3:24</span>
+    <span title="站点阅读时长">3:25</span>
   
 </div>
 
