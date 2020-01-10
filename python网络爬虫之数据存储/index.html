@@ -132,7 +132,7 @@
 <meta property="og:image" content="c:%5CUsers%5C%E9%99%88%E5%B0%8F%E5%9D%9A%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200109154424642.png">
 <meta property="og:image" content="https://i.loli.net/2020/01/09/vn8x7IlFouM31ip.png">
 <meta property="og:image" content="https://i.loli.net/2020/01/09/P9Dcw8JoSIvY7dZ.png">
-<meta property="og:updated_time" content="2020-01-09T09:38:39.546Z">
+<meta property="og:updated_time" content="2020-01-10T02:30:14.457Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="python网络爬虫之数据存储">
 <meta name="twitter:description" content="数据存储的两种方式 存储在文件中，包括TXT文件和CSV文件 存储在数据库中，包括MySQL关系型数据库和MongoDB数据库  文件打开方式   读写方式 可否读写 若文件不存在 写入方式    w 写入 创建 覆盖写入   w+ 读取+写入 创建 覆盖写入   a 写入 创建 追加写入   a+ 读取+写入 创建 追加写入   r 读取 报错 不可写入   r+ 读取+写入 报错 覆盖写入">
@@ -328,7 +328,7 @@
       
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">67</span></a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">68</span></a>
 
   </li>
         
@@ -485,7 +485,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-09 17:38:39" itemprop="dateModified" datetime="2020-01-09T17:38:39+08:00">2020-01-09</time>
+                <time title="修改时间：2020-01-10 10:30:14" itemprop="dateModified" datetime="2020-01-10T10:30:14+08:00">2020-01-10</time>
               </span>
             
           
@@ -546,7 +546,7 @@
               
                 <span class="post-meta-item-text">本文字数：</span>
               
-              <span title="本文字数">16k</span>
+              <span title="本文字数">17k</span>
             </span>
           
 
@@ -833,7 +833,8 @@
 </li>
 <li><p><code>修改文档</code></p>
 <ul>
-<li><strong>update_one()方法：</strong>第一个参数为查询的条件，第二个参数为要修改的字段，<em>如果查找到的匹配数据多于一条，则会修改第一条</em></li>
+<li><strong>update_one()方法：</strong>第一个参数为查询的条件，第二个参数为要修改的字段，<em>如果查找到的匹配数据多于一条，则会修改第一条</em>，</li>
+<li><code>参数upsert=True</code>表示当没有查询到符合的数据，就新数据插入</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">updateone</span><span class="params">()</span>:</span>   </span><br><span class="line">    client = MongoClient(host=<span class="string">"localhost"</span>, port=<span class="number">27017</span>)</span><br><span class="line">    db = client[<span class="string">'runoodbd'</span>]</span><br><span class="line">    coll = db[<span class="string">'sites2'</span>]   </span><br><span class="line"></span><br><span class="line">    myquery = &#123;<span class="string">"alexa"</span>: <span class="string">"100"</span>&#125;</span><br><span class="line">    newvalue = &#123;<span class="string">"$set"</span>: &#123;<span class="string">"alexa"</span>: <span class="string">"99"</span>&#125;&#125;</span><br><span class="line">    <span class="comment"># coll.update_one(myquery, newvalue)</span></span><br><span class="line">    coll.update_one(myquery, newvalue)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 打印修改后的集合</span></span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> coll.find():</span><br><span class="line">        print(x)</span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">&#123;'_id': 1, 'name': 'Taobao', 'alexa': '99', 'url': 'https://www.taobao.com'&#125;</span></span><br><span class="line"><span class="string">&#123;'_id': 2, 'name': 'QQ', 'alexa': '101', 'url': 'https://www.qq.com'&#125;</span></span><br><span class="line"><span class="string">&#123;'_id': 3, 'name': 'Facebook', 'alexa': '10', 'url': 'https://www.facebook.com'&#125;</span></span><br><span class="line"><span class="string">&#123;'_id': 4, 'name': '知乎', 'alexa': '103', 'url': 'https://www.zhihu.com'&#125;</span></span><br><span class="line"><span class="string">&#123;'_id': 5, 'name': 'Github', 'alexa': '109', 'url': 'https://www.github.com'&#125;</span></span><br><span class="line"><span class="string">"""</span></span><br></pre></td></tr></table></figure>
 
@@ -1051,7 +1052,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">67</span>
+                    <span class="site-state-item-count">68</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1429,7 +1430,7 @@ show_date_time();
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">219k</span>
+    <span title="站点总字数">223k</span>
   
 
   
@@ -1438,7 +1439,7 @@ show_date_time();
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">3:20</span>
+    <span title="站点阅读时长">3:23</span>
   
 </div>
 

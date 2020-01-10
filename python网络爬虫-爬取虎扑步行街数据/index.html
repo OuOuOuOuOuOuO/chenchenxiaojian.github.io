@@ -109,16 +109,22 @@
 
 
 
-  <meta name="description" content="你我只是个普通人，活着就好">
-<meta property="og:type" content="website">
-<meta property="og:title" content="陈小坚の博客">
-<meta property="og:url" content="http://chenchenxiaojian.github.io/tags/递推/index.html">
+  <meta name="description" content="前言由于虎扑页面的限制，因为访问虎扑步行街的第11个页面就需要用户进行登录，鉴于此时技术还没有学全，只能爬取1到10的页面。 抓取什么数据 帖子名称 帖子链接 发帖人 发帖人链接 发帖时间 帖子回复数 帖子浏览数 最后回复帖子的人 最后回复的时间  如何抓取数据 首先我们发现这个页面是用gzip进行压缩的，gzip是用utf-8进行编码的，也就是我们抓取的页面是用utf-8编码的，而r.text返">
+<meta name="keywords" content="python网络爬虫">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python网络爬虫-爬取虎扑步行街数据">
+<meta property="og:url" content="http://chenchenxiaojian.github.io/python网络爬虫-爬取虎扑步行街数据/index.html">
 <meta property="og:site_name" content="陈小坚の博客">
-<meta property="og:description" content="你我只是个普通人，活着就好">
+<meta property="og:description" content="前言由于虎扑页面的限制，因为访问虎扑步行街的第11个页面就需要用户进行登录，鉴于此时技术还没有学全，只能爬取1到10的页面。 抓取什么数据 帖子名称 帖子链接 发帖人 发帖人链接 发帖时间 帖子回复数 帖子浏览数 最后回复帖子的人 最后回复的时间  如何抓取数据 首先我们发现这个页面是用gzip进行压缩的，gzip是用utf-8进行编码的，也就是我们抓取的页面是用utf-8编码的，而r.text返">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2020/01/09/P9Dcw8JoSIvY7dZ.png">
+<meta property="og:image" content="https://i.loli.net/2020/01/10/kKyCxT97fMjlqbG.png">
+<meta property="og:image" content="https://i.loli.net/2020/01/10/W9uBJ7CSt8OfiVj.png">
+<meta property="og:updated_time" content="2020-01-10T03:06:53.653Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="陈小坚の博客">
-<meta name="twitter:description" content="你我只是个普通人，活着就好">
+<meta name="twitter:title" content="python网络爬虫-爬取虎扑步行街数据">
+<meta name="twitter:description" content="前言由于虎扑页面的限制，因为访问虎扑步行街的第11个页面就需要用户进行登录，鉴于此时技术还没有学全，只能爬取1到10的页面。 抓取什么数据 帖子名称 帖子链接 发帖人 发帖人链接 发帖时间 帖子回复数 帖子浏览数 最后回复帖子的人 最后回复的时间  如何抓取数据 首先我们发现这个页面是用gzip进行压缩的，gzip是用utf-8进行编码的，也就是我们抓取的页面是用utf-8编码的，而r.text返">
+<meta name="twitter:image" content="https://i.loli.net/2020/01/09/P9Dcw8JoSIvY7dZ.png">
 
 
 
@@ -126,7 +132,7 @@
 
   
   
-  <link rel="canonical" href="http://chenchenxiaojian.github.io/tags/递推/">
+  <link rel="canonical" href="http://chenchenxiaojian.github.io/python网络爬虫-爬取虎扑步行街数据/">
 
 
 
@@ -136,7 +142,7 @@
   };
 </script>
 
-  <title>标签: 递推 | 陈小坚の博客</title>
+  <title>python网络爬虫-爬取虎扑步行街数据 | 陈小坚の博客</title>
   
 
 
@@ -184,7 +190,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
     <a href="https://github.com/chenchenxiaojian" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
 
@@ -263,7 +269,7 @@
         
         
           
-          <li class="menu-item menu-item-tags menu-item-active">
+          <li class="menu-item menu-item-tags">
 
     
     
@@ -389,86 +395,313 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>递推<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
+
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://chenchenxiaojian.github.io/python网络爬虫-爬取虎扑步行街数据/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="陈小坚(｀・ω・´)">
+      <meta itemprop="description" content="你我只是个普通人，活着就好">
+      <meta itemprop="image" content="/images/头像.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="陈小坚の博客">
+    </span>
+
+    
+      <header class="post-header">
+
         
-          <a class="post-title-link" href="/【洛谷】P1025数的划分/" itemprop="url">
-            
-              <span itemprop="name">【洛谷】P1025数的划分</span>
-            
-          </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">python网络爬虫-爬取虎扑步行街数据
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-11-01T13:45:14+08:00" content="2019-11-01">
-          11-01
-        </time>
-      </div>
+              
+            
+          </h1>
+        
 
-    </header>
-  </article>
+        <div class="post-meta">
 
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-01-10 10:23:28 / 修改时间：11:06:53" itemprop="dateCreated datePublished" datetime="2020-01-10T10:23:28+08:00">2020-01-10</time>
+            </span>
+          
+
+          
+            
+
+            
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/python网络爬虫/" itemprop="url" rel="index"><span itemprop="name">python网络爬虫</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/python网络爬虫-爬取虎扑步行街数据/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/python网络爬虫-爬取虎扑步行街数据/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+                 阅读次数： 
+                <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+              </span>
+            </span>
+          
+
+          <br>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">本文字数：</span>
+              
+              <span title="本文字数">3.8k</span>
+            </span>
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              
+              <span title="阅读时长">3 分钟</span>
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>由于虎扑页面的限制，因为访问虎扑步行街的第11个页面就需要用户进行登录，鉴于此时技术还没有学全，只能爬取1到10的页面。</p>
+<h4 id="抓取什么数据"><a href="#抓取什么数据" class="headerlink" title="抓取什么数据"></a>抓取什么数据</h4><ul>
+<li>帖子名称</li>
+<li>帖子链接</li>
+<li>发帖人</li>
+<li>发帖人链接</li>
+<li>发帖时间</li>
+<li>帖子回复数</li>
+<li>帖子浏览数</li>
+<li>最后回复帖子的人</li>
+<li>最后回复的时间</li>
+</ul>
+<h4 id="如何抓取数据"><a href="#如何抓取数据" class="headerlink" title="如何抓取数据"></a>如何抓取数据</h4><ul>
+<li><p>首先我们发现这个页面是用gzip进行压缩的，gzip是用utf-8进行编码的，也就是我们抓取的页面是用utf-8编码的，而r.text返回的是unicode编码的字符串，如果我们直接用就会出现乱码，因此，我们用r.content，返回的bytes数据（抓取音频，文件），然后将这个页面从utf-8解码为unicode编码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">html = r.content</span><br><span class="line">html = html.decode(<span class="string">'utf-8'</span>) <span class="comment">#将utf-8解码为unicode</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p><img src="https://i.loli.net/2020/01/09/P9Dcw8JoSIvY7dZ.png" alt></p>
+<ul>
+<li>抓取数据对应的字段的html标签(代码中看)</li>
+</ul>
+<h4 id="用Mongodb存放抓取到的数据"><a href="#用Mongodb存放抓取到的数据" class="headerlink" title="用Mongodb存放抓取到的数据"></a>用Mongodb存放抓取到的数据</h4><ul>
+<li>需要注意的问题，就是可能会出现本来在第一页的帖子，然后凉了啥的，被顶到了第二页，那么这时候就不能存放在数据库中，所以每次插入数据要进行判断一下</li>
+</ul>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> pymongo <span class="keyword">import</span> MongoClient</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_page</span><span class="params">(link)</span>:</span></span><br><span class="line">    data_list = []</span><br><span class="line">    headers = &#123;</span><br><span class="line">        <span class="string">"User-Agent"</span>: <span class="string">"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:71.0) Gecko/20100101 Firefox/71.0"</span></span><br><span class="line">    &#125;</span><br><span class="line">    r = requests.get(link, headers=headers)</span><br><span class="line">    html = r.content</span><br><span class="line">    html = html.decode(<span class="string">'utf-8'</span>) <span class="comment">#将utf-8解码为unicode</span></span><br><span class="line">    soup = BeautifulSoup(html, <span class="string">'lxml'</span>)</span><br><span class="line">    for_list = soup.find(<span class="string">'ul'</span>, class_=<span class="string">"for-list"</span>)</span><br><span class="line">    for_list = for_list.find_all(<span class="string">'li'</span>)</span><br><span class="line">    <span class="keyword">for</span> each_for <span class="keyword">in</span> for_list:</span><br><span class="line">        <span class="comment"># 帖子名称</span></span><br><span class="line">        for_name = each_for.find(<span class="string">'div'</span>, class_=<span class="string">"titlelink box"</span>).a.text.strip()</span><br><span class="line">    </span><br><span class="line">        <span class="comment"># 帖子链接</span></span><br><span class="line">        for_link = each_for.find(<span class="string">'div'</span>, class_=<span class="string">"titlelink box"</span>).a[<span class="string">'href'</span>]</span><br><span class="line">    </span><br><span class="line">        for_link = <span class="string">'https://bbs.hupu.com'</span> + for_link</span><br><span class="line">    </span><br><span class="line">        <span class="comment"># 作者</span></span><br><span class="line">        for_writer = each_for.find(<span class="string">'div'</span>, class_=<span class="string">"author box"</span>).a.text.strip()</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 作者链接</span></span><br><span class="line">        for_writer_link = each_for.find(<span class="string">'div'</span>, class_= <span class="string">"author box"</span>).a[<span class="string">'href'</span>]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 帖子创建时间</span></span><br><span class="line">        for_createtime = each_for.find(<span class="string">'div'</span>, class_= <span class="string">"author box"</span>)</span><br><span class="line">        <span class="comment"># 获取节点的所有子节点，然后发现时间在列表中第6项</span></span><br><span class="line">        for_createtime = for_createtime.contents   </span><br><span class="line">        for_createtime = for_createtime[<span class="number">5</span>].text.strip()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 回复数</span></span><br><span class="line">        for_reply_numbers = each_for.find(<span class="string">'span'</span>, class_= <span class="string">"ansour box"</span>).text.split(<span class="string">'/'</span>)[<span class="number">0</span>].strip()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 浏览数</span></span><br><span class="line">        for_see_numbers = each_for.find(<span class="string">'span'</span>, class_= <span class="string">"ansour box"</span>).text.split(<span class="string">'/'</span>)[<span class="number">1</span>].strip()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 最后回复用户</span></span><br><span class="line">        for_last_reply_user = each_for.find(<span class="string">'div'</span>, class_=<span class="string">"endreply box"</span>).span.text.strip()</span><br><span class="line">        </span><br><span class="line">        <span class="comment">#最后回复时间</span></span><br><span class="line">        for_last_reply_time = each_for.find(<span class="string">'div'</span>, class_=<span class="string">"endreply box"</span>).a.text.strip()</span><br><span class="line">        </span><br><span class="line">        data_list.append([for_name, for_link, for_writer, for_writer_link, for_createtime, for_reply_numbers,for_see_numbers, for_last_reply_user,for_last_reply_time])</span><br><span class="line">    <span class="keyword">return</span> data_list</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">sort_by_Mongodb</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, db_host, db_port, db_name, coll_name)</span>:</span></span><br><span class="line">        self.db_host = db_host</span><br><span class="line">        self.db_port = db_port</span><br><span class="line">        self.db_name = db_name</span><br><span class="line">        self.coll_name = coll_name</span><br><span class="line">        self.client = MongoClient(host=self.db_host, port=self.db_port)</span><br><span class="line">        self.db = self.client[self.db_name]</span><br><span class="line">        self.coll = self.db[self.coll_name]</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">update</span><span class="params">(self, query, insert_data)</span>:</span></span><br><span class="line">        <span class="comment"># query表示查询条件, insert_data表示更新的数据，其实在本例中就是要插入的数据</span></span><br><span class="line">        self.coll.update_one(query, &#123;<span class="string">'$set'</span>:insert_data&#125;, upsert=<span class="literal">True</span>)</span><br><span class="line">        <span class="comment"># upsert (optional): If True, perform an insert if no documents match the filter.</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    link = <span class="string">"https://bbs.hupu.com/bxj-"</span></span><br><span class="line">    <span class="comment"># 超过第10个页面就需要登录了。。。。</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">11</span>):</span><br><span class="line">        link_temp = link + str(i)</span><br><span class="line">        data_list = get_page(link_temp) <span class="comment">#返回的是列表的列表</span></span><br><span class="line">        a = sort_by_Mongodb(<span class="string">"localhost"</span>, <span class="number">27017</span>, <span class="string">"hupu"</span>, <span class="string">"buxingjie"</span>)</span><br><span class="line">        <span class="keyword">for</span> each <span class="keyword">in</span> data_list:</span><br><span class="line">            insert_dict = &#123;</span><br><span class="line">                <span class="string">"帖子名称"</span>: each[<span class="number">0</span>],</span><br><span class="line">                <span class="string">"帖子链接"</span>: each[<span class="number">1</span>],</span><br><span class="line">                <span class="string">"发帖人"</span>: each[<span class="number">2</span>],</span><br><span class="line">                <span class="string">"发帖人链接"</span>: each[<span class="number">3</span>],</span><br><span class="line">                <span class="string">"发帖时间"</span>: each[<span class="number">4</span>],</span><br><span class="line">                <span class="string">"贴子回复数"</span>: each[<span class="number">5</span>],</span><br><span class="line">                <span class="string">"帖子浏览数"</span>: each[<span class="number">6</span>],</span><br><span class="line">                <span class="string">"最后回复帖子的人"</span>: each[<span class="number">7</span>],</span><br><span class="line">                <span class="string">"最后回复时间"</span>: each[<span class="number">8</span>]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment"># 帖子链接肯定是不一样的，因此把这个作为筛选条件</span></span><br><span class="line">            a.update(&#123;<span class="string">"帖子链接"</span>: each[<span class="number">1</span>]&#125;, insert_dict)</span><br><span class="line">        print(<span class="string">"第"</span>+ str(i)+ <span class="string">"页面存取完成！！！！！！！！！！！"</span>)</span><br><span class="line">        time.sleep(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<h4 id="结果截图"><a href="#结果截图" class="headerlink" title="结果截图"></a>结果截图</h4><p><img src="https://i.loli.net/2020/01/10/kKyCxT97fMjlqbG.png" alt="图片.png"></p>
+<p><img src="https://i.loli.net/2020/01/10/W9uBJ7CSt8OfiVj.png" alt="图片.png"></p>
+<p><strong>一共抓取到1151条贴子，对于10个页面来说，好像差不多吧~</strong></p>
 
       
     </div>
 
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div id="reward-container">
+  <div>你可以对我打赏de~阿里嘎多~</div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+
+    
+      
+      
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/微信收款码.jpg" alt="陈小坚(｀・ω・´) 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+      
+      
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/支付宝收款码.jpg" alt="陈小坚(｀・ω・´) 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+    <div>
+        <p id="div-border-left-red">
+       <b>本文基于<a target="_blank" title="Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)" href="http://creativecommons.org/licenses/by-sa/4.0/"> 知识共享署名-相同方式共享 4.0 </a>国际许可协议发布</b><br>
+        <span>
+        <b>本文地址：</b><a href="/python网络爬虫-爬取虎扑步行街数据/" title="python网络爬虫-爬取虎扑步行街数据">http://chenchenxiaojian.github.io/python网络爬虫-爬取虎扑步行街数据/</a><br><b>转载请注明出处，谢谢！</b>
+        </span>
+        </p>
+    </div>
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/python网络爬虫/" rel="tag"><i class="fa fa-google"></i> python网络爬虫</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/剑指offer-斐波那契序列/" rel="next" title="剑指offer-斐波那契序列">
+                <i class="fa fa-chevron-left"></i> 剑指offer-斐波那契序列
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+  </div>
 
 
           </div>
           
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
 
         </div>
         
@@ -488,8 +721,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -836,6 +1078,23 @@ show_date_time();
       </div>
 
       
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#抓取什么数据"><span class="nav-number">2.</span> <span class="nav-text">抓取什么数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何抓取数据"><span class="nav-number">3.</span> <span class="nav-text">如何抓取数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#用Mongodb存放抓取到的数据"><span class="nav-number">4.</span> <span class="nav-text">用Mongodb存放抓取到的数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#代码"><span class="nav-number">5.</span> <span class="nav-text">代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#结果截图"><span class="nav-number">6.</span> <span class="nav-text">结果截图</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
 
       
         <div class="back-to-top">
@@ -1000,6 +1259,10 @@ show_date_time();
 
 
   
+  <script src="/js/scrollspy.js?v=7.2.0"></script>
+<script src="/js/post-details.js?v=7.2.0"></script>
+
+
 
   
 
@@ -1041,6 +1304,8 @@ show_date_time();
 
 
 
+
+  
 
 
 
