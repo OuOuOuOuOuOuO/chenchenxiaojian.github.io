@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[剑指offer-调整数组的顺序使奇数位于偶数前面]]></title>
+    <url>%2F%E5%89%91%E6%8C%87offer-%E8%B0%83%E6%95%B4%E6%95%B0%E7%BB%84%E7%9A%84%E9%A1%BA%E5%BA%8F%E4%BD%BF%E5%A5%87%E6%95%B0%E4%BD%8D%E4%BA%8E%E5%81%B6%E6%95%B0%E5%89%8D%E9%9D%A2%2F</url>
+    <content type="text"><![CDATA[题目描述输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有的奇数位于数组的前半部分，所有的偶数位于数组的后半部分，并保证奇数和奇数，偶数和偶数之间的相对位置不变。 思路 可以用空间换时间的做法，用两个数组分别保存奇数和偶数，最后在进行合并；时间复杂度为O(n)；空间复杂度为O(n) 使用冒泡排序，这样要注意奇数和奇数，偶数和偶数之间的相对位置不变，也就是保持稳定性，而冒泡排序具有稳定性的特点，不过时间复杂度为$O(n^2)$， 空间复杂度为O(1); 另外一种思路就是使用两个指针，如果第一个指针指向的数是偶数（此时下标为a），另一个指针就找到第一个奇数并指向了他（此时下标为b），那么下标为a~b-1之间的数就都是偶数，然后就把这个区间的数王往前面移动一个单位，然后在把第二个指针指向的数复制到第一个指针指向的位置；时间复杂度：假设一个数需要移动n个，那么n个数字需要移动n*n次，为$O(n^2)$ AC代码12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364#include &lt;iostream&gt;#include &lt;vector&gt;using namespace std;class Solution&#123;public: void reOrderArray(vector&lt;int&gt; &amp;array) &#123; vector&lt;int&gt;odd; //奇数 vector&lt;int&gt;even; //偶数 for(int i = 0;i &lt; array.size();i++) &#123; if (array[i] % 2 == 1) odd.push_back(array[i]); else &#123; even.push_back(array[i]); &#125; &#125; int len = 0; for (int i = 0;i &lt; odd.size();i++) &#123; array[len++] = odd[i]; &#125; for(int i = 0;i &lt; even.size();i++) &#123; array[len++] = even[i]; &#125; &#125; void reOrderArray_by_bubble_sort(vector&lt;int&gt;&amp;array) &#123; int m = array.size()-1; while (m &gt; 0) &#123; for(int i = 0;i &lt; m;i++) &#123; if (array[i] % 2 == 0 &amp;&amp; array[i+1] %2 ==1) &#123; int temp = array[i]; array[i] = array[i+1]; array[i+1] = temp; &#125; &#125; m--; &#125; &#125;&#125;;int main()&#123; int arr[7] = &#123;1, 2, 3, 4, 5, 6, 7&#125;; vector&lt;int&gt; v(arr, arr + 7); Solution so; so.reOrderArray_by_bubble_sort(v); for (int i = 0; i &lt; v.size(); i++) cout &lt;&lt; v[i] &lt;&lt; endl; return 0;&#125; 总结 面对一些排序问题，我们会想到各种各样的排序算法，这时候需要考虑其空间复杂度，时间复杂度和其稳定性]]></content>
+      <categories>
+        <category>OJ</category>
+        <category>剑指offer</category>
+      </categories>
+      <tags>
+        <tag>数组 - 排序</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[剑指offer-数值的整数次方]]></title>
+    <url>%2F%E5%89%91%E6%8C%87offer-%E6%95%B0%E5%80%BC%E7%9A%84%E6%95%B4%E6%95%B0%E6%AC%A1%E6%96%B9%2F</url>
+    <content type="text"><![CDATA[题目描述 给定一个double类型的浮点数base和int类型的整数exponent。求base的exponent次方。 保证base和exponent不同时为0 思路 0的0次方没有意思 注意数的负数次方变成倒数 任何数的0次方等于1 AC代码12345678910111213141516171819202122232425262728293031323334#include &lt;iostream&gt;#include &lt;math.h&gt;using namespace std;class Solution&#123;public: double Power(double base, int exponent) &#123; int temp = abs(exponent); if (base == 0) &#123; return 0; &#125; double res = 1; for (int i = 0; i &lt; temp; i++) &#123; res = res * base; &#125; if (exponent &gt;= 0) return res; else return 1 / res; &#125;&#125;;int main()&#123; Solution so; cout &lt;&lt; so.Power(2, -3); return 0;&#125;]]></content>
+      <categories>
+        <category>OJ</category>
+        <category>剑指offer</category>
+      </categories>
+      <tags>
+        <tag>数论</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[剑指offer-二进制中1的个数]]></title>
     <url>%2F%E5%89%91%E6%8C%87offer-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%AD1%E7%9A%84%E4%B8%AA%E6%95%B0%2F</url>
     <content type="text"><![CDATA[题目描述输入一个整数，输出该数二进制表示中1的个数。其中负数用补码表示。 思路 遇到的问题就是我再一次想把这个数字转换为二进制码，但是其实计算机已经帮我们做了这个过程，转换为二进制数其实大多应用于高精度中 鉴于这个情况，我们可以用位运算，从而比较出该数字的每一位1，但是需要注意陷入死循环的问题，只要非空非0，循环就可以一直继续 至于代码中设置退出循环的条件就是flag超出unsigned int所能表示的数据范围，就会发生截断，然后只保留32位，也就是unsigned int占4个字节，变成0然后循环退出。 AC代码12345678910111213141516171819202122232425262728293031#include &lt;iostream&gt;#include &lt;math.h&gt;using namespace std;class Solution&#123;public: int NumberOf1(int n) &#123; int count = 0; unsigned int flag = 1; int times = 0; while (flag) &#123; if (flag &amp; n) count++; flag = flag &lt;&lt; 1; cout &lt;&lt; flag &lt;&lt; endl; times++; &#125; // cout &lt;&lt; "次数为" &lt;&lt; times &lt;&lt;endl; return count; &#125;&#125;;int main()&#123; Solution so; cout &lt;&lt;so.NumberOf1(13)&lt;&lt;endl;&#125; 我写不出来的算法规律：一个数减去1然后与原来的数进行与运算，会将这个数最右边的1变成0；（虽然写不出，但还是学学嘛=-=）这种算法就是一个数里面有多少个1就循环多少次， 12345678910int NumberOf1_2(int n) &#123; int count = 0; while (n) &#123; count++; n = (n-1) &amp; n; &#125; return count; &#125; 遇到的问题&amp;总结 unsigned int与int做运算时，Int会强制转换为无符号整数 1234567unsigned int a = 1,int b = -2;// a b 都是无符号整数 这样编译不了，可能是有新版本吧，unsigned int a = 1;int b = -2;int c = -2;cout &lt;&lt; b &lt;&lt; endl; //-2if (a + c &gt; 0) //因此b,c在计算机中是以补码的形式存放，0xfffffff(1110) ==&gt;无符号表示的就是2^32-2 cout &lt;&lt; a + b &lt;&lt; endl; //4294967295 ==&gt;&gt;2^32-1 注意一个变量的类型，无符号整数和有符号整数此外，这个16进制数表示的负数的补码，正数就无所谓=-= 12345678910int res = 0xffffffff;unsigned int rea = 0xffffffff;cout &lt;&lt; 0xffffffff &lt;&lt;endl;cout &lt;&lt; res &lt;&lt;endl;cout &lt;&lt; rea &lt;&lt;endl;/*4294967295-14294967295*/ 遇到判断二进制数，不用在自己转为二进制数了，计算机底层会帮我们处理完成的，只有在高精度时才需要进行这样的处理 条件判断只要是不为0或者不为空就可以运行 最后一个问题就是左移32或者以上时，编译器如何处理这个越界情况,上代码=-= 12345678910111213unsigned int test1 = 2147483648;test1 = test1 &lt;&lt; 1;cout &lt;&lt; "test1: " &lt;&lt;test1 &lt;&lt;endl;unsigned int test = 1;test = (test &lt;&lt; 32);unsigned int i = 1;cout &lt;&lt; "test2 :" &lt;&lt;test &lt;&lt; endl;cout &lt;&lt;"test3:" &lt;&lt; (i&lt;&lt;32) &lt;&lt;endl;/*test1: 0test2 :1test3:1*/ 对上述代码的总结： 首先这个基于g++编译器 其次，如果对于左移1位的数，越界溢出按照截断处理（就是只是保留低位的二进制数） 但是如果左移32或者以上g++编译器就会默认处理为：左移位数与该数据类型位数做取模运算，例如无符号整数1 &lt;&lt; 32，那么32 % 32(无符号整数4个字节) = 0，也就是不移动，结果等于1]]></content>
