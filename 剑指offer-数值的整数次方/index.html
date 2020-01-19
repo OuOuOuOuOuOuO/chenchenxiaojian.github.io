@@ -117,7 +117,7 @@
 <meta property="og:site_name" content="陈小坚の博客">
 <meta property="og:description" content="题目描述  给定一个double类型的浮点数base和int类型的整数exponent。求base的exponent次方。    保证base和exponent不同时为0  思路 0的0次方没有意思 注意数的负数次方变成倒数 任何数的0次方等于1 0的负数次方是没有意义的，但是我的代码中只要base是0，就返回0，但是实际上0的负数次本质上是没有任何意义的。 double base判断base是否">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-01-19T03:17:46.114Z">
+<meta property="og:updated_time" content="2020-01-19T13:32:21.875Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="剑指offer-数值的整数次方">
 <meta name="twitter:description" content="题目描述  给定一个double类型的浮点数base和int类型的整数exponent。求base的exponent次方。    保证base和exponent不同时为0  思路 0的0次方没有意思 注意数的负数次方变成倒数 任何数的0次方等于1 0的负数次方是没有意义的，但是我的代码中只要base是0，就返回0，但是实际上0的负数次本质上是没有任何意义的。 double base判断base是否">
@@ -469,7 +469,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-19 11:17:46" itemprop="dateModified" datetime="2020-01-19T11:17:46+08:00">2020-01-19</time>
+                <time title="修改时间：2020-01-19 21:32:21" itemprop="dateModified" datetime="2020-01-19T21:32:21+08:00">2020-01-19</time>
               </span>
             
           
@@ -1663,6 +1663,46 @@ show_date_time();
   
   
 
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      document.getElementById(all[i].inputID + '-Frame').parentNode.className += ' has-jax';
+    }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
   
 
 

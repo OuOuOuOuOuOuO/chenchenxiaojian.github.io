@@ -117,7 +117,7 @@
 <meta property="og:site_name" content="陈小坚の博客">
 <meta property="og:description" content="题目给定单向链表的头指针和一个结点指针，定义一个函数在 $O(1)$ 时间删除该结点。 思路 第一个思路就是顺序查找然后找到要删除节点的位置，时间复杂度为$O(n)$  如果想要在$O(1)$时间内删除节点，给出一个要删除的节点，我们可以很快找到这个节点下一个节点  需要注意的问题就是这个算法的前提就是要删除的节点在这个链表中，因此判断一个节点是否在这个链表中还是需要$O(n)$的时间  如果这个">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-01-19T13:27:57.214Z">
+<meta property="og:updated_time" content="2020-01-19T13:32:11.515Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="剑指offer-在O1时间删除链表节点">
 <meta name="twitter:description" content="题目给定单向链表的头指针和一个结点指针，定义一个函数在 $O(1)$ 时间删除该结点。 思路 第一个思路就是顺序查找然后找到要删除节点的位置，时间复杂度为$O(n)$  如果想要在$O(1)$时间内删除节点，给出一个要删除的节点，我们可以很快找到这个节点下一个节点  需要注意的问题就是这个算法的前提就是要删除的节点在这个链表中，因此判断一个节点是否在这个链表中还是需要$O(n)$的时间  如果这个">
@@ -454,7 +454,7 @@
                 
               
 
-              <time title="创建时间：2020-01-19 20:58:25 / 修改时间：21:27:57" itemprop="dateCreated datePublished" datetime="2020-01-19T20:58:25+08:00">2020-01-19</time>
+              <time title="创建时间：2020-01-19 20:58:25 / 修改时间：21:32:11" itemprop="dateCreated datePublished" datetime="2020-01-19T20:58:25+08:00">2020-01-19</time>
             </span>
           
 
@@ -1662,6 +1662,46 @@ show_date_time();
   
   
 
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      document.getElementById(all[i].inputID + '-Frame').parentNode.className += ' has-jax';
+    }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
   
 
 

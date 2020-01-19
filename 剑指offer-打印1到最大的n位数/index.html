@@ -117,7 +117,7 @@
 <meta property="og:site_name" content="陈小坚の博客">
 <meta property="og:description" content="题目输入数字n，按顺序打印出从1最大的n位十进制数。比如输入3，则打印出1、2、3一直到最大的3位数即999。 思路 1到最大的n位十进制数，其实就是n位数字的全排列 需要考虑long long不能存放的数字，只能用高精度的思想，也就是用数组存放数字 符合正常的交互方式，也就是从第一个非0的位置开始输出  AC代码123456789101112131415161718192021222324252">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-01-19T11:49:45.112Z">
+<meta property="og:updated_time" content="2020-01-19T13:32:17.489Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="剑指offer-打印1到最大的n位数">
 <meta name="twitter:description" content="题目输入数字n，按顺序打印出从1最大的n位十进制数。比如输入3，则打印出1、2、3一直到最大的3位数即999。 思路 1到最大的n位十进制数，其实就是n位数字的全排列 需要考虑long long不能存放的数字，只能用高精度的思想，也就是用数组存放数字 符合正常的交互方式，也就是从第一个非0的位置开始输出  AC代码123456789101112131415161718192021222324252">
@@ -454,7 +454,7 @@
                 
               
 
-              <time title="创建时间：2020-01-19 19:42:54 / 修改时间：19:49:45" itemprop="dateCreated datePublished" datetime="2020-01-19T19:42:54+08:00">2020-01-19</time>
+              <time title="创建时间：2020-01-19 19:42:54 / 修改时间：21:32:17" itemprop="dateCreated datePublished" datetime="2020-01-19T19:42:54+08:00">2020-01-19</time>
             </span>
           
 
@@ -1654,6 +1654,46 @@ show_date_time();
   
   
 
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      document.getElementById(all[i].inputID + '-Frame').parentNode.className += ' has-jax';
+    }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
   
 
 
