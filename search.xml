@@ -1,6 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[剑指offer-字符串的排列]]></title>
+    <url>%2F%E5%89%91%E6%8C%87offer-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97%2F</url>
+    <content type="text"><![CDATA[题目描述输入一个字符串,按字典序打印出该字符串中字符的所有排列。例如输入字符串abc,则打印出由字符a,b,c所能排列出来的所有字符串abc,acb,bac,bca,cab和cba。 输入描述:1输入一个字符串,长度不超过9(可能有字符重复),字符只包括大小写字母。 思路全排列: 实现的思路参见 需要注意的问题： 判重 字典序 输入样例空字符串 AC代码12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455#include &lt;iostream&gt;#include &lt;vector&gt;#include &lt;string.h&gt;#include &lt;algorithm&gt;using namespace std;class Solution&#123;public: vector&lt;string&gt; Permutation(string str) &#123; vector&lt;string&gt; res; if (str == "") //空字符 return res; premutation(str, res, 0); //需要输出字典序，所以进行排序 sort(res.begin(), res.end()); return res; &#125; void swap(string &amp;str, int i, int j) &#123; char temp = str[i]; str[i] = str[j]; str[j] = temp; &#125; void premutation(string str, vector&lt;string&gt; &amp;res, int size) &#123; if (size == str.size()) &#123; if (find(res.begin(), res.end(), str) == res.end()) //判断重复 res.push_back(str); return; &#125; for (int i = size; i &lt; str.size(); i++) &#123; swap(str, i, size); premutation(str, res, size + 1); swap(str, i, size); //回溯 &#125; &#125;&#125;;int main()&#123; string str = "abc"; // string str = ""; // string str = "aab"; Solution so; vector&lt;string&gt; res = so.Permutation(str); for (vector&lt;string&gt;::iterator it = res.begin(); it != res.end(); it++) &#123; cout &lt;&lt; *it &lt;&lt; " "; &#125; cout &lt;&lt; endl;&#125;]]></content>
+      <categories>
+        <category>OJ</category>
+        <category>剑指offer</category>
+      </categories>
+      <tags>
+        <tag>字符串</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[剑指offer-二叉搜索树与双向链表]]></title>
+    <url>%2F%E5%89%91%E6%8C%87offer-%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B8%8E%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8%2F</url>
+    <content type="text"><![CDATA[题目描述输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。要求不能创建任何新的结点，只能调整树中结点指针的指向。 思路因为这是一个二叉搜索树，并且要求将其变成排序的双向链表，这正符合二叉树的中序遍历思路，当我们遍历到根节点的时候，左子树已经排好序，我们要就是将左子树的最大节点与根节点相连，至于如何实现左子树的排序，用pre保存上一个节点，中序遍历到当前节点cur时，就将pre-&gt;right = cur，cur-&gt;left = pre，然后进行更新pre。 AC代码1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889#include &lt;iostream&gt;using namespace std;struct TreeNode&#123; int val; struct TreeNode *left; struct TreeNode *right; TreeNode(int x) : val(x), left(NULL), right(NULL) &#123; &#125;&#125;;//先序创建TreeNode *Create_tree()&#123; TreeNode *T; int val; cin &gt;&gt; val; if (val == 0) //叶子结点用0标记 return NULL; else &#123; T = new TreeNode(val); T-&gt;left = Create_tree(); T-&gt;right = Create_tree(); &#125; return T;&#125;//先序遍历void pre_print(TreeNode *T)&#123; if (T) &#123; cout &lt;&lt; T-&gt;val &lt;&lt; " "; pre_print(T-&gt;left); pre_print(T-&gt;right); &#125;&#125;class Solution&#123;public: TreeNode *Convert(TreeNode *pRootOfTree) &#123; if (pRootOfTree == NULL) return NULL; TreeNode *p = NULL; //因为左子树的最后一个左孩子的左指针须为空 convert(pRootOfTree, p); //找到最左子树的最左孩子，然后返回 while (pRootOfTree-&gt;left) &#123; pRootOfTree = pRootOfTree-&gt;left; &#125; return pRootOfTree; &#125; void convert(TreeNode *cur, TreeNode *&amp;pre) &#123; if (cur == NULL) return; convert(cur-&gt;left, pre); cur-&gt;left = pre; if (pre) pre-&gt;right = cur; //将上一个节点指向当前节点，比如是5--&gt; 6 pre = cur; //更新上一个节点 convert(cur-&gt;right, pre); &#125;&#125;;int main()&#123; TreeNode *root = Create_tree(); pre_print(root); cout &lt;&lt; endl; Solution so; TreeNode *res = so.Convert(root); cout &lt;&lt; res-&gt;val &lt;&lt; endl; while (res) &#123; cout &lt;&lt; res-&gt;val &lt;&lt; " "; res = res-&gt;right; &#125; return 0;&#125;/*8 6 5 0 0 7 0 0 10 9 0 0 11 0 08 6 5 7 10 9 11 55 6 7 8 9 10 11*/ 总结 存在问题，对二叉树的线索化不熟悉啊=-=]]></content>
+      <categories>
+        <category>OJ</category>
+        <category>剑指offer</category>
+      </categories>
+      <tags>
+        <tag>链表</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[剑指offer-复杂链表的复制]]></title>
+    <url>%2F%E5%89%91%E6%8C%87offer-%E5%A4%8D%E6%9D%82%E9%93%BE%E8%A1%A8%E7%9A%84%E5%A4%8D%E5%88%B6%2F</url>
+    <content type="text"><![CDATA[题目描述输入一个复杂链表（每个节点中有节点值，以及两个指针，一个指向下一个节点，另一个特殊指针指向任意一个节点），返回结果为复制后复杂链表的head。（注意，输出结果中请不要返回参数中的节点引用，否则判题程序会直接返回空） 思路 先复制对应的节点并连接在对应节点的后面 设置各个节点的random指针 将新旧链表分割开来（这里我是一脸蒙蔽，明明我返回写的函数没有返回引用，就是通过不了测试….） 时间复杂度为$O(n)$，空间复杂度为$O(1)$ AC代码1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889909192939495969798#include &lt;iostream&gt;using namespace std;struct RandomListNode&#123; int label; struct RandomListNode *next, *random; RandomListNode(int x) : label(x), next(NULL), random(NULL) &#123; &#125;&#125;;class Solution&#123;public: RandomListNode *Clone(RandomListNode *pHead) &#123; first(pHead); second(pHead); return third(pHead); &#125; void first(RandomListNode *pHead) //复制每个节点，并将节点复制到对应节点的后面 &#123; RandomListNode *p = pHead; while (p) &#123; RandomListNode *new_node = new RandomListNode(p-&gt;label); //创建新节点 //将新节点复制到原节点的后面 new_node-&gt;next = p-&gt;next; //这里不能复制节点的random指针，因为后面的新节点还没有创建，就不能连接在一起 new_node-&gt;random = NULL; //先设置为NULL p-&gt;next = new_node; //指针移动到新的节点上 p = new_node-&gt;next; &#125; &#125; void second(RandomListNode *pHead) //连接每个节点的random指针 &#123; RandomListNode *p = pHead; while (p) &#123; RandomListNode * temp = p-&gt;next; if (p-&gt;random) temp-&gt;random = p-&gt;random-&gt;next; p = temp-&gt;next; &#125; &#125; RandomListNode *third(RandomListNode *pHead) //将新旧两个链表分割出来 &#123; /* 我这自己写的就是通过不了测试，感觉也没问题啊.... if (pHead == NULL) return NULL; RandomListNode * curnode = pHead-&gt;next; RandomListNode * res = curnode; RandomListNode * temp; while (curnode-&gt;next) &#123; temp = curnode-&gt;next; curnode-&gt;next = temp-&gt;next; curnode = temp-&gt;next; &#125; return res; */ if (pHead == NULL) return NULL; RandomListNode * pnew = pHead-&gt;next; RandomListNode *temp; RandomListNode * curnode = pHead; while(curnode-&gt;next) //将旧链表重新连接好，这样也就是将新旧链表分割开来了 &#123; temp = curnode-&gt;next; curnode-&gt;next =temp-&gt;next; curnode = temp; &#125; return pnew; &#125;&#125;;int main()&#123; RandomListNode *head = new RandomListNode(1); RandomListNode *p1 = new RandomListNode(2); RandomListNode *p2 = new RandomListNode(3); head-&gt;next = p1; p1-&gt;next = p2; head-&gt;random = p2; p2-&gt;random = p1; Solution so; RandomListNode *pnew = so.Clone(head); while (pnew) &#123; cout &lt;&lt; pnew-&gt;label &lt;&lt; " "; pnew = pnew-&gt;random; &#125; cout &lt;&lt; endl; return 0;&#125;]]></content>
+      <categories>
+        <category>OJ</category>
+        <category>剑指offer</category>
+      </categories>
+      <tags>
+        <tag>链表</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[剑指offer-二叉树中和为某一值的路径]]></title>
+    <url>%2F%E5%89%91%E6%8C%87offer-%E4%BA%8C%E5%8F%89%E6%A0%91%E4%B8%AD%E5%92%8C%E4%B8%BA%E6%9F%90%E4%B8%80%E5%80%BC%E7%9A%84%E8%B7%AF%E5%BE%84%2F</url>
+    <content type="text"><![CDATA[题目描述输入一颗二叉树的跟节点和一个整数，打印出二叉树中结点值的和为输入整数的所有路径。路径定义为从树的根结点开始往下一直到叶结点所经过的结点形成一条路径。(注意: 在返回值的list中，数组长度大的数组靠前) 思路DFS，根据先序遍历的思想，往下深搜，先根结点，然后左子树，接着右子树，然后回溯（就是返回到根结点的状态），当发现target == 0并且他是叶子结点就可以返回了，需要注意题目要求的是从根结点到叶结点。 AC代码123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104#include &lt;iostream&gt;#include &lt;vector&gt;using namespace std;struct TreeNode&#123; int val; struct TreeNode *left; struct TreeNode *right; TreeNode(int x) : val(x), left(NULL), right(NULL) &#123; &#125;&#125;;//先序创建TreeNode *Create_tree()&#123; TreeNode *T; int val; cin &gt;&gt; val; if (val == 0) //叶子结点用0标记 return NULL; else &#123; T = new TreeNode(val); T-&gt;left = Create_tree(); T-&gt;right = Create_tree(); &#125; return T;&#125;//先序遍历void pre_print(TreeNode *T)&#123; if (T) &#123; cout &lt;&lt; T-&gt;val &lt;&lt; " "; pre_print(T-&gt;left); pre_print(T-&gt;right); &#125;&#125;class Solution&#123;public: vector&lt;vector&lt;int&gt;&gt; FindPath(TreeNode *root, int expectNumber) &#123; if (root == NULL) return &#123;&#125;; vector&lt;int&gt; temp; vector&lt;vector&lt;int&gt;&gt; res; dfs(root, expectNumber, res, temp); return res; &#125; //temp ，res不是全局，所以要加引用 void dfs(TreeNode *root, int target, vector&lt;vector&lt;int&gt;&gt; &amp;res, vector&lt;int&gt; &amp;temp) &#123; //temp表示当前记录的路径，如果正确，就把temp复制到res中 if(root == NULL) return; target = target - root-&gt;val; temp.push_back(root-&gt;val); //判断是否已经加满了,需要注意题目要求的是叶子结点...所以要加判断是不是叶子结点 if(target == 0 &amp;&amp; root-&gt;left== NULL &amp;&amp; root-&gt;right == NULL) &#123; res.push_back(temp); temp.pop_back(); return; &#125; dfs(root-&gt;left, target, res, temp); dfs(root-&gt;right, target, res, temp); target = target + root-&gt;val; //回溯 temp.pop_back(); &#125;&#125;;int main()&#123; TreeNode *root = Create_tree(); // pre_print(root); Solution so; vector&lt;vector&lt;int&gt;&gt; res; res = so.FindPath(root, 22); //二维数组的遍历 vector&lt;vector&lt;int&gt;&gt;::iterator iter; vector&lt;int&gt;::iterator it; vector&lt;int&gt; temp; for (iter = res.begin(); iter != res.end(); iter++) &#123; //cout &lt;&lt; "哈哈" &lt;&lt; endl; temp = *iter; for (it = temp.begin(); it != temp.end(); it++) &#123; cout &lt;&lt; *it &lt;&lt; " "; &#125; cout &lt;&lt; endl; &#125; cout &lt;&lt; endl; return 0;&#125;/*1 2 4 0 0 6 0 0 3 5 0 0 7 0 01 2 6 1 3 5 */]]></content>
+      <categories>
+        <category>OJ</category>
+        <category>剑指offer</category>
+      </categories>
+      <tags>
+        <tag>DFS</tag>
+        <tag>二叉树</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[剑指offer-二叉搜索树的后序遍历序列]]></title>
+    <url>%2F%E5%89%91%E6%8C%87offer-%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E7%9A%84%E5%90%8E%E5%BA%8F%E9%81%8D%E5%8E%86%E5%BA%8F%E5%88%97%2F</url>
+    <content type="text"><![CDATA[题目描述输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历的结果。如果是则输出Yes,否则输出No。假设输入的数组的任意两个数字都互不相同 思路 二叉查找树（Binary Search Tree），（又：二叉搜索树，二叉排序树）它或者是一棵空树，或者是具有下列性质的二叉树： 若它的左子树不空，则左子树上所有结点的值均小于它的根结点的值； 若它的右子树不空，则右子树上所有结点的值均大于它的根结点的值； 它的左、右子树也分别为二叉排序树。 利用二叉搜索树的特点，在后序序列中通过比较与根结点（也就是最后一个值）的关系，找到相应的左子树和右子树，如果左子树或者右子树不符合二叉搜索树的定义，就不是二叉搜索树了 AC代码1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162#include &lt;iostream&gt;#include &lt;vector&gt;using namespace std;class Solution&#123;public: bool VerifySquenceOfBST(vector&lt;int&gt; sequence) &#123; return so(sequence,0,sequence.size()-1); &#125; bool so(vector&lt;int&gt; sequence, int begin, int end) &#123; if (sequence.empty() || begin &gt; end) return false; int root = sequence[end]; int i = begin; for (; i &lt; end; i++)//注意这里不包括end，因为只需要比较end前面的数字而已 &#123; if (sequence[i] &gt; root) break; &#125; int j = i; for (; j &lt; end; j++) //从j开始就是判断右子树是否都大于根结点 &#123; if (sequence[j] &lt; root) return false; &#125; bool left = true; if (i &gt; begin) //判断是否有左子树 so(sequence, begin, i - 1); bool right = true; if (i &lt; end - 1) //判断是否有右子树 so(sequence, i, end - 1); return left &amp;&amp; right; &#125;&#125;;int main()&#123; Solution s; vector&lt;int&gt;v = &#123;4,5,2,6,7,3,1&#125;; if (s.VerifySquenceOfBST(v) == true) cout &lt;&lt;"yes" &lt;&lt;endl; else &#123; cout &lt;&lt;"no" &lt;&lt; endl; &#125; return 0;&#125;/*测试样例：功能测试- 只有右子树的bst &#123;8,7,6,5&#125;- 只有左子树的bst &#123;1,2,3,4&#125;- 不是搜索树 &#123;7,4,6,5&#125;- 是搜索二叉树&#123;4,5,2,6,7,3,1&#125;==》 1,2,3,4,5,6,7广度遍历的完全二叉树特殊测试：空序列*/]]></content>
+      <categories>
+        <category>OJ</category>
+        <category>剑指offer</category>
+      </categories>
+      <tags>
+        <tag>二叉树</tag>
+        <tag>递归</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[剑指offer-从上往下打印二叉数]]></title>
     <url>%2F%E5%89%91%E6%8C%87offer-%E4%BB%8E%E4%B8%8A%E5%BE%80%E4%B8%8B%E6%89%93%E5%8D%B0%E4%BA%8C%E5%8F%89%E6%95%B0%2F</url>
     <content type="text"><![CDATA[题目描述从上往下打印出二叉树的每个节点，同层节点从左至右打印。 思路BFS，使用队列实现 AC代码123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384#include &lt;iostream&gt;#include &lt;queue&gt;#include &lt;vector&gt;using namespace std;struct TreeNode&#123; int val; struct TreeNode *left; struct TreeNode *right; TreeNode(int x) : val(x), left(NULL), right(NULL) &#123; &#125;&#125;;//先序创建TreeNode *Create_tree()&#123; TreeNode *T; int val; cin &gt;&gt; val; if (val == 0) //叶子结点用0标记 return NULL; else &#123; T = new TreeNode(val); T-&gt;left = Create_tree(); T-&gt;right = Create_tree(); &#125; return T;&#125;//先序遍历void pre_print(TreeNode *T)&#123; if (T) &#123; cout &lt;&lt; T-&gt;val &lt;&lt; " "; pre_print(T-&gt;left); pre_print(T-&gt;right); &#125;&#125;class Solution&#123;public: vector&lt;int&gt; PrintFromTopToBottom(TreeNode *root) &#123; queue&lt;TreeNode *&gt; q; vector&lt;int&gt; res; if (root == NULL) return res; q.push(root); while (!q.empty()) &#123; res.push_back(q.front()-&gt;val); if (q.front()-&gt;left) q.push(q.front()-&gt;left); if (q.front()-&gt;right) q.push(q.front()-&gt;right); q.pop(); &#125; return res; &#125;&#125;;int main()&#123; TreeNode *root; root = Create_tree(); Solution so; vector&lt;int&gt; res; res = so.PrintFromTopToBottom(root); for (vector&lt;int&gt;::iterator it = res.begin(); it != res.end(); it++) &#123; cout &lt;&lt; *it &lt;&lt; " "; &#125; cout &lt;&lt; endl; return 0;&#125;/*测试样例：1 2 4 0 0 5 0 0 3 6 0 0 7 0 01 2 3 4 5 6 7 */]]></content>
@@ -9,8 +71,8 @@
         <category>剑指offer</category>
       </categories>
       <tags>
-        <tag>队列</tag>
         <tag>二叉树</tag>
+        <tag>队列</tag>
       </tags>
   </entry>
   <entry>
@@ -236,8 +298,8 @@
         <category>剑指offer</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>递归</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
@@ -260,8 +322,8 @@
         <category>剑指offer</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>递归</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
@@ -339,7 +401,7 @@
   <entry>
     <title><![CDATA[c++之vector的使用]]></title>
     <url>%2Fc%2B%2B%E4%B9%8Bvector%E7%9A%84%E4%BD%BF%E7%94%A8%2F</url>
-    <content type="text"><![CDATA[内置函数 at(size_type n)函数 返回对向量中为位置n处元素的引用,reference或者如果向量中元素为const，则返回const reference. 12345678910// vector的函数at返回一个容器内容对象的引用vector &lt;int&gt;a(8); for (int i = 0;i &lt; 8;i++)&#123; a.at(i) = i;&#125;for (int i = 0; i&lt; a.size();i++)&#123; cout &lt;&lt; a.at(i) &lt;&lt;endl;&#125; 初始化 用数组初始化 123456int Tree_pre[8] = &#123;1,2,4,7,3,5,6,8&#125;;int Tree_vin[8] = &#123;4,7,2,1,5,3,8,6&#125;;vector&lt;int&gt;pre(Tree_pre, Tree_pre+8); //用数组初始化向量vector&lt;int&gt;vin(Tree_vin, Tree_vin+8); 用vector初始化二维数组（以下方法是基于c++11标准，c++98不支持） 12345// vector&lt;vector&lt;int&gt;&gt;arr(3, vector&lt;int&gt;(3));// arr[0] = &#123;1,2,3&#125;;// arr[1] = &#123;4,5,6&#125;;// arr[2] = &#123;7,8,9&#125;;vector&lt;vector&lt;int&gt;&gt; arr = &#123;&#123;1, 2&#125;, &#123;3, 4&#125;, &#123;5, 6&#125;&#125;; 遍历vector 使用迭代器 12for (vector&lt;int&gt;::iterator it = res.begin(); it != res.end(); it++) cout &lt;&lt; *it &lt;&lt; " ";]]></content>
+    <content type="text"><![CDATA[内置函数 at(size_type n)函数 返回对向量中为位置n处元素的引用,reference或者如果向量中元素为const，则返回const reference. 12345678910// vector的函数at返回一个容器内容对象的引用vector &lt;int&gt;a(8); for (int i = 0;i &lt; 8;i++)&#123; a.at(i) = i;&#125;for (int i = 0; i&lt; a.size();i++)&#123; cout &lt;&lt; a.at(i) &lt;&lt;endl;&#125; 初始化 用数组初始化 123456int Tree_pre[8] = &#123;1,2,4,7,3,5,6,8&#125;;int Tree_vin[8] = &#123;4,7,2,1,5,3,8,6&#125;;vector&lt;int&gt;pre(Tree_pre, Tree_pre+8); //用数组初始化向量vector&lt;int&gt;vin(Tree_vin, Tree_vin+8); 用vector初始化二维数组（以下方法是基于c++11标准，c++98不支持） 12345// vector&lt;vector&lt;int&gt;&gt;arr(3, vector&lt;int&gt;(3));// arr[0] = &#123;1,2,3&#125;;// arr[1] = &#123;4,5,6&#125;;// arr[2] = &#123;7,8,9&#125;;vector&lt;vector&lt;int&gt;&gt; arr = &#123;&#123;1, 2&#125;, &#123;3, 4&#125;, &#123;5, 6&#125;&#125;; 遍历vector 使用迭代器 12for (vector&lt;int&gt;::iterator it = res.begin(); it != res.end(); it++) cout &lt;&lt; *it &lt;&lt; " "; 判断某个元素是否在vector中 12if (find(res.begin(), res.end(), str) == res.end()) //判断重复 res.push_back(str); 对vector进行排序，需要注意的是，当vector中是自定义的类型，需要重载== 1sort(res.begin(), res.end());]]></content>
       <categories>
         <category>c++</category>
       </categories>
