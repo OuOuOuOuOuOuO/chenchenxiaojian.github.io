@@ -117,7 +117,7 @@
 <meta property="og:site_name" content="陈小坚の博客">
 <meta property="og:description" content="题目描述求出1~13的整数中1出现的次数,并算出100~1300的整数中1出现的次数？为此他特别数了一下1~13中包含1的数字有1、10、11、12、13因此共出现6次,但是对于后面问题他就没辙了。ACMer希望你们帮帮他,并把问题更加普遍化,可以很快的求出任意非负整数区间中1出现的次数（从1 到 n 中1出现的次数）。 思路 如果对每个数都进行判断，也就是通过计算得到一个数的每一个位是否为1，这">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-02-11T14:36:38.118Z">
+<meta property="og:updated_time" content="2020-02-11T15:08:39.860Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="整数中1出现的次数-从1到n整数中1出现的次数">
 <meta name="twitter:description" content="题目描述求出1~13的整数中1出现的次数,并算出100~1300的整数中1出现的次数？为此他特别数了一下1~13中包含1的数字有1、10、11、12、13因此共出现6次,但是对于后面问题他就没辙了。ACMer希望你们帮帮他,并把问题更加普遍化,可以很快的求出任意非负整数区间中1出现的次数（从1 到 n 中1出现的次数）。 思路 如果对每个数都进行判断，也就是通过计算得到一个数的每一个位是否为1，这">
@@ -454,7 +454,7 @@
                 
               
 
-              <time title="创建时间：2020-02-11 21:38:55 / 修改时间：22:36:38" itemprop="dateCreated datePublished" datetime="2020-02-11T21:38:55+08:00">2020-02-11</time>
+              <time title="创建时间：2020-02-11 21:38:55 / 修改时间：23:08:39" itemprop="dateCreated datePublished" datetime="2020-02-11T21:38:55+08:00">2020-02-11</time>
             </span>
           
 
@@ -566,15 +566,15 @@
 <ul>
 <li><p><strong>个位</strong> 出现1的次数来说，规律为：res = (n/10)*1 + (n % 10 != 0? 1:0)；例如对于数字33来说，1~30之间的数在个位为数字1的次数为30次，而剩下余数也就是3是大于1的，因此在加一次1，所以个位的数字1的个数为30 + 1 = 31；</p>
 </li>
-<li><p><strong>十位</strong> 出现1的次数来说，规律为，$res = (n/100)*10 + \begin{cases} 0&amp; \text{(n %100 &lt; 10)} \ 10&amp; \text{(n%100&gt;19)} \ n%100-10+1&amp; \text{其他}                \end{cases}$；                       例如数字123，110~119之间十位出现1的个数为10个，而剩下的123%10 = 23 &gt; 19(也就是10~19)也存在10个数，因此在十位出现的数字1的个数为20次</p>
+<li><p><strong>十位</strong> 出现1的次数来说，规律为，$$res = (n/100)*10 + \begin{cases} 0&amp; \text{(n %100 &lt; 10)} \ 10&amp; \text{(n%100&gt;19)} \ n%100-10+1&amp; \text{其他}                \end{cases}$$；                       例如数字123，110~119之间十位出现1的个数为10个，而剩下的123%10 = 23 &gt; 19(也就是10~19)也存在10个数，因此在十位出现的数字1的个数为20次</p>
 </li>
-<li><p><strong>百位</strong> 出现1的次数来说，规律为，$res = (n/1000) * 100 + \begin{cases} 0&amp; \text{n%1000&lt;100} \ 100&amp; \text{n%1000&gt;199}  \ n%1000-100+1&amp; \text{其他} \\end{cases}$                          </p>
+<li><p><strong>百位</strong> 出现1的次数来说，规律为，$$res = (n/1000) * 100 + \begin{cases} 0&amp; \text{n%1000&lt;100} \ 100&amp; \text{n%1000&gt;199}  \ n%1000-100+1&amp; \text{其他} \\end{cases}$$。                        </p>
 </li>
 </ul>
 </li>
 </ul>
 <ul>
-<li>总结，公式为$res = (n/(i<em>10)</em>i) + \begin{cases} 0&amp; \text{n%(i<em>10) &lt; i} \ i&amp; \text{n%(i</em>10)&gt;(2<em>i-1)} \ n%(i</em>10)-i+1&amp; \text{其他}\end{cases}$ (i表示第几位)</li>
+<li>总结，公式为$$res = (n/(i<em>10)</em>i) + \begin{cases} 0&amp; \text{n%(i<em>10) &lt; i} \ i&amp; \text{n%(i</em>10)&gt;(2<em>i-1)} \ n%(i</em>10)-i+1&amp; \text{其他}\end{cases}$$ (i表示第几位)</li>
 </ul>
 <ul>
 <li>时间复杂度为$O(lgn)$。</li>
