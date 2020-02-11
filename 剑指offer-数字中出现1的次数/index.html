@@ -112,14 +112,14 @@
   <meta name="description" content="题目描述求出1~13的整数中1出现的次数,并算出100~1300的整数中1出现的次数？为此他特别数了一下1~13中包含1的数字有1、10、11、12、13因此共出现6次,但是对于后面问题他就没辙了。ACMer希望你们帮帮他,并把问题更加普遍化,可以很快的求出任意非负整数区间中1出现的次数（从1 到 n 中1出现的次数）。 思路 如果对每个数都进行判断，也就是通过计算得到一个数的每一个位是否为1，这">
 <meta name="keywords" content="数论">
 <meta property="og:type" content="article">
-<meta property="og:title" content="整数中1出现的次数-从1到n整数中1出现的次数">
-<meta property="og:url" content="http://chenchenxiaojian.github.io/整数中1出现的次数-从1到n整数中1出现的次数/index.html">
+<meta property="og:title" content="剑指offer-数字中出现1的次数">
+<meta property="og:url" content="http://chenchenxiaojian.github.io/剑指offer-数字中出现1的次数/index.html">
 <meta property="og:site_name" content="陈小坚の博客">
 <meta property="og:description" content="题目描述求出1~13的整数中1出现的次数,并算出100~1300的整数中1出现的次数？为此他特别数了一下1~13中包含1的数字有1、10、11、12、13因此共出现6次,但是对于后面问题他就没辙了。ACMer希望你们帮帮他,并把问题更加普遍化,可以很快的求出任意非负整数区间中1出现的次数（从1 到 n 中1出现的次数）。 思路 如果对每个数都进行判断，也就是通过计算得到一个数的每一个位是否为1，这">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-02-11T15:08:39.860Z">
+<meta property="og:updated_time" content="2020-02-11T15:46:39.123Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="整数中1出现的次数-从1到n整数中1出现的次数">
+<meta name="twitter:title" content="剑指offer-数字中出现1的次数">
 <meta name="twitter:description" content="题目描述求出1~13的整数中1出现的次数,并算出100~1300的整数中1出现的次数？为此他特别数了一下1~13中包含1的数字有1、10、11、12、13因此共出现6次,但是对于后面问题他就没辙了。ACMer希望你们帮帮他,并把问题更加普遍化,可以很快的求出任意非负整数区间中1出现的次数（从1 到 n 中1出现的次数）。 思路 如果对每个数都进行判断，也就是通过计算得到一个数的每一个位是否为1，这">
 
 
@@ -128,7 +128,7 @@
 
   
   
-  <link rel="canonical" href="http://chenchenxiaojian.github.io/整数中1出现的次数-从1到n整数中1出现的次数/">
+  <link rel="canonical" href="http://chenchenxiaojian.github.io/剑指offer-数字中出现1的次数/">
 
 
 
@@ -138,7 +138,7 @@
   };
 </script>
 
-  <title>整数中1出现的次数-从1到n整数中1出现的次数 | 陈小坚の博客</title>
+  <title>剑指offer-数字中出现1的次数 | 陈小坚の博客</title>
   
 
 
@@ -411,7 +411,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://chenchenxiaojian.github.io/整数中1出现的次数-从1到n整数中1出现的次数/">
+    <link itemprop="mainEntityOfPage" href="http://chenchenxiaojian.github.io/剑指offer-数字中出现1的次数/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="陈小坚(｀・ω・´)">
@@ -428,7 +428,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">整数中1出现的次数-从1到n整数中1出现的次数
+          <h1 class="post-title" itemprop="name headline">剑指offer-数字中出现1的次数
 
               
             
@@ -454,7 +454,7 @@
                 
               
 
-              <time title="创建时间：2020-02-11 21:38:55 / 修改时间：23:08:39" itemprop="dateCreated datePublished" datetime="2020-02-11T21:38:55+08:00">2020-02-11</time>
+              <time title="创建时间：2020-02-11 23:42:43 / 修改时间：23:46:39" itemprop="dateCreated datePublished" datetime="2020-02-11T23:42:43+08:00">2020-02-11</time>
             </span>
           
 
@@ -498,8 +498,8 @@
                 </span>
             
                 <span class="post-meta-item-text">评论数：</span>
-                <a href="/整数中1出现的次数-从1到n整数中1出现的次数/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/整数中1出现的次数-从1到n整数中1出现的次数/" itemprop="commentCount"></span>
+                <a href="/剑指offer-数字中出现1的次数/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/剑指offer-数字中出现1的次数/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -566,18 +566,18 @@
 <ul>
 <li><p><strong>个位</strong> 出现1的次数来说，规律为：res = (n/10)*1 + (n % 10 != 0? 1:0)；例如对于数字33来说，1~30之间的数在个位为数字1的次数为30次，而剩下余数也就是3是大于1的，因此在加一次1，所以个位的数字1的个数为30 + 1 = 31；</p>
 </li>
-<li><p><strong>十位</strong> 出现1的次数来说，规律为，$$res = (n/100)*10 + \begin{cases} 0&amp; \text{(n %100 &lt; 10)} \ 10&amp; \text{(n%100&gt;19)} \ n%100-10+1&amp; \text{其他}                \end{cases}$$；                       例如数字123，110~119之间十位出现1的个数为10个，而剩下的123%10 = 23 &gt; 19(也就是10~19)也存在10个数，因此在十位出现的数字1的个数为20次</p>
+<li><p><strong>十位</strong> 出现1的次数来说，规律为，$res = (n/100)*10 + \begin{cases} 0&amp; \text{(n %100 &lt; 10)} \\ 10&amp; \text{(n%100&gt;19)} \\ n%100-10+1&amp; \text{其他} \end{cases}$；                       例如数字123，110~119之间十位出现1的个数为10个，而剩下的123%10 = 23 &gt; 19(也就是10~19)也存在10个数，因此在十位出现的数字1的个数为20次</p>
 </li>
-<li><p><strong>百位</strong> 出现1的次数来说，规律为，$$res = (n/1000) * 100 + \begin{cases} 0&amp; \text{n%1000&lt;100} \ 100&amp; \text{n%1000&gt;199}  \ n%1000-100+1&amp; \text{其他} \\end{cases}$$。                        </p>
-</li>
-</ul>
+<li><p><strong>百位</strong> 出现1的次数来说，规律为，$res = (n/1000) * 100 + \begin{cases} 0&amp; \text{n%1000&lt;100} \\ 100&amp; \text{n%1000&gt;199}  \\ n%1000-100+1&amp; \text{其他}  \end{cases}$                          </p>
 </li>
 </ul>
-<ul>
-<li>总结，公式为$$res = (n/(i<em>10)</em>i) + \begin{cases} 0&amp; \text{n%(i<em>10) &lt; i} \ i&amp; \text{n%(i</em>10)&gt;(2<em>i-1)} \ n%(i</em>10)-i+1&amp; \text{其他}\end{cases}$$ (i表示第几位)</li>
+</li>
 </ul>
 <ul>
-<li>时间复杂度为$O(lgn)$。</li>
+<li>总结，公式为$res = (n/(i\times10) \times i) + \begin{cases} 0&amp; \text{n%(i<em>10) &lt; i} \\ i&amp; \text{n%(i</em>10)&gt;(2<em>i-1)} \\ n%(i</em>10)-i+1&amp; \text{其他} \end{cases}$ (i表示第几位)</li>
+</ul>
+<ul>
+<li>时间复杂度为$O(\lg n)$。</li>
 </ul>
 <h3 id="AC代码"><a href="#AC代码" class="headerlink" title="AC代码"></a>AC代码</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">NumberOf1Between1AndN_Solution</span><span class="params">(<span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(n &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i = i * <span class="number">10</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">int</span> k = n % (i * <span class="number">10</span>);</span><br><span class="line">            <span class="keyword">int</span> temp;</span><br><span class="line">            <span class="keyword">if</span> (k &lt; i)</span><br><span class="line">                temp = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (k &gt; <span class="number">2</span> * i - <span class="number">1</span>)</span><br><span class="line">                temp = i;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                temp = k - i + <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">            res += n / (i * <span class="number">10</span>) * i + temp;</span><br><span class="line">            <span class="built_in">cout</span> &lt;&lt; res &lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Solution so;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; so.NumberOf1Between1AndN_Solution(<span class="number">123</span>) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="comment">// return 0;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -636,7 +636,7 @@
         <p id="div-border-left-red">
        <b>本文基于<a target="_blank" title="Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)" href="http://creativecommons.org/licenses/by-sa/4.0/"> 知识共享署名-相同方式共享 4.0 </a>国际许可协议发布</b><br>
         <span>
-        <b>本文地址：</b><a href="/整数中1出现的次数-从1到n整数中1出现的次数/" title="整数中1出现的次数-从1到n整数中1出现的次数">http://chenchenxiaojian.github.io/整数中1出现的次数-从1到n整数中1出现的次数/</a><br><b>转载请注明出处，谢谢！</b>
+        <b>本文地址：</b><a href="/剑指offer-数字中出现1的次数/" title="剑指offer-数字中出现1的次数">http://chenchenxiaojian.github.io/剑指offer-数字中出现1的次数/</a><br><b>转载请注明出处，谢谢！</b>
         </span>
         </p>
     </div>
