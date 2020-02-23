@@ -124,6 +124,8 @@
 
 
 
+  <link rel="alternate" href="/atom.xml" title="陈小坚の博客" type="application/atom+xml">
+
 
 
   
@@ -276,7 +278,7 @@
       
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">31</span></a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">32</span></a>
 
   </li>
         
@@ -312,7 +314,7 @@
       
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">97</span></a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">105</span></a>
 
   </li>
         
@@ -587,7 +589,7 @@
 <h3 id="输出格式"><a href="#输出格式" class="headerlink" title="输出格式"></a>输出格式</h3><p>输出文件共 ttt 行，对应输入的 ttt 个程序，每行输出<code>Yes</code>或<code>No</code>或者<code>ERR</code>（输出中不包含引号），若程序实际复杂度与输入给出的复杂度一致则输出<code>Yes</code>，不一致则输出<code>No</code>，若程序有语法错误（其中语法错误只有: ① F 和 E 不匹配 ②新建的变量与已经存在但未被销毁的变量重复两种情况），则输出<code>ERR</code> 。</p>
 <p>注意：即使在程序不会执行的循环体中出现了语法错误也会编译错误，要输出 <code>ERR</code>。</p>
 <h3 id="输入输出样例"><a href="#输入输出样例" class="headerlink" title="输入输出样例"></a>输入输出样例</h3><p><strong>输入 #1</strong></p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">8</span></span><br><span class="line"><span class="number">2</span> O(<span class="number">1</span>)</span><br><span class="line">F i <span class="number">1</span> <span class="number">1</span></span><br><span class="line">E</span><br><span class="line"><span class="number">2</span> O(n^<span class="number">1</span>)</span><br><span class="line">F x <span class="number">1</span> n</span><br><span class="line">E</span><br><span class="line"><span class="number">1</span> O(<span class="number">1</span>)</span><br><span class="line">F x <span class="number">1</span> n</span><br><span class="line"><span class="number">4</span> O(n^<span class="number">2</span>)</span><br><span class="line">F x <span class="number">5</span> n</span><br><span class="line">F y <span class="number">10</span> n</span><br><span class="line">E</span><br><span class="line">E</span><br><span class="line"><span class="number">4</span> O(n^<span class="number">2</span>)</span><br><span class="line">F x <span class="number">9</span> n</span><br><span class="line">E</span><br><span class="line">F y <span class="number">2</span> n</span><br><span class="line">E</span><br><span class="line"><span class="number">4</span> O(n^<span class="number">1</span>)</span><br><span class="line">F x <span class="number">9</span> n</span><br><span class="line">F y n <span class="number">4</span></span><br><span class="line">E</span><br><span class="line">E</span><br><span class="line"><span class="number">4</span> O(<span class="number">1</span>)</span><br><span class="line">F y n <span class="number">4</span></span><br><span class="line">F x <span class="number">9</span> n</span><br><span class="line">E</span><br><span class="line">E</span><br><span class="line"><span class="number">4</span> O(n^<span class="number">2</span>)</span><br><span class="line">F x <span class="number">1</span> n</span><br><span class="line">F x <span class="number">1</span> <span class="number">10</span></span><br><span class="line">E</span><br><span class="line">E</span><br></pre></td></tr></table></figure>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">8</span></span><br><span class="line"><span class="number">2</span> O(<span class="number">1</span>)</span><br><span class="line">F i <span class="number">1</span> <span class="number">1</span></span><br><span class="line">E</span><br><span class="line"><span class="number">2</span> O(n^<span class="number">1</span>)</span><br><span class="line">F x <span class="number">1</span> n</span><br><span class="line">E</span><br><span class="line"><span class="number">1</span> O(<span class="number">1</span>)</span><br><span class="line">F x <span class="number">1</span> n</span><br><span class="line"><span class="number">4</span> O(n^<span class="number">2</span>)</span><br><span class="line">F x <span class="number">5</span> n</span><br><span class="line">F y <span class="number">10</span> n</span><br><span class="line">E</span><br><span class="line">E</span><br><span class="line"><span class="number">4</span> O(n^<span class="number">2</span>)</span><br><span class="line">F x <span class="number">9</span> n</span><br><span class="line">E</span><br><span class="line">F y <span class="number">2</span> n</span><br><span class="line">E</span><br><span class="line"><span class="number">4</span> O(n^<span class="number">1</span>)</span><br><span class="line">F x <span class="number">9</span> n</span><br><span class="line">F y n <span class="number">4</span></span><br><span class="line">E</span><br><span class="line">E</span><br><span class="line"><span class="number">4</span> O(<span class="number">1</span>)</span><br><span class="line">F y n <span class="number">4</span></span><br><span class="line">F x <span class="number">9</span> n</span><br><span class="line">E</span><br><span class="line">E</span><br><span class="line"><span class="number">4</span> O(n^<span class="number">2</span>)</span><br><span class="line">F x <span class="number">1</span> n</span><br><span class="line">F x <span class="number">1</span> <span class="number">10</span></span><br><span class="line">E</span><br><span class="line">E</span><br></pre></td></tr></table></figure>
 
 <p><strong>输出 #1</strong></p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="literal">Yes</span></span><br><span class="line"><span class="literal">Yes</span></span><br><span class="line"><span class="string">ERR</span></span><br><span class="line"><span class="literal">Yes</span></span><br><span class="line"><span class="literal">No</span></span><br><span class="line"><span class="literal">Yes</span></span><br><span class="line"><span class="literal">Yes</span></span><br><span class="line"><span class="string">ERR</span></span><br></pre></td></tr></table></figure>
@@ -798,7 +800,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">97</span>
+                    <span class="site-state-item-count">105</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -986,7 +988,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">31</span>
+                      
+                    
+                    <span class="site-state-item-count">32</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -994,6 +998,13 @@
             </nav>
           
 
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
           
 
           
@@ -1186,7 +1197,7 @@ show_date_time();
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">274k</span>
+    <span title="站点总字数">287k</span>
   
 
   
@@ -1195,7 +1206,7 @@ show_date_time();
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">4:10</span>
+    <span title="站点阅读时长">4:21</span>
   
 </div>
 

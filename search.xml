@@ -1,6 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[剑指offer-数组中只出现一次的数字]]></title>
+    <url>%2F%E5%89%91%E6%8C%87offer-%E6%95%B0%E7%BB%84%E4%B8%AD%E5%8F%AA%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E6%95%B0%E5%AD%97%2F</url>
+    <content type="text"><![CDATA[题目描述一个整型数组里除了两个数字之外，其他的数字都出现了两次。请写程序找出这两个只出现一次的数字。 思路 首先需要注意到数组中只有两个数字出现了一次，其他都出现了两次 其次：异或运算：两个相同的数字进行异或运算等于0，0和其他数字异或运算都等于其他数字本身 因此如果我们将数组所有的数字全部进行异或运算例如数组{2, 4, 3, 6, 3, 2, 5, 5}，也就是2^4^3^6^3^3^2^5^5 = 0010，异或的结果肯定是会出现一个1或者多个1以上，因为异或的结果是由两个只出现一次的数字决定的，其他出现两次的数字运算后都为0，对结果没有影响。对于出现多个1的问题，我们可以从右边开始，找到第一个1的下标（从左边开始也是可以的），因此通过判断数组中每一个数字的下标是否为1或为0，从分成两个不同的数组（例如上例：{2,2,6,3,3}和{4,5,5}），这样两个数组就各自有一个只出现一次的数字，这样是必然的，因为我们是根据异或结果中的1的下标进行分类的，例如假设只出现一次的数字为1和3，那么异或运算就是010了，这个1的位置也就是将二进制第二位的判断将1和3分类开了。 最后求两个数组的异或结果就是出现一次的数字 注意问题： ==优先级比&amp;大，函数参数传指针，调用时需要传地址 AC代码1234567891011121314151617181920212223242526272829303132333435363738394041#include &lt;iostream&gt;#include &lt;vector&gt;using namespace std;class Solution&#123;public: void FindNumsAppearOnce(vector&lt;int&gt; data, int *num1, int *num2) &#123; int all_numbers_xo = 0; //所有数字进行异或运算的结果 for (int i = 0; i &lt; data.size(); i++) all_numbers_xo ^= data[i]; //结果是一个二进制数，至少存在一个1或多个1，我们可以从右边开始找到第一个1的下标（也可以从左边） int index = 1; while ((all_numbers_xo &amp; index) == 0) &#123; index &lt;&lt;= 1; //左移 // all_numbers_xo &gt;&gt;= 1; //右移 &#125; //根据数组中的数字的index位是否为1或者0分为两个数组,因为对这个index为1或者为0有影响的是两个只出现一次的数字 //因此从这个两个数组就可以各自求出各自只出现一次的数字，进行异或操作即可 *num1 = *num2 = 0; for (int i = 0; i &lt; data.size(); i++) &#123;//判断条件不能写成==1 if ((data[i] &amp; index) != 0) //说明这个数字是属于index为1的数组的 *num1 ^= data[i]; else *num2 ^= data[i]; &#125; &#125;&#125;;int main()&#123; vector&lt;int&gt; data = &#123;2, 4, 3, 6, 3, 2, 5, 5&#125;; int num1, num2; Solution so; so.FindNumsAppearOnce(data, &amp;num1, &amp;num2); cout &lt;&lt; num1 &lt;&lt; " " &lt;&lt; num2 &lt;&lt; endl; return 0;&#125;]]></content>
+      <categories>
+        <category>OJ</category>
+        <category>剑指offer</category>
+      </categories>
+      <tags>
+        <tag>数组</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[剑指offer-平衡二叉树]]></title>
+    <url>%2F%E5%89%91%E6%8C%87offer-%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91%2F</url>
+    <content type="text"><![CDATA[题目描述输入一棵二叉树，判断该二叉树是否是平衡二叉树。 思路 平衡二叉树（Balanced Binary Tree）具有以下性质：它是一棵空树或它的左右两个子树的高度差的绝对值不超过1，并且左右两个子树都是一棵平衡二叉树。 如果从根节点开始遍历，然后递归遍历左子树和右子树，那么会出现重复的遍历 因此，我们从下往上遍历，也即是后序遍历，这里可以有一个剪枝，当发现子树不是bbt的时候，就直接返回-1，这样子就不用在往上遍历了。那么什么时候应该返回-1，也就是当这个子树的左右高度差大于1时就返回-1，否则就返回这个子树的高度。 AC代码123456789101112131415161718192021class Solution &#123;public: bool IsBalanced_Solution(TreeNode* pRoot) &#123; if (pRoot == NULL) return true; return f(pRoot) != -1; &#125; int f(TreeNode * pRoot) &#123; if (pRoot == NULL) return 0; //剪枝 int left = f(pRoot-&gt;left); if (left == -1) //左子树不是bbt return -1; int right = f(pRoot-&gt;right); if (right == -1) return -1; return abs(left-right)&gt;1?-1:1+max(left, right);//如果差值大于1，说明不是bbt，返回-1 &#125;&#125;;]]></content>
+      <categories>
+        <category>OJ</category>
+        <category>剑指offer</category>
+      </categories>
+      <tags>
+        <tag>二叉树</tag>
+        <tag>剪枝</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[剑指offer-数字在排序数组中出现的次数]]></title>
+    <url>%2F%E5%89%91%E6%8C%87offer-%E6%95%B0%E5%AD%97%E5%9C%A8%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E5%87%BA%E7%8E%B0%E7%9A%84%E6%AC%A1%E6%95%B0%2F</url>
+    <content type="text"><![CDATA[题目描述统计一个数字在排序数组中出现的次数。 思路 首先需要注意的问题，这个数组是递增还是递减，不过测试样例都是递增的…. 排序的数组我们应该要想到二分查找，只不过如果我们通过二分查找找到第一个k不能保证这个k是第一个或者最后一个，这样你还是通过这个k的位置从前从后进行顺序查找，时间复杂度退化为$O(n)$，跟普通的顺序查找就没什么不同的 那么，我们可以通过二分查找找到第一个K和最后一个k的下标，然后两者之差就是出现的次数 如果找到第一个和最后一个k，也是可以通过二分查找进行，关键在于当我们找到k时只需要判断他是不是最后一个k或者第一个k即可，如果不是，则区间进行更新。时间复杂度为$O(\log n)$。 AC代码123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960class Solution &#123;public: int GetNumberOfK(vector&lt;int&gt; data ,int k) &#123; int count = 0; if (data.size() &gt; 0) &#123; int begin = first_index(data,k); int last = last_index(data,k); if (begin &gt; -1 &amp;&amp; last &gt; -1) count = last-begin+1; &#125; return count; &#125; //前提是这个数组是递增的 int first_index(vector&lt;int&gt; data,int k) &#123;//找到第一个k int low = 0; int high = data.size()-1; while (low &lt;= high) &#123; int mid = low + (high-low)/2;//防止溢出 if (data[mid] == k) //判断此时这个k是不是第一个k &#123; if(data[mid-1] != k &amp;&amp; mid &gt; 0 || mid == 0) return mid; else high = mid-1;//不是第一个k，说明第一个k在mid前面 &#125; else if (data[mid] &gt; k) high = mid -1; else low = mid + 1; &#125; return -1; //没有找到 &#125; int last_index(vector&lt;int&gt;data, int k) &#123;//找到最后一个K int low = 0; int high = data.size()-1; while (low &lt;= high) &#123; int mid = low + (high-low)/2; if (data[mid] == k) //判断是不是最后一个k &#123; //判断是否越界 if (data[mid+1] != k &amp;&amp; mid+1 &lt;= data.size()-1 || mid == data.size()-1) return mid; else low = mid + 1; &#125; else if (data[mid] &gt; k) high = mid-1; else low = mid + 1; &#125; return -1; &#125;&#125;; 总结 对于排序的数组的查找，应该想到使用二分查找 二分查找需要注意的细节就是防止溢出：int mid = low + (high-low)/2;]]></content>
+      <categories>
+        <category>OJ</category>
+        <category>剑指offer</category>
+      </categories>
+      <tags>
+        <tag>二分</tag>
+        <tag>数组</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[剑指offer-两个链表的第一个公共结点]]></title>
+    <url>%2F%E5%89%91%E6%8C%87offer-%E4%B8%A4%E4%B8%AA%E9%93%BE%E8%A1%A8%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%85%AC%E5%85%B1%E7%BB%93%E7%82%B9%2F</url>
+    <content type="text"><![CDATA[题目描述输入两个链表，找出它们的第一个公共结点。（注意因为传入数据是链表，所以错误测试数据的提示是用其他方式显示的，保证传入数据是正确的） 思路 第一种思路就是遍历一个链表的节点，然后跟另一个链表的所有节点比较是否相同，时间复杂度为$O(m*n)$，空间复杂度为$O(1)$； 第二种思路：由于这两个链表是单向链表，那么这两个链表当有相同的节点时，在这个相同节点的后面都是相同的节点，因为是单向，只有一个next，那么我们从后往前遍历，要求的第一个相同的节点也就是遍历过程中遇到的最后一个相同的节点，我们可以使用两个辅助栈，存放这个链表的所有的节点，比较栈顶元素是否相同，如果相同就弹出，比较下一个栈顶元素是否相同，直到找到最后一个相同的节点，时间复杂度为$O(n+m)$，空间复杂度为$O(m+n)$； 第三种思路：如果我们采用从头到尾的遍历方式，对于这个两个长度可能不同的链表我们需要保证他们能够同时遍历到尾部，那么我么可以可以计算出链表的长度，然后先让长链表先走，这样保证链表的遍历能够同时到达尾部，时间复杂度为$O(m+n)$，空间复杂度为$O(1)$. AC代码12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576class Solution&#123;public: ListNode *FindFirstCommonNode(ListNode *pHead1, ListNode *pHead2) &#123; if (pHead1 == NULL || pHead2 == NULL) return NULL; ListNode *res = NULL; stack&lt;ListNode *&gt; s1; stack&lt;ListNode *&gt; s2; while (pHead1) &#123; s1.push(pHead1); pHead1 = pHead1-&gt;next; &#125; while (pHead2) &#123; s2.push(pHead2); pHead2 = pHead2-&gt;next; &#125; while (!s1.empty() &amp;&amp; !s2.empty()) &#123; if (s1.top() == s2.top()) &#123; res = s1.top(); &#125; s1.pop(); s2.pop(); &#125; return res; &#125; ListNode *f(ListNode *pHead1, ListNode *pHead2) &#123; if (pHead1 == NULL || pHead2 == NULL) return NULL; int len1 = 0; int len2 = 0; ListNode * p1 = pHead1; ListNode * p2 = pHead2; while (p1) &#123; len1++; p1 = p1-&gt;next; &#125; while (p2) &#123; len2++; p2 = p2-&gt;next; &#125; if (len1 &gt; len2) &#123; int diff = len1 - len2; for (int i = 0; i &lt; diff; i++) pHead1 = pHead1-&gt;next; &#125; else &#123; int diff = len2 - len1; for (int i = 0; i &lt; diff; i++) pHead2 = pHead2-&gt;next; &#125; ListNode *res = NULL; //这样保证两个链表可以同时遍历到尾部 while (pHead1 &amp;&amp; pHead2) &#123; if (pHead1 == pHead2) &#123; res = pHead1; break; &#125; pHead1 = pHead1-&gt;next; pHead2 = pHead2-&gt;next; &#125; return res; &#125;&#125;;]]></content>
+      <categories>
+        <category>OJ</category>
+        <category>剑指offer</category>
+      </categories>
+      <tags>
+        <tag>链表</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[剑指offer-数组中的逆序对]]></title>
+    <url>%2F%E5%89%91%E6%8C%87offer-%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%80%86%E5%BA%8F%E5%AF%B9%2F</url>
+    <content type="text"><![CDATA[题目描述在数组中的两个数字，如果前面一个数字大于后面的数字，则这两个数字组成一个逆序对。输入一个数组,求出这个数组中的逆序对的总数P。并将P对1000000007取模的结果输出。 即输出P%1000000007 输入描述:1题目保证输入的数组中没有的相同的数字数据范围： 对于%50的数据,size&lt;=10^4 对于%75的数据,size&lt;=10^5 对于%100的数据,size&lt;=2*10^5 示例1 输入11,2,3,4,5,6,7,0 输出17 思路使用归并排序，对数组中的两个区间进行比较排序的时候就是统计逆序对的时候，需要注意的是这个两个区间已经是顺序的，且是从大到小排序的，具体思想查看个人博客 AC代码12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061#include &lt;iostream&gt;#include &lt;vector&gt;using namespace std;class Solution&#123;public: int InversePairs(vector&lt;int&gt; data) &#123; long long res = 0; solve(0, data.size() - 1, data, res); return res % 1000000007; &#125; void solve(int low, int high, vector&lt;int&gt; &amp;data, long long &amp;res) //注意data,res要传引用 &#123; if (low &lt; high) &#123; int mid = (low + high) / 2; solve(low, mid, data, res); solve(mid + 1, high, data, res); merge_sort(low, high, mid, data, res); &#125; &#125; void merge_sort(int begin, int end, int mid, vector&lt;int&gt; &amp;data, long long &amp;res) //注意data,res要传引用 &#123; int temp[200004]; //辅助数组，将原来的数组拍好序复制到temp中 int i = begin; int j = mid + 1; int k = begin; //辅助数组的索引 while (i &lt;= mid &amp;&amp; j &lt;= end) &#123; if (data[i] &gt; data[j]) //低位大于高位,可以记录逆序对 &#123; res = res + end - j + 1; //因为从大到小排序的，如果低位的数大于高位，那么当前的数肯定大于高位后面的数 temp[k++] = data[i++]; &#125; else temp[k++] = data[j++]; &#125; //将剩余的数复制到temp数组的后面 while (i &lt;= mid) temp[k++] = data[i++]; while (j &lt;= end) temp[k++] = data[j++]; //更新data数组 for (int i = begin; i &lt;= end; i++) &#123; data[i] = temp[i]; //注意，我们的temp数组是从k = begin开始操作的 &#125; &#125;&#125;;int main()&#123; vector&lt;int&gt; data = &#123;1, 2, 3, 4, 5, 6, 7, 0&#125;; Solution so; cout &lt;&lt; so.InversePairs(data) &lt;&lt; endl; return 0;&#125;]]></content>
+      <categories>
+        <category>OJ</category>
+        <category>剑指offer</category>
+      </categories>
+      <tags>
+        <tag>数组</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[剑指offer-第一个只出现一次的字符]]></title>
+    <url>%2F%E5%89%91%E6%8C%87offer-%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%8F%AA%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E5%AD%97%E7%AC%A6%2F</url>
+    <content type="text"><![CDATA[题目描述在一个字符串(0&lt;=字符串长度&lt;=10000，全部由字母组成)中找到第一个只出现一次的字符,并返回它的位置, 如果没有则返回 -1（需要区分大小写） 思路哈希表 AC代码123456789101112131415161718192021222324252627282930313233343536#include &lt;iostream&gt;using namespace std;class Solution&#123;public: int FirstNotRepeatingChar(string str) &#123; if (str.size() == 0) return -1; int table[256]; for (int i = 0; i &lt; 256; i++) table[i] = 0; for (int i = 0; i &lt; str.size(); i++) &#123; table[str[i]]++; &#125; for (int i = 0; i &lt; str.size(); i++) &#123; if (table[str[i]] == 1) &#123; return i; &#125; &#125; return -1; &#125;&#125;;int main()&#123; string str = "googgle"; Solution so; cout &lt;&lt; so.FirstNotRepeatingChar(str) &lt;&lt; endl; return 0;&#125;]]></content>
+      <categories>
+        <category>OJ</category>
+        <category>剑指offer</category>
+      </categories>
+      <tags>
+        <tag>字符串</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[剑指offer-丑数]]></title>
+    <url>%2F%E5%89%91%E6%8C%87offer-%E4%B8%91%E6%95%B0%2F</url>
+    <content type="text"><![CDATA[题目描述把只包含质因子2、3和5的数称作丑数（Ugly Number）。例如6、8都是丑数，但14不是，因为它包含质因子7。 习惯上我们把1当做是第一个丑数。求按从小到大的顺序的第N个丑数。 思路 AC代码123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475#include &lt;iostream&gt;#include &lt;algorithm&gt;#include &lt;vector&gt;using namespace std;/*bool checked(int n)&#123; while (n % 2 == 0) n = n / 2; while (n % 3 == 0) n = n / 3; while (n % 5 == 0) n = n / 5; if (n == 1) return true; else return false;&#125;class Solution&#123;public: int GetUglyNumber_Solution(int index) &#123; int res; if (index &lt;=0) return 0; int number = 1; int temp = 1; while (temp &lt;= index) &#123; if (checked(number)) &#123; temp++; &#125; number++; &#125; return number-1; &#125;&#125;;*/class Solution&#123;public: int GetUglyNumber_Solution(int index) &#123; if (index &lt; 7) return index; int p2 = 0; //维护三个队列的指针 int p3 = 0; int p5 = 0; vector&lt;int&gt; res; int new_number = 1; res.push_back(new_number); while (res.size() &lt; index) &#123; new_number = min(res[p2]*2, min(res[p3]*3, res[p5]*5)); if (res[p2]*2 == new_number) p2++; if (res[p3]*3 == new_number) p3++; if (res[p5]*5 == new_number) p5++; res.push_back(new_number); &#125; return res[index - 1]; &#125;&#125;;int main()&#123; Solution so; cout &lt;&lt; so.GetUglyNumber_Solution(7); return 0;&#125;]]></content>
+      <categories>
+        <category>OJ</category>
+        <category>剑指offer</category>
+      </categories>
+      <tags>
+        <tag>数论</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[剑指offer-把数组排成最小的数]]></title>
+    <url>%2F%E5%89%91%E6%8C%87offer-%E6%8A%8A%E6%95%B0%E7%BB%84%E6%8E%92%E6%88%90%E6%9C%80%E5%B0%8F%E7%9A%84%E6%95%B0%2F</url>
+    <content type="text"><![CDATA[题目描述输入一个正整数数组，把数组里所有数字拼接起来排成一个数，打印能拼接出的所有数字中最小的一个。例如输入数组{3，32，321}，则打印出这三个数字能排成的最小数字为321323。 思路 首先int类型不好比较“大小”, 其次拼接的数字不知道int能不能存下,而且结果也是return string 所以将int转换为string，然后对string进行排序，由于不能保证string之间的长度相同，那么将两个字符串加起来就保证排序的简单实现。 AC代码12345678910111213141516171819202122232425262728293031323334353637383940414243444546#include &lt;iostream&gt;#include &lt;vector&gt;#include &lt;algorithm&gt;#include &lt;string.h&gt;using namespace std;bool tmp(string a, string b)&#123; return (a+b) &lt; (b+a); //如果就不用纠结string.size()不同的问题==&gt; 例如 3 32 34&#125;class Solution&#123;public: string PrintMinNumber(vector&lt;int&gt; numbers) &#123; vector&lt;string&gt;arr; for (int i = 0; i &lt; numbers.size(); i++) &#123; arr.push_back(to_string(numbers[i])); //int 转换为 string &#125; sort(arr.begin(), arr.end(), tmp); string res = ""; for (vector&lt;string&gt;::iterator it = arr.begin(); it != arr.end(); it++) &#123; // cout &lt;&lt; *it &lt;&lt; endl; res += *it; &#125; return res; &#125;&#125;;int main()&#123; vector&lt;int&gt; numbers = &#123;32, 3, 321&#125;; Solution so; /* 不能对一个空的vector直接赋值，只能Push_back int i = 0; vector&lt;string&gt;tmp; tmp.push_back("hello"); tmp[0] = to_string(numbers[0]); cout &lt;&lt; tmp[0]; */ cout &lt;&lt; so.PrintMinNumber(numbers) &lt;&lt; endl; return 0;&#125;]]></content>
+      <categories>
+        <category>OJ</category>
+        <category>剑指offer</category>
+      </categories>
+      <tags>
+        <tag>字符串</tag>
+        <tag>数组</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[剑指offer-数字中出现1的次数]]></title>
     <url>%2F%E5%89%91%E6%8C%87offer-%E6%95%B0%E5%AD%97%E4%B8%AD%E5%87%BA%E7%8E%B01%E7%9A%84%E6%AC%A1%E6%95%B0%2F</url>
     <content type="text"><![CDATA[题目描述求出1~13的整数中1出现的次数,并算出100~1300的整数中1出现的次数？为此他特别数了一下1~13中包含1的数字有1、10、11、12、13因此共出现6次,但是对于后面问题他就没辙了。ACMer希望你们帮帮他,并把问题更加普遍化,可以很快的求出任意非负整数区间中1出现的次数（从1 到 n 中1出现的次数）。 思路 如果对每个数都进行判断，也就是通过计算得到一个数的每一个位是否为1，这样复杂度太大 找规律： 个位 出现1的次数来说，规律为：res = (n/10)*1 + (n % 10 != 0? 1:0)；例如对于数字33来说，1~30之间的数在个位为数字1的次数为30次，而剩下余数也就是3是大于1的，因此在加一次1，所以个位的数字1的个数为30 + 1 = 31； 十位 出现1的次数来说，规律为，$res = (n/100)*10 + \begin{cases} 0&amp; \text{(n %100 &lt; 10)} \\ 10&amp; \text{(n%100&gt;19)} \\ n%100-10+1&amp; \text{其他} \end{cases}$； 例如数字123，110~119之间十位出现1的个数为10个，而剩下的123%10 = 23 &gt; 19(也就是10~19)也存在10个数，因此在十位出现的数字1的个数为20次 百位 出现1的次数来说，规律为，$res = (n/1000) * 100 + \begin{cases} 0&amp; \text{n%1000&lt;100} \\ 100&amp; \text{n%1000&gt;199} \\ n%1000-100+1&amp; \text{其他} \end{cases}$ 总结，公式为$res = (n/(i\times10) \times i) + \begin{cases} 0&amp; \text{n%(i10) &lt; i} \\ i&amp; \text{n%(i10)&gt;(2i-1)} \\ n%(i10)-i+1&amp; \text{其他} \end{cases}$ (i表示第几位) 时间复杂度为$O(\lg n)$。 AC代码123456789101112131415161718192021222324252627282930313233343536#include &lt;iostream&gt;using namespace std;class Solution&#123;public: int NumberOf1Between1AndN_Solution(int n) &#123; if(n &lt; 0) return 0; int res = 0; for (int i = 1; i &lt;= n; i = i * 10) &#123; int k = n % (i * 10); int temp; if (k &lt; i) temp = 0; else if (k &gt; 2 * i - 1) temp = i; else temp = k - i + 1; res += n / (i * 10) * i + temp; cout &lt;&lt; res &lt;&lt;endl; &#125; return res; &#125;&#125;;int main()&#123; Solution so; cout &lt;&lt; so.NumberOf1Between1AndN_Solution(123) &lt;&lt; endl; // return 0; return 0;&#125;]]></content>
@@ -106,8 +205,8 @@
         <category>剑指offer</category>
       </categories>
       <tags>
-        <tag>递归</tag>
         <tag>二叉树</tag>
+        <tag>递归</tag>
       </tags>
   </entry>
   <entry>
@@ -449,7 +548,7 @@
   <entry>
     <title><![CDATA[c++之vector的使用]]></title>
     <url>%2Fc%2B%2B%E4%B9%8Bvector%E7%9A%84%E4%BD%BF%E7%94%A8%2F</url>
-    <content type="text"><![CDATA[内置函数 at(size_type n)函数 返回对向量中为位置n处元素的引用,reference或者如果向量中元素为const，则返回const reference. 12345678910// vector的函数at返回一个容器内容对象的引用vector &lt;int&gt;a(8); for (int i = 0;i &lt; 8;i++)&#123; a.at(i) = i;&#125;for (int i = 0; i&lt; a.size();i++)&#123; cout &lt;&lt; a.at(i) &lt;&lt;endl;&#125; 初始化 用数组初始化 123456int Tree_pre[8] = &#123;1,2,4,7,3,5,6,8&#125;;int Tree_vin[8] = &#123;4,7,2,1,5,3,8,6&#125;;vector&lt;int&gt;pre(Tree_pre, Tree_pre+8); //用数组初始化向量vector&lt;int&gt;vin(Tree_vin, Tree_vin+8); 用vector初始化二维数组（以下方法是基于c++11标准，c++98不支持） 12345// vector&lt;vector&lt;int&gt;&gt;arr(3, vector&lt;int&gt;(3));// arr[0] = &#123;1,2,3&#125;;// arr[1] = &#123;4,5,6&#125;;// arr[2] = &#123;7,8,9&#125;;vector&lt;vector&lt;int&gt;&gt; arr = &#123;&#123;1, 2&#125;, &#123;3, 4&#125;, &#123;5, 6&#125;&#125;; 遍历vector 使用迭代器 12for (vector&lt;int&gt;::iterator it = res.begin(); it != res.end(); it++) cout &lt;&lt; *it &lt;&lt; " "; 判断某个元素是否在vector中 12if (find(res.begin(), res.end(), str) == res.end()) //判断重复 res.push_back(str); 对vector进行排序，需要注意的是，当vector中是自定义的类型，需要重载== 1sort(res.begin(), res.end());]]></content>
+    <content type="text"><![CDATA[内置函数 at(size_type n)函数 返回对向量中为位置n处元素的引用,reference或者如果向量中元素为const，则返回const reference. 12345678910// vector的函数at返回一个容器内容对象的引用vector &lt;int&gt;a(8); for (int i = 0;i &lt; 8;i++)&#123; a.at(i) = i;&#125;for (int i = 0; i&lt; a.size();i++)&#123; cout &lt;&lt; a.at(i) &lt;&lt;endl;&#125; 初始化 用数组初始化 123456int Tree_pre[8] = &#123;1,2,4,7,3,5,6,8&#125;;int Tree_vin[8] = &#123;4,7,2,1,5,3,8,6&#125;;vector&lt;int&gt;pre(Tree_pre, Tree_pre+8); //用数组初始化向量vector&lt;int&gt;vin(Tree_vin, Tree_vin+8); 用vector初始化二维数组（以下方法是基于c++11标准，c++98不支持） 12345// vector&lt;vector&lt;int&gt;&gt;arr(3, vector&lt;int&gt;(3));// arr[0] = &#123;1,2,3&#125;;// arr[1] = &#123;4,5,6&#125;;// arr[2] = &#123;7,8,9&#125;;vector&lt;vector&lt;int&gt;&gt; arr = &#123;&#123;1, 2&#125;, &#123;3, 4&#125;, &#123;5, 6&#125;&#125;; 遍历vector 使用迭代器 12for (vector&lt;int&gt;::iterator it = res.begin(); it != res.end(); it++) cout &lt;&lt; *it &lt;&lt; " "; 判断某个元素是否在vector中 12if (find(res.begin(), res.end(), str) == res.end()) //判断重复 res.push_back(str); 对vector进行排序，需要注意的是，当vector中是自定义的类型，需要重载== 1sort(res.begin(), res.end()); 注意不能对一个空的vector进行赋值操作 123456//不能对一个空的vector直接赋值，只能Push_backint i = 0;vector&lt;string&gt;tmp;tmp.push_back("hello");tmp[0] = to_string(numbers[0]);cout &lt;&lt; tmp[0];]]></content>
       <categories>
         <category>c++</category>
       </categories>
