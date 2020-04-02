@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[leetcode-接雨水]]></title>
+    <url>%2Fleetcode-%E6%8E%A5%E9%9B%A8%E6%B0%B4%2F</url>
+    <content type="text"><![CDATA[题目https://leetcode-cn.com/problems/trapping-rain-water/ 思路栈的做法：维护一个栈，这个栈其实就是一个递减的水柱下标的集合，但遇到一个新的水柱比当前栈顶水柱高，那么就有积水了，难点是要理解如何求出这些积水（长乘宽）。 AC代码1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677#include &lt;iostream&gt;#include &lt;vector&gt;#include &lt;stack&gt;using namespace std;class Solution &#123;public: int trap(vector&lt;int&gt;&amp; height) &#123; /*暴力法 int res = 0; //按列算，首尾不用算，默认接不到水， for(int i = 1;i &lt; height.size()-1;i++)&#123; int maxLeft = 0; int maxRigth = 0; for(int j = i; j &gt;= 0;j--) &#123; //当前列左边的最大值 maxLeft = max(maxLeft,height[j]); &#125; for (int j = i;j&lt;height.size();j++)&#123;//当前列右边边的最大值 maxRigth = max(maxRigth,height[j]); &#125; //木桶效应 res += min(maxLeft,maxRigth)-height[i]; &#125; return res; */ /*用两个数组分别保存每个列的左边最大值和右边最大值 if(height.size()==0) return 0; //平台所谓的健壮性，加上就过了。。不加报一些奇奇怪怪错误 int res = 0; int size = height.size(); vector&lt;int&gt;max_left(size); vector&lt;int&gt;max_right(size); max_left[0] = height[0]; for(int i = 1;i&lt;size-1;i++)&#123; max_left[i] = max(height[i],max_left[i-1]); &#125; max_right[size-1] = height[size-1]; for(int i = size-2;i&gt;=0;i--) max_right[i] = max(height[i],max_right[i+1]); for(int i = 1;i&lt; size-1;i++)&#123; res += min(max_left[i],max_right[i])-height[i]; &#125; return res; */ int res = 0; stack&lt;int&gt;s; //存放每一列雨水的下标（实际上存储的下标值对应的水柱是递减的） int cur = 0; while (cur &lt; height.size())&#123; //当前的水柱大于栈顶的水柱，说明有积水 while (!s.empty() &amp;&amp; height[cur] &gt; height[s.top()])&#123; int top = s.top(); s.pop(); if(s.empty()) //为空，说明没有积水 break; res += (min(height[cur],height[s.top()]) - height[top]) * (cur-s.top()-1); //长乘宽 &#125; s.push(cur++); &#125; return res; &#125;&#125;;int main()&#123; vector&lt;int&gt;height = &#123;0,1,0,2,1,0,1,3,2,1,2,1&#125;; Solution so; cout &lt;&lt; so.trap(height) &lt;&lt; endl; return 0;&#125;]]></content>
+      <categories>
+        <category>OJ</category>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>栈</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[leetcode-有效的括号]]></title>
+    <url>%2Fleetcode-%E6%9C%89%E6%95%88%E7%9A%84%E6%8B%AC%E5%8F%B7%2F</url>
+    <content type="text"><![CDATA[题目描述https://leetcode-cn.com/problems/valid-parentheses/ 思路 栈解法，遇到左括号压入栈中，遇到右括号与栈顶元素进行配对，配对成功弹出栈顶元素，配对失败返回false 需要注意只有右括号的情况 AC代码123456789101112131415161718192021222324252627282930313233343536373839404142434445#include &lt;iostream&gt;#include &lt;string&gt;#include &lt;stack&gt;using namespace std;class Solution&#123;public: bool isValid(string s) &#123; if (s == "") return true; if (s.size() % 2) return false; stack&lt;char&gt; temp; for (int i = 0; i &lt; s.size(); i++) &#123; if (!temp.empty()) //需要注意只有右括号的情况 &#123; if (s[i] == '(' || s[i] == '&#123;' || s[i] == '[') temp.push(s[i]); else &#123; //()差1，&#123;&#125;[]差2 if (s[i] == temp.top() + 1 || s[i] == temp.top() + 2) temp.pop(); else return false; &#125; &#125; else temp.push(s[i]); &#125; return temp.size()==0; &#125;&#125;;int main()&#123; // cout &lt;&lt; "hellp world" &lt;&lt; endl; string s = "()"; Solution so; cout &lt;&lt; so.isValid(s); return 0;&#125;]]></content>
+      <categories>
+        <category>OJ</category>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>栈</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[python-项目部署]]></title>
     <url>%2Fpython-%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2%2F</url>
     <content type="text"><![CDATA[环境部署 在所在项目生成相关包的requirements.txt文件 pip freeze &gt; requirements.txt 在云主机上设置python虚拟环境，直接安装virtualenvwrapper即可，https://virtualenvwrapper.readthedocs.io/en/latest/ 需要注意这里的坑，需要使用pip3，不要后面配置python3找到这个脚本。 找到 virtualenvwrapper.sh的位置，添加环境变量 配置启动文件vim ~/.bashrc，编辑完source ~/.bashrc Add three lines to your shell startup file (.bashrc, .profile, etc.) to set the location where the virtual environments should live, the location of your development project directories, and the location of the script installed with this package: 我们只需设置虚拟环境应驻留的位置与此软件包一起安装的脚本的位置即可 workon查看有没有虚拟环境， mkvirtual + 环境名 创建环境 deactivate : 退出虚拟环境 workon + 环境名：进入虚拟环境 进入虚拟环境后，根据requirements.txt安装项目所需的环境 1(cov) [root@chenxiaojian 疫情]# pip3 install -r requirements.txt 开发模式部署 项目是一个flask项目，将app.run(host=”0.0.0.0”,port=8000)指定所有主机和端口访问 开放云服务器的8000端口 主机ip:8000进行访问 生产模式部署 安装nginx，进行反向代理（也就是我们访问ip地址,默认是80端口，然后nginx反向代理到本机的8000端口，也就是我们的web项目。） 1yum -y install nginx 安装gunicorn，进入虚拟环境中安装 1pip3 install gunicorn 用gunicorn启动app.py（第一个app指的是app.py，第二个app指的是flask实例的对象） 1234567(cov) [root@chenxiaojian 疫情]# gunicorn -b 127.0.0.1:8000 -D app:app(cov) [root@chenxiaojian 疫情]# ps aux | grep gunicornroot 1444 0.3 0.8 222220 16640 ? S 09:54 0:00 /root/.virtualenvs/cov/bin/python /root/.virtualenvs/cov/bin/gunicorn -b 127.0.0.1:8000 -D app:approot 1525 0.0 0.0 112728 976 pts/0 R+ 09:54 0:00 grep --color=auto gunicornroot 14988 0.0 0.8 222476 16664 ? S 09:45 0:00 /root/.virtualenvs/cov/bin/python /root/.virtualenvs/cov/bin/gunicorn -b 127.0.0.1 -D app:approot 14991 0.2 1.5 247864 29384 ? S 09:45 0:01 /root/.virtualenvs/cov/bin/python /root/.virtualenvs/cov/bin/gunicorn -b 127.0.0.1 -D app:app(cov) [root@chenxiaojian 疫情]# 启动nginx服务失败，查看错误，显示端口80被占用，netstat -ltunp查看，但是我的端口明明被nginx占用了，只能查看进程，并kill。 /etc/nginx/nginx.conf 需要注意：gunicorn启动的端口号要和nginx配置的端口号要一样8000. (server_name：填写自己的ip或者域名) 查看nginx配置是否正常 123(cov) [root@chenxiaojian 疫情]# nginx -t -c /etc/nginx/nginx.confnginx: the configuration file /etc/nginx/nginx.conf syntax is oknginx: configuration file /etc/nginx/nginx.conf test is successful 访问ip或者域名成功！]]></content>
@@ -1387,8 +1411,8 @@
         <category>模拟</category>
       </categories>
       <tags>
-        <tag>字符串</tag>
         <tag>栈</tag>
+        <tag>字符串</tag>
         <tag>模拟</tag>
       </tags>
   </entry>
