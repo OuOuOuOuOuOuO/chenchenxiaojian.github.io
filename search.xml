@@ -1,6 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[关于vscode-ssh远程连接下openssh与git自带的ssh的冲突解决方法]]></title>
+    <url>%2F%E5%85%B3%E4%BA%8Evscode-ssh%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5%E4%B8%8Bopenssh%E4%B8%8Egit%E8%87%AA%E5%B8%A6%E7%9A%84ssh%E7%9A%84%E5%86%B2%E7%AA%81%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95%2F</url>
+    <content type="text"><![CDATA[问题报错 过程试图写入的管道不存在 原因本机同时装有openssh和git，这样就会冲突了 解决方法将openssh卸载了，同时指定vscode的默认ssh命令路径，将下列配置添加到vscode的用户配置的setting.json中 (可以打开命令行，where ssh，很奇怪：cmd只有显示openssh，git命令行下显示git自带的和openssh) 12"remote.SSH.path": "E:\\git\\Git\\usr\\bin\\ssh.exe","remote.SSH.showLoginTerminal": true, //配置登录的终端 测试出现的问题ssh: permission denied (publickey) 原因远程Linux的openssh-server的配置文件问题，我们可以修改/etc/ssh/sshd_config的配置文件，配置密码登录；相关配置修改如下： 1234PasswordAuthentication yesPermitRootLogin yesPubkeyAuthentication no#AuthorizedKeysFile .ssh/authorized_keys .ssh/authorized_keys2 测试成功啦😱😱😱]]></content>
+      <categories>
+        <category>Linux</category>
+        <category>常见问题</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[leetcode-旋转数组]]></title>
+    <url>%2Fleetcode-%E6%97%8B%E8%BD%AC%E6%95%B0%E7%BB%84%2F</url>
+    <content type="text"><![CDATA[题目https://leetcode-cn.com/problems/rotate-matrix-lcci/ 思路 找规律，将二维数组的每个下标都列出出来，然后可以发现新数组的下标是旧数组的（x,y）==》（n-y-1,x）; 需要注意的是，我们遍历时是从0开始，所以才减去1，如果从1开始，那么要+1.找规律即可。 另一难点，原地旋转，不借助辅助空间，还是找规律的….（找了一个小时） （3,1）==》（1,1） （3,3）==》（3,1） （1,3）==》（3,3） （1,1）==》（1,3） 可以发现，回到原点了 那么存在另外一个难点，如何确定哪些数应该进行上述的变换，我们可以发现（1,1）和（1,3）是对称的，那么我们变换了（1,1），（（1,3）也就是自然地也跟着变换），因此我们只需要变换矩阵中的对称部分即可，这样就保证不会重复。需要注意n=奇数时，对应变换的矩阵的确定。 AC代码1234567891011121314151617181920212223242526272829303132333435363738#include &lt;iostream&gt;#include &lt;vector&gt;using namespace std;class Solution&#123;public: void rotate(vector&lt;vector&lt;int&gt;&gt; &amp;matrix) &#123; int n = matrix.size(); for (int i = 0;i &lt; n/2;i++) &#123; //需要注意是从0开始，如果是从1开始的话，那么是n+1，而不是n-1; for (int j = 0;j &lt; (n+1)/2;j++) //这里的n+1就是奇数的时候中间的数 &#123; int temp = matrix[i][j]; matrix[i][j] = matrix[n-1-j][i]; matrix[n-1-j][i] = matrix[n-1-i][n-1-j]; matrix[n-1-i][n-1-j] = matrix[j][n-1-i]; matrix[j][n-1-i] = temp; &#125; &#125; &#125;&#125;;int main()&#123; vector&lt;vector&lt;int&gt;&gt; res = &#123;&#123;1,2,3&#125;,&#123;4,5,6&#125;,&#123;7,8,9&#125;&#125;; Solution so; so.rotate(res); for (int i = 0;i &lt; res.size();i++) &#123; for(int j = 0;j &lt; res.size();j++) cout &lt;&lt; res[i][j] &lt;&lt; " "; cout &lt;&lt; endl; &#125; cout &lt;&lt;endl; return 0;&#125; 想不到的 先上下变换，然后对角线变换。]]></content>
+      <categories>
+        <category>OJ</category>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>数组</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[leetcode-删除最外层的括号]]></title>
+    <url>%2Fleetcode-%E5%88%A0%E9%99%A4%E6%9C%80%E5%A4%96%E5%B1%82%E7%9A%84%E6%8B%AC%E5%8F%B7%2F</url>
+    <content type="text"><![CDATA[题目https://leetcode-cn.com/problems/remove-outermost-parentheses/ 思路 使用栈，遍历字符串，遇到左括号就压入，遇到右括号就弹出，当栈为空时，说明当前index是外层要舍去的括号，根据下标之间的关系即可找到“原语” 另外一种思路：使用两个变量left和right，初始化left = 1，right = 0；这样可以忽略外层的左括号，方便后面判断left != right时可以追加到res，而不会受到外层左括号的影响。 AC代码1234567891011121314151617181920212223242526272829303132333435363738#include &lt;iostream&gt;#include &lt;string&gt;using namespace std;class Solution &#123;public: string removeOuterParentheses(string S) &#123; string res = ""; int left = 1; int right = 0; for(int i = 1;i &lt; S.size();i++) &#123; if(S[i]=='(') left++; else right++; //判断 if (left != right) res.push_back(S[i]); else &#123; //相等，说明左右括号配对，所以外层括号不能压入 right = 0; left = 1; i++; //忽略外层的左括号 &#125; &#125; return res; &#125;&#125;;int main()&#123; string s = "(()())"; Solution so; cout &lt;&lt; so.removeOuterParentheses(s) &lt;&lt;endl; return 0;&#125;]]></content>
+      <categories>
+        <category>OJ</category>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>栈</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[leetcode-字符串转换为整数]]></title>
+    <url>%2Fleetcode-%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E6%8D%A2%E4%B8%BA%E6%95%B4%E6%95%B0%2F</url>
+    <content type="text"><![CDATA[题目https://leetcode-cn.com/problems/string-to-integer-atoi/ 思路 首先去掉前置多余空格 判断正负情况，需要注意出现两个正负号的字符都return 0，例如“+-2”； 接下来在剩余的字符串中提取出数字即可，我们只需要判断这个字符是不是0~9，用isdigit()函数判断即可 提取数字需要判断溢出情况，我们通过判断当前res*10加上下一个数字会不会大于2147483647即可，对于-2147483648这种情况，虽然逻辑上从我们的代码上判定位溢出，但是返回结果恰好等于-2147483648。 AC代码123456789101112131415161718192021222324252627282930313233343536373839404142434445#include &lt;iostream&gt;#include &lt;string&gt;using namespace std;class Solution&#123;public: int myAtoi(string str) &#123; int i = 0; while (str[i] == ' ') //处理前置空格 i++; int flag = 1; int res = 0; if (str[i] == '+') &#123; i++; &#125; else if (str[i] == '-') //特殊情况，'+-2'==》 0 &#123; i++; flag = -1; &#125; while (i &lt; str.size() &amp;&amp; isdigit(str[i])) &#123; //判断是否为数字 int temp = str[i] - 48; //处理溢出 // if(res &gt; INT32_MAX / 10 || ((res == INT32_MAX/10) &amp;&amp; temp &gt; 7)) if (res &gt; (INT32_MAX - temp) / 10) //溢出判断，这不用将res设置为long //"-2147483648"虽然比INT32_MAX大，虽然判定位溢出，但是实际上不溢出的，我们的结果返回的正确的 return flag == 1 ? INT32_MAX : INT32_MIN; res = res * 10 + temp; i++; &#125; return flag*res; &#125;&#125;;int main()&#123; string s = "-2147483648"; Solution so; cout &lt;&lt; so.myAtoi(s) &lt;&lt; endl; return 0;&#125; 测试样例 正确的正数，负数 溢出的正数，负数 非法字符和数字的混合]]></content>
+      <categories>
+        <category>OJ</category>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>字符串</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[leetcode-接雨水]]></title>
     <url>%2Fleetcode-%E6%8E%A5%E9%9B%A8%E6%B0%B4%2F</url>
     <content type="text"><![CDATA[题目https://leetcode-cn.com/problems/trapping-rain-water/ 思路栈的做法：维护一个栈，这个栈其实就是一个递减的水柱下标的集合，但遇到一个新的水柱比当前栈顶水柱高，那么就有积水了，难点是要理解如何求出这些积水（长乘宽）。 AC代码1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677#include &lt;iostream&gt;#include &lt;vector&gt;#include &lt;stack&gt;using namespace std;class Solution &#123;public: int trap(vector&lt;int&gt;&amp; height) &#123; /*暴力法 int res = 0; //按列算，首尾不用算，默认接不到水， for(int i = 1;i &lt; height.size()-1;i++)&#123; int maxLeft = 0; int maxRigth = 0; for(int j = i; j &gt;= 0;j--) &#123; //当前列左边的最大值 maxLeft = max(maxLeft,height[j]); &#125; for (int j = i;j&lt;height.size();j++)&#123;//当前列右边边的最大值 maxRigth = max(maxRigth,height[j]); &#125; //木桶效应 res += min(maxLeft,maxRigth)-height[i]; &#125; return res; */ /*用两个数组分别保存每个列的左边最大值和右边最大值 if(height.size()==0) return 0; //平台所谓的健壮性，加上就过了。。不加报一些奇奇怪怪错误 int res = 0; int size = height.size(); vector&lt;int&gt;max_left(size); vector&lt;int&gt;max_right(size); max_left[0] = height[0]; for(int i = 1;i&lt;size-1;i++)&#123; max_left[i] = max(height[i],max_left[i-1]); &#125; max_right[size-1] = height[size-1]; for(int i = size-2;i&gt;=0;i--) max_right[i] = max(height[i],max_right[i+1]); for(int i = 1;i&lt; size-1;i++)&#123; res += min(max_left[i],max_right[i])-height[i]; &#125; return res; */ int res = 0; stack&lt;int&gt;s; //存放每一列雨水的下标（实际上存储的下标值对应的水柱是递减的） int cur = 0; while (cur &lt; height.size())&#123; //当前的水柱大于栈顶的水柱，说明有积水 while (!s.empty() &amp;&amp; height[cur] &gt; height[s.top()])&#123; int top = s.top(); s.pop(); if(s.empty()) //为空，说明没有积水 break; res += (min(height[cur],height[s.top()]) - height[top]) * (cur-s.top()-1); //长乘宽 &#125; s.push(cur++); &#125; return res; &#125;&#125;;int main()&#123; vector&lt;int&gt;height = &#123;0,1,0,2,1,0,1,3,2,1,2,1&#125;; Solution so; cout &lt;&lt; so.trap(height) &lt;&lt; endl; return 0;&#125;]]></content>
@@ -237,8 +285,8 @@
         <category>剑指offer</category>
       </categories>
       <tags>
-        <tag>二分</tag>
         <tag>数组</tag>
+        <tag>二分</tag>
       </tags>
   </entry>
   <entry>
@@ -298,8 +346,8 @@
         <category>剑指offer</category>
       </categories>
       <tags>
-        <tag>字符串</tag>
         <tag>数组</tag>
+        <tag>字符串</tag>
       </tags>
   </entry>
   <entry>
@@ -408,8 +456,8 @@
         <category>剑指offer</category>
       </categories>
       <tags>
-        <tag>递归</tag>
         <tag>二叉树</tag>
+        <tag>递归</tag>
       </tags>
   </entry>
   <entry>
@@ -1283,8 +1331,8 @@
         <category>DFS</category>
       </categories>
       <tags>
-        <tag>DFS</tag>
         <tag>字符串</tag>
+        <tag>DFS</tag>
       </tags>
   </entry>
   <entry>
