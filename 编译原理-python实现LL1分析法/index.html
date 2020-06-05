@@ -1,0 +1,1816 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link rel="stylesheet" href="/lib/pace/pace-theme-flash.min.css?v=1.0.2">
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/fancybox/source/jquery.fancybox.css">
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.2.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: true,
+    fancybox: true,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="原理 本次实验是设计一个LL(1)分析器，给定任意文法，自动消除一切左递归（前提是文法中不含回路，且产生式右部不含有空字），自动回溯（提取最左公因子），自动生成FIRST集，自动生成FOLLOW集，自动生成LL(1)分析表，给定一个输入串，输出该输入串的分析过程。  本次实验需要的原理知识在此不过多阐述，可以参考《编译原理教程》第四版（胡元义主编）  需要注意的是，书本上自动消除一切左递归的算法中">
+<meta name="keywords" content="编译原理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="编译原理-python实现LL1分析法">
+<meta property="og:url" content="http://chenchenxiaojian.github.io/编译原理-python实现LL1分析法/index.html">
+<meta property="og:site_name" content="陈小坚の博客">
+<meta property="og:description" content="原理 本次实验是设计一个LL(1)分析器，给定任意文法，自动消除一切左递归（前提是文法中不含回路，且产生式右部不含有空字），自动回溯（提取最左公因子），自动生成FIRST集，自动生成FOLLOW集，自动生成LL(1)分析表，给定一个输入串，输出该输入串的分析过程。  本次实验需要的原理知识在此不过多阐述，可以参考《编译原理教程》第四版（胡元义主编）  需要注意的是，书本上自动消除一切左递归的算法中">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2020/06/05/jb7fIozdSsGYmMF.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200605095409958.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjEwMDQ1Ng==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200605095310512.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjEwMDQ1Ng==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200605095628605.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjEwMDQ1Ng==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200605095740309.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjEwMDQ1Ng==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200605095845884.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjEwMDQ1Ng==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200605095952975.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjEwMDQ1Ng==,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2020-06-05T02:22:57.980Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="编译原理-python实现LL1分析法">
+<meta name="twitter:description" content="原理 本次实验是设计一个LL(1)分析器，给定任意文法，自动消除一切左递归（前提是文法中不含回路，且产生式右部不含有空字），自动回溯（提取最左公因子），自动生成FIRST集，自动生成FOLLOW集，自动生成LL(1)分析表，给定一个输入串，输出该输入串的分析过程。  本次实验需要的原理知识在此不过多阐述，可以参考《编译原理教程》第四版（胡元义主编）  需要注意的是，书本上自动消除一切左递归的算法中">
+<meta name="twitter:image" content="https://i.loli.net/2020/06/05/jb7fIozdSsGYmMF.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="陈小坚の博客" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="http://chenchenxiaojian.github.io/编译原理-python实现LL1分析法/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>编译原理-python实现LL1分析法 | 陈小坚の博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/chenchenxiaojian" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">陈小坚の博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">记录学习生活的点点滴滴</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">41</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">53</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">145</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-schedule">
+
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/schedule/" rel="section"><i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>日程表</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://chenchenxiaojian.github.io/编译原理-python实现LL1分析法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="陈小坚(｀・ω・´)">
+      <meta itemprop="description" content="你我只是个普通人，活着就好">
+      <meta itemprop="image" content="/images/头像.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="陈小坚の博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">编译原理-python实现LL1分析法
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-06-05 09:13:37 / 修改时间：10:22:57" itemprop="dateCreated datePublished" datetime="2020-06-05T09:13:37+08:00">2020-06-05</time>
+            </span>
+          
+
+          
+            
+
+            
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/编译原理/" itemprop="url" rel="index"><span itemprop="name">编译原理</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/编译原理-python实现LL1分析法/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/编译原理-python实现LL1分析法/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+                 阅读次数： 
+                <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+              </span>
+            </span>
+          
+
+          <br>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">本文字数：</span>
+              
+              <span title="本文字数">27k</span>
+            </span>
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              
+              <span title="阅读时长">25 分钟</span>
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><ul>
+<li><p>本次实验是设计一个LL(1)分析器，给定任意文法，自动消除一切左递归（前提是文法中不含回路，且产生式右部不含有空字），自动回溯（提取最左公因子），自动生成FIRST集，自动生成FOLLOW集，自动生成LL(1)分析表，给定一个输入串，输出该输入串的分析过程。</p>
+</li>
+<li><p>本次实验需要的原理知识在此不过多阐述，可以参考《编译原理教程》第四版（胡元义主编）</p>
+</li>
+<li><p>需要注意的是，书本上自动消除一切左递归的算法中，我认为会出现第一个产生式的直接左递归没有消除（不知道对不对，看两层循环中中第一个产生式没有消除直接左递归），所以消除完所有产生式的左递归后，在进行处理，判断是否含有直接左递归，有则消除；其他算法都是根据书上的原理进行实现的。</p>
+</li>
+<li><p>设计一个类LL1，初始化传入参数：终结符（Tset），非终结符（NTset），文法开始符（S）(需要注意的是，本次实验必须要求文法开始符是字符’S’),  产生式（Production）, FIRST集（firstset），FOLLOW集（followset）, LL(1)分析表（Table）</p>
+<figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">class LL1:</span><br><span class="line">    def __init__(<span class="literal">self</span>, T<span class="built_in">set</span>, NT<span class="built_in">set</span>, S, Production, firstset, followset, Table):</span><br><span class="line">        <span class="literal">self</span>.T<span class="built_in">set</span> = T<span class="built_in">set</span></span><br><span class="line">        <span class="literal">self</span>.NT<span class="built_in">set</span> = NT<span class="built_in">set</span></span><br><span class="line">        <span class="literal">self</span>.S = S</span><br><span class="line">        <span class="literal">self</span>.Production = Production</span><br><span class="line">        <span class="literal">self</span>.firstset = firstset</span><br><span class="line">        <span class="literal">self</span>.followset = followset</span><br><span class="line">        <span class="literal">self</span>.Table = Table</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">各个参数的数据存放形式：</span><br><span class="line">Tset：[]列表</span><br><span class="line"><span class="string">NTset:</span>[]列表</span><br><span class="line"><span class="string">S:</span> <span class="string">'S'</span> 字符串</span><br><span class="line"><span class="string">Production:</span>&#123;&#125;,例如：A-&gt;aA|b, 就是表示为&#123;<span class="string">'A'</span>: [<span class="string">"aA"</span>,<span class="string">"b"</span>]&#125;</span><br><span class="line"><span class="string">firstset:</span> &#123;&#125;, 例如：fisrt(A):(a,b),就是表示为&#123;‘A’:[<span class="string">"a"</span>,<span class="string">"b"</span>]&#125;</span><br><span class="line"><span class="string">followset:</span>&#123;&#125;,同firstset一样</span><br><span class="line"><span class="string">Table:</span>&#123;&#125;嵌套字典，例如：M[A,a] = (A-&gt;a)，那么就是表示为&#123;<span class="string">'A'</span>:&#123;<span class="string">'a'</span>:[<span class="string">'A-&gt;a'</span>]&#125;&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>LL1类的各个方法：</p>
+<ul>
+<li>removeLeftRecursion(self)：消除一切左递归</li>
+<li>removeLeftCommonFactor(self)：消除最左公因子</li>
+<li>createFirst(self)，createFirstSet(self): 生成FIRST集</li>
+<li>createFollow(self)，createFollowSet(self)：生成FOLLOW集</li>
+<li>createTable(self)：生成LL1分析表</li>
+</ul>
+</li>
+<li><p>其他函数是跟界面各个按钮绑定的函数，跟实验主旨没啥大的关系，就不阐述了</p>
+</li>
+<li><p>本次实验GUI是用Python tkinter</p>
+</li>
+</ul>
+<h3 id="实验效果"><a href="#实验效果" class="headerlink" title="实验效果"></a>实验效果</h3><p><strong>LL(1)分析器界面：</strong></p>
+<img src="https://i.loli.net/2020/06/05/jb7fIozdSsGYmMF.png" alt="图片.png" style="zoom: 67%;">
+
+<p><strong>点击打开文件，选择文法的txt文件，就是把文件的内容读到文本框中</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/20200605095409958.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjEwMDQ1Ng==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<img src="https://img-blog.csdnimg.cn/20200605095310512.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjEwMDQ1Ng==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" style="zoom:67%;">
+
+<p><strong>点击消除左递归，消除左因子，生成first集，生成follow集按钮，就是生成对应的结果。</strong></p>
+<img src="https://img-blog.csdnimg.cn/20200605095628605.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjEwMDQ1Ng==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" style="zoom:67%;">
+
+<p><strong>点击生成Table表，就会生成一个新窗口，显示结果</strong></p>
+<img src="https://img-blog.csdnimg.cn/20200605095740309.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjEwMDQ1Ng==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" style="zoom: 50%;">
+
+<p><strong>然后在输入框输入判定的字符串</strong></p>
+<img src="https://img-blog.csdnimg.cn/20200605095845884.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjEwMDQ1Ng==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" style="zoom:67%;">
+
+<p><strong>点击判断栈情况，输入该字符串的分析过程</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/20200605095952975.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjEwMDQ1Ng==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="源代码（main-py）"><a href="#源代码（main-py）" class="headerlink" title="源代码（main.py）"></a>源代码（main.py）</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br><span class="line">407</span><br><span class="line">408</span><br><span class="line">409</span><br><span class="line">410</span><br><span class="line">411</span><br><span class="line">412</span><br><span class="line">413</span><br><span class="line">414</span><br><span class="line">415</span><br><span class="line">416</span><br><span class="line">417</span><br><span class="line">418</span><br><span class="line">419</span><br><span class="line">420</span><br><span class="line">421</span><br><span class="line">422</span><br><span class="line">423</span><br><span class="line">424</span><br><span class="line">425</span><br><span class="line">426</span><br><span class="line">427</span><br><span class="line">428</span><br><span class="line">429</span><br><span class="line">430</span><br><span class="line">431</span><br><span class="line">432</span><br><span class="line">433</span><br><span class="line">434</span><br><span class="line">435</span><br><span class="line">436</span><br><span class="line">437</span><br><span class="line">438</span><br><span class="line">439</span><br><span class="line">440</span><br><span class="line">441</span><br><span class="line">442</span><br><span class="line">443</span><br><span class="line">444</span><br><span class="line">445</span><br><span class="line">446</span><br><span class="line">447</span><br><span class="line">448</span><br><span class="line">449</span><br><span class="line">450</span><br><span class="line">451</span><br><span class="line">452</span><br><span class="line">453</span><br><span class="line">454</span><br><span class="line">455</span><br><span class="line">456</span><br><span class="line">457</span><br><span class="line">458</span><br><span class="line">459</span><br><span class="line">460</span><br><span class="line">461</span><br><span class="line">462</span><br><span class="line">463</span><br><span class="line">464</span><br><span class="line">465</span><br><span class="line">466</span><br><span class="line">467</span><br><span class="line">468</span><br><span class="line">469</span><br><span class="line">470</span><br><span class="line">471</span><br><span class="line">472</span><br><span class="line">473</span><br><span class="line">474</span><br><span class="line">475</span><br><span class="line">476</span><br><span class="line">477</span><br><span class="line">478</span><br><span class="line">479</span><br><span class="line">480</span><br><span class="line">481</span><br><span class="line">482</span><br><span class="line">483</span><br><span class="line">484</span><br><span class="line">485</span><br><span class="line">486</span><br><span class="line">487</span><br><span class="line">488</span><br><span class="line">489</span><br><span class="line">490</span><br><span class="line">491</span><br><span class="line">492</span><br><span class="line">493</span><br><span class="line">494</span><br><span class="line">495</span><br><span class="line">496</span><br><span class="line">497</span><br><span class="line">498</span><br><span class="line">499</span><br><span class="line">500</span><br><span class="line">501</span><br><span class="line">502</span><br><span class="line">503</span><br><span class="line">504</span><br><span class="line">505</span><br><span class="line">506</span><br><span class="line">507</span><br><span class="line">508</span><br><span class="line">509</span><br><span class="line">510</span><br><span class="line">511</span><br><span class="line">512</span><br><span class="line">513</span><br><span class="line">514</span><br><span class="line">515</span><br><span class="line">516</span><br><span class="line">517</span><br><span class="line">518</span><br><span class="line">519</span><br><span class="line">520</span><br><span class="line">521</span><br><span class="line">522</span><br><span class="line">523</span><br><span class="line">524</span><br><span class="line">525</span><br><span class="line">526</span><br><span class="line">527</span><br><span class="line">528</span><br><span class="line">529</span><br><span class="line">530</span><br><span class="line">531</span><br><span class="line">532</span><br><span class="line">533</span><br><span class="line">534</span><br><span class="line">535</span><br><span class="line">536</span><br><span class="line">537</span><br><span class="line">538</span><br><span class="line">539</span><br><span class="line">540</span><br><span class="line">541</span><br><span class="line">542</span><br><span class="line">543</span><br><span class="line">544</span><br><span class="line">545</span><br><span class="line">546</span><br><span class="line">547</span><br><span class="line">548</span><br><span class="line">549</span><br><span class="line">550</span><br><span class="line">551</span><br><span class="line">552</span><br><span class="line">553</span><br><span class="line">554</span><br><span class="line">555</span><br><span class="line">556</span><br><span class="line">557</span><br><span class="line">558</span><br><span class="line">559</span><br><span class="line">560</span><br><span class="line">561</span><br><span class="line">562</span><br><span class="line">563</span><br><span class="line">564</span><br><span class="line">565</span><br><span class="line">566</span><br><span class="line">567</span><br><span class="line">568</span><br><span class="line">569</span><br><span class="line">570</span><br><span class="line">571</span><br><span class="line">572</span><br><span class="line">573</span><br><span class="line">574</span><br><span class="line">575</span><br><span class="line">576</span><br><span class="line">577</span><br><span class="line">578</span><br><span class="line">579</span><br><span class="line">580</span><br><span class="line">581</span><br><span class="line">582</span><br><span class="line">583</span><br><span class="line">584</span><br><span class="line">585</span><br><span class="line">586</span><br><span class="line">587</span><br><span class="line">588</span><br><span class="line">589</span><br><span class="line">590</span><br><span class="line">591</span><br><span class="line">592</span><br><span class="line">593</span><br><span class="line">594</span><br><span class="line">595</span><br><span class="line">596</span><br><span class="line">597</span><br><span class="line">598</span><br><span class="line">599</span><br><span class="line">600</span><br><span class="line">601</span><br><span class="line">602</span><br><span class="line">603</span><br><span class="line">604</span><br><span class="line">605</span><br><span class="line">606</span><br><span class="line">607</span><br><span class="line">608</span><br><span class="line">609</span><br><span class="line">610</span><br><span class="line">611</span><br><span class="line">612</span><br><span class="line">613</span><br><span class="line">614</span><br><span class="line">615</span><br><span class="line">616</span><br><span class="line">617</span><br><span class="line">618</span><br><span class="line">619</span><br><span class="line">620</span><br><span class="line">621</span><br><span class="line">622</span><br><span class="line">623</span><br><span class="line">624</span><br><span class="line">625</span><br><span class="line">626</span><br><span class="line">627</span><br><span class="line">628</span><br><span class="line">629</span><br><span class="line">630</span><br><span class="line">631</span><br><span class="line">632</span><br><span class="line">633</span><br><span class="line">634</span><br><span class="line">635</span><br><span class="line">636</span><br><span class="line">637</span><br><span class="line">638</span><br><span class="line">639</span><br><span class="line">640</span><br><span class="line">641</span><br><span class="line">642</span><br><span class="line">643</span><br><span class="line">644</span><br><span class="line">645</span><br><span class="line">646</span><br><span class="line">647</span><br><span class="line">648</span><br><span class="line">649</span><br><span class="line">650</span><br><span class="line">651</span><br><span class="line">652</span><br><span class="line">653</span><br><span class="line">654</span><br><span class="line">655</span><br><span class="line">656</span><br><span class="line">657</span><br><span class="line">658</span><br><span class="line">659</span><br><span class="line">660</span><br><span class="line">661</span><br><span class="line">662</span><br><span class="line">663</span><br><span class="line">664</span><br><span class="line">665</span><br><span class="line">666</span><br><span class="line">667</span><br><span class="line">668</span><br><span class="line">669</span><br><span class="line">670</span><br><span class="line">671</span><br><span class="line">672</span><br><span class="line">673</span><br><span class="line">674</span><br><span class="line">675</span><br><span class="line">676</span><br><span class="line">677</span><br><span class="line">678</span><br><span class="line">679</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tkinter</span><br><span class="line"><span class="keyword">import</span> tkinter.filedialog   <span class="comment">#对话框</span></span><br><span class="line"><span class="keyword">import</span> tkinter.ttk      <span class="comment"># 表格</span></span><br><span class="line"></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">Production产生式存放：</span></span><br><span class="line"><span class="string">    A-&gt;a | b</span></span><br><span class="line"><span class="string">    &#123;A:['a','b']&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">firstset集存在,follow集同理</span></span><br><span class="line"><span class="string">first(A) = (a,b),则&#123;'A':[a,b]&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">table表（M表）例如：M[A,(] = "A-&gt;(abc"</span></span><br><span class="line"><span class="string">&#123;'A':&#123;'(':["A-&gt;(abc"]&#125;&#125;</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LL1</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, Tset, NTset, S, Production, firstset, followset, Table)</span>:</span></span><br><span class="line">        self.Tset = Tset</span><br><span class="line">        self.NTset = NTset</span><br><span class="line">        self.S = S</span><br><span class="line">        self.Production = Production</span><br><span class="line">        self.firstset = firstset</span><br><span class="line">        self.followset = followset</span><br><span class="line">        self.Table = Table</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 消除一切左递归</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">removeLeftRecursion</span><span class="params">(self)</span>:</span></span><br><span class="line">        i = <span class="number">1</span></span><br><span class="line">        <span class="keyword">while</span> i &lt;= len(self.NTset):</span><br><span class="line">            j = <span class="number">1</span></span><br><span class="line">            <span class="keyword">while</span> j &lt;= i<span class="number">-1</span>:</span><br><span class="line">                <span class="comment"># set转换为list，才能进行下标取值操作</span></span><br><span class="line">                Ai = self.NTset[i<span class="number">-1</span>]  <span class="comment"># Ai非终结符</span></span><br><span class="line">                Aj = self.NTset[j<span class="number">-1</span>]  <span class="comment"># Aj非终结符</span></span><br><span class="line"></span><br><span class="line">                rmList = [x <span class="keyword">for</span> x <span class="keyword">in</span> self.Production[Ai] <span class="keyword">if</span> x.startswith(Aj)]</span><br><span class="line">                <span class="keyword">if</span> rmList:</span><br><span class="line">                    addList = [y+x.replace(Aj, <span class="string">""</span>, <span class="number">1</span>) <span class="keyword">if</span> y != <span class="string">'ε'</span> <span class="keyword">else</span> x.replace(Aj, <span class="string">""</span>, <span class="number">1</span>)</span><br><span class="line">                               <span class="keyword">for</span> x <span class="keyword">in</span> rmList <span class="keyword">for</span> y <span class="keyword">in</span> self.Production[Aj]]</span><br><span class="line">                    <span class="comment"># 本来不需要替换的，保留</span></span><br><span class="line">                    self.Production[Ai] = list(</span><br><span class="line">                        filter((<span class="keyword">lambda</span> x: x <span class="keyword">not</span> <span class="keyword">in</span> rmList), self.Production[Ai]))</span><br><span class="line">                    <span class="comment"># 追加新替换的式子进来</span></span><br><span class="line">                    <span class="comment"># extend,append函数没有返回值的，所以不能list().extend()，否则返回None</span></span><br><span class="line">                    self.Production[Ai].extend(addList)</span><br><span class="line">                <span class="comment"># print("去除间接左递归", self.Production)</span></span><br><span class="line"></span><br><span class="line">                <span class="comment"># 消除直接左递归</span></span><br><span class="line">                LeftRecursionProduction = [</span><br><span class="line">                    x <span class="keyword">for</span> x <span class="keyword">in</span> self.Production[Ai] <span class="keyword">if</span> x.startswith(Ai)]    <span class="comment"># 左递归的产生式</span></span><br><span class="line"></span><br><span class="line">                notLeftRecursionProduction = [</span><br><span class="line">                    x <span class="keyword">for</span> x <span class="keyword">in</span> self.Production[Ai] <span class="keyword">if</span> <span class="keyword">not</span> x.startswith(Ai)]  <span class="comment"># 不是左递归的产生式</span></span><br><span class="line">                <span class="keyword">if</span> LeftRecursionProduction:     <span class="comment"># 含有左递归的产生式</span></span><br><span class="line">                    newNT = Ai+<span class="string">"'"</span>              <span class="comment"># 新终结符，如 A,A'</span></span><br><span class="line">                    <span class="keyword">if</span> newNT <span class="keyword">not</span> <span class="keyword">in</span> self.NTset:</span><br><span class="line">                        self.NTset.append(newNT)</span><br><span class="line">                    <span class="keyword">if</span> notLeftRecursionProduction:</span><br><span class="line">                        self.Production[Ai] = [</span><br><span class="line">                            x+newNT <span class="keyword">for</span> x <span class="keyword">in</span> notLeftRecursionProduction]</span><br><span class="line">                    <span class="keyword">else</span>:</span><br><span class="line">                        self.Production[Ai] = [newNT]</span><br><span class="line">                    newList = [</span><br><span class="line">                        x.replace(x[<span class="number">0</span>], <span class="string">''</span>, <span class="number">1</span>)+newNT <span class="keyword">for</span> x <span class="keyword">in</span> LeftRecursionProduction]</span><br><span class="line">                    newList.append(<span class="string">'ε'</span>)         <span class="comment"># 追加空字，哑f西no</span></span><br><span class="line">                    self.Production[newNT] = newList    <span class="comment"># 加进产生式的字典中</span></span><br><span class="line">                j = j+<span class="number">1</span></span><br><span class="line"></span><br><span class="line">            i = i+<span class="number">1</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        特殊判断，第一个非终结符对应的产生式本身是直接左递归，</span></span><br><span class="line"><span class="string">        注意是第一个非终结符，因为上面的两层循环判断了除第一个非终结符的情况了</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        LeftRecursionProduction = [</span><br><span class="line">            x <span class="keyword">for</span> x <span class="keyword">in</span> self.Production[self.NTset[<span class="number">0</span>]] <span class="keyword">if</span> x.startswith(self.NTset[<span class="number">0</span>])]</span><br><span class="line">        notLeftRecursionProduction = [</span><br><span class="line">            x <span class="keyword">for</span> x <span class="keyword">in</span> self.Production[self.NTset[<span class="number">0</span>]] <span class="keyword">if</span> <span class="keyword">not</span> x.startswith(self.NTset[<span class="number">0</span>])]</span><br><span class="line">        <span class="keyword">if</span> LeftRecursionProduction:</span><br><span class="line">            newNT = <span class="string">'S'</span>+<span class="string">"'"</span></span><br><span class="line">            <span class="keyword">if</span> newNT <span class="keyword">not</span> <span class="keyword">in</span> self.NTset:         <span class="comment"># 新的终结符判断是否存在，不存在插入</span></span><br><span class="line">                self.NTset.append(newNT)</span><br><span class="line">            <span class="keyword">if</span> notLeftRecursionProduction:</span><br><span class="line">                self.Production[<span class="string">'S'</span>] = [</span><br><span class="line">                    x+newNT <span class="keyword">for</span> x <span class="keyword">in</span> notLeftRecursionProduction]</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                self.Production[<span class="string">'S'</span>] = [newNT]</span><br><span class="line">            newList = [x.replace(x[<span class="number">0</span>], <span class="string">''</span>, <span class="number">1</span>) +</span><br><span class="line">                       newNT <span class="keyword">for</span> x <span class="keyword">in</span> LeftRecursionProduction]</span><br><span class="line">            newList.append(<span class="string">'ε'</span>)         <span class="comment"># 追加空字，哑f西no</span></span><br><span class="line">            self.Production[newNT] = newList    <span class="comment"># 加进产生式的字典中</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 去除多余的生成式,dfs</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        fromkeys方法注意：</span></span><br><span class="line"><span class="string">        如果每个key的value都为同一个对象，</span></span><br><span class="line"><span class="string">        则操作该key的value时，所有的key的value都会改变</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        judge = dict.fromkeys(self.NTset, <span class="number">0</span>)        <span class="comment"># 字典，非终结符做key,0做valu</span></span><br><span class="line">        stack = []</span><br><span class="line">        stack.append(self.S)</span><br><span class="line">        judge[self.S] = <span class="number">1</span>       <span class="comment"># 标志为已访问</span></span><br><span class="line">        <span class="keyword">while</span>(len(stack) &gt; <span class="number">0</span> <span class="keyword">and</span> (<span class="number">0</span> <span class="keyword">in</span> judge.values())):</span><br><span class="line">            top = stack.pop()</span><br><span class="line">            rightPro = self.Production[top]  <span class="comment"># 产生式右部</span></span><br><span class="line">            <span class="keyword">for</span> item <span class="keyword">in</span> rightPro:</span><br><span class="line">                i = <span class="number">0</span></span><br><span class="line">                <span class="keyword">while</span> i &lt; len(item):</span><br><span class="line">                    ch = <span class="string">""</span></span><br><span class="line">                    <span class="keyword">if</span> item[i] <span class="keyword">in</span> self.NTset:</span><br><span class="line">                        ch += item[i]</span><br><span class="line">                        <span class="keyword">if</span> i != len(item)<span class="number">-1</span>:</span><br><span class="line">                            <span class="keyword">if</span> item[i+<span class="number">1</span>] == <span class="string">"'"</span>:</span><br><span class="line">                                ch += <span class="string">"'"</span></span><br><span class="line">                        <span class="keyword">if</span> judge[ch] == <span class="number">0</span>:</span><br><span class="line">                            stack.append(ch)</span><br><span class="line">                        judge[ch] = <span class="number">1</span>       <span class="comment"># 标志为访问过</span></span><br><span class="line">                    i = i+<span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> key, values <span class="keyword">in</span> judge.items():</span><br><span class="line">            <span class="keyword">if</span> values == <span class="number">0</span>:</span><br><span class="line">                self.Production.pop(key)        <span class="comment"># 去除产生式</span></span><br><span class="line">                self.NTset.remove(key)          <span class="comment"># 去除非终结符</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 消除最左公因子</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    算法思想：将每个非终结符的产生式右部，也就是多个字符串，按照首个字符分类，</span></span><br><span class="line"><span class="string">    然后进行转换，新转换生成的新非终结符的产生式更新到self实例中，进行转换。</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">removeLeftCommonFactor</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">for</span> item <span class="keyword">in</span> self.NTset:                 <span class="comment"># 遍历每个非终结符的产生式</span></span><br><span class="line">            diff = &#123;&#125;                           <span class="comment"># 将相同首字符的分为一类</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> self.Production[item]:     <span class="comment"># 遍历该非终结符的每个产生式</span></span><br><span class="line">                <span class="keyword">if</span> i[<span class="number">0</span>] <span class="keyword">not</span> <span class="keyword">in</span> diff.keys():</span><br><span class="line">                    diff[i[<span class="number">0</span>]] = [i]</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    diff[i[<span class="number">0</span>]].append(i)</span><br><span class="line">            oldList = []                        <span class="comment"># 原来非终结符产生式的右部</span></span><br><span class="line">            newNt = item                        <span class="comment"># 新产生的非终结符</span></span><br><span class="line">            <span class="keyword">for</span> key, value <span class="keyword">in</span> diff.items():</span><br><span class="line">                newList = []                    <span class="comment"># 新产生的非终结符产生式的右部</span></span><br><span class="line">                <span class="keyword">if</span> len(value) &gt; <span class="number">1</span>:              <span class="comment"># 可以提取公因子</span></span><br><span class="line">                    newNt += <span class="string">"'"</span>                <span class="comment"># 新的终结符</span></span><br><span class="line">                    oldList.append(key+newNt)</span><br><span class="line">                    <span class="keyword">for</span> v <span class="keyword">in</span> value:</span><br><span class="line">                        <span class="keyword">if</span> len(v) == <span class="number">1</span>:         <span class="comment"># 提取公因子后为ε</span></span><br><span class="line">                            newList.append(<span class="string">'ε'</span>)</span><br><span class="line">                        <span class="keyword">else</span>:</span><br><span class="line">                            <span class="comment"># 提取非公因子的部分,replace函数需要指定替换的次数，bug error</span></span><br><span class="line">                            newList.append(v.replace(v[<span class="number">0</span>], <span class="string">''</span>, <span class="number">1</span>))</span><br><span class="line">                    <span class="keyword">if</span> len(newList) != <span class="number">0</span>:</span><br><span class="line">                        self.Production[newNt] = newList            <span class="comment"># 添加新的产生式右部</span></span><br><span class="line">                        self.NTset.append(newNt)                    <span class="comment"># 添加新的非终结符</span></span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    <span class="comment"># 注意这里value为列表，所以value[0]为所求</span></span><br><span class="line">                    oldList.append(value[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">            self.Production[item] = oldList</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">createFirst</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">for</span> nt <span class="keyword">in</span> self.NTset:</span><br><span class="line">            <span class="keyword">if</span> nt <span class="keyword">not</span> <span class="keyword">in</span> self.firstset.keys():</span><br><span class="line">                self.firstset[nt] = []</span><br><span class="line">            <span class="keyword">for</span> eachPro <span class="keyword">in</span> self.Production[nt]:</span><br><span class="line">                <span class="keyword">if</span> eachPro[<span class="number">0</span>] <span class="keyword">in</span> self.Tset <span class="keyword">or</span> eachPro[<span class="number">0</span>] == <span class="string">'ε'</span>:                          <span class="comment"># A-&gt;a</span></span><br><span class="line">                    self.firstset[nt].append(eachPro[<span class="number">0</span>])</span><br><span class="line">                    self.firstset[nt] = list(set(self.firstset[nt]))</span><br><span class="line">                <span class="keyword">else</span>:                                                <span class="comment"># A-&gt;B...</span></span><br><span class="line">                    <span class="keyword">if</span> eachPro[<span class="number">0</span>] <span class="keyword">in</span> self.firstset.keys():</span><br><span class="line">                        <span class="comment"># 将Y1集除空字追加到X</span></span><br><span class="line">                        R_addto_L = [</span><br><span class="line">                            x <span class="keyword">for</span> x <span class="keyword">in</span> self.firstset[eachPro[<span class="number">0</span>]] <span class="keyword">if</span> x != <span class="string">'ε'</span>]</span><br><span class="line"></span><br><span class="line">                        self.firstset[nt].extend(R_addto_L)</span><br><span class="line">                        self.firstset[nt] = list(</span><br><span class="line">                            set(self.firstset[nt]))    <span class="comment"># 去重</span></span><br><span class="line"></span><br><span class="line">                        <span class="keyword">if</span> <span class="string">'ε'</span> <span class="keyword">in</span> self.Production[eachPro[<span class="number">0</span>]]:  <span class="comment"># 第一个Y1存在ε</span></span><br><span class="line">                            after_Y1_str = eachPro[<span class="number">1</span>:]</span><br><span class="line">                            <span class="keyword">if</span> <span class="keyword">not</span> after_Y1_str:    <span class="comment"># 为空，即是A-&gt;B 这种情况，且B含有空字，需要追加空字</span></span><br><span class="line">                                self.firstset[nt].append(<span class="string">'ε'</span>)</span><br><span class="line">                                self.firstset[nt] = list(</span><br><span class="line">                                    set(self.firstset[nt]))</span><br><span class="line">                            <span class="keyword">else</span>:</span><br><span class="line">                                index = <span class="number">0</span></span><br><span class="line">                                <span class="keyword">for</span> ch <span class="keyword">in</span> after_Y1_str:</span><br><span class="line">                                    <span class="keyword">if</span> <span class="string">'ε'</span> <span class="keyword">in</span> self.Production[ch]:</span><br><span class="line">                                        index = index+<span class="number">1</span></span><br><span class="line">                                    <span class="keyword">else</span>:</span><br><span class="line">                                        <span class="keyword">break</span></span><br><span class="line">                                existNULL_Y = after_Y1_str[<span class="number">0</span>:index]</span><br><span class="line">                                <span class="keyword">if</span> len(existNULL_Y) == len(after_Y1_str):       <span class="comment"># Y1后面的Y都有空字，加</span></span><br><span class="line">                                    self.firstset[nt].append(<span class="string">'ε'</span>)</span><br><span class="line">                                    self.firstset[nt] = list(</span><br><span class="line">                                        set(self.firstset[nt]))</span><br><span class="line">                                <span class="keyword">for</span> each_Y <span class="keyword">in</span> existNULL_Y:</span><br><span class="line">                                    Y_addto_X = [</span><br><span class="line">                                        x <span class="keyword">for</span> x <span class="keyword">in</span> self.firstset[each_Y] <span class="keyword">if</span> x != <span class="string">'ε'</span>]</span><br><span class="line">                                    self.firstset[nt].extend(Y_addto_X)</span><br><span class="line">                                    self.firstset[nt] = list(</span><br><span class="line">                                        set(self.firstset[nt]))</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">createFirstSet</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            size1 = <span class="number">0</span></span><br><span class="line">            <span class="keyword">for</span> item <span class="keyword">in</span> self.firstset.values():</span><br><span class="line">                size1 += len(item)</span><br><span class="line">            <span class="comment"># print(size1)</span></span><br><span class="line">            self.createFirst()</span><br><span class="line">            size2 = <span class="number">0</span></span><br><span class="line">            <span class="keyword">for</span> item <span class="keyword">in</span> self.firstset.values():</span><br><span class="line">                size2 += len(item)</span><br><span class="line">            <span class="keyword">if</span> size1 == size2:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">        </span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">createFollow</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">for</span> nt <span class="keyword">in</span> self.NTset:</span><br><span class="line">            <span class="keyword">for</span> key, values <span class="keyword">in</span> self.Production.items():</span><br><span class="line">                <span class="keyword">for</span> item <span class="keyword">in</span> values:</span><br><span class="line">                    index = item.find(nt)</span><br><span class="line">                    flag = <span class="number">1</span></span><br><span class="line">                    newnt = nt+<span class="string">"'"</span></span><br><span class="line">                    <span class="keyword">if</span> newnt <span class="keyword">in</span> item:</span><br><span class="line">                        flag = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">                    <span class="keyword">if</span> flag <span class="keyword">and</span> index &gt;= <span class="number">0</span>:</span><br><span class="line">                        newindex = index + len(nt)<span class="number">-1</span></span><br><span class="line">                        <span class="keyword">if</span> newindex == len(item)<span class="number">-1</span>:  <span class="comment"># 非终结符刚刚好在末尾,规则3</span></span><br><span class="line">                            self.followset[nt].extend(self.followset[key])</span><br><span class="line">                            self.followset[nt] = list(set(self.followset[nt]))</span><br><span class="line"></span><br><span class="line">                        <span class="comment"># 非终结符后面有字符,item[newindex+1]表示所求follow集的非终结符后面的第一个字符</span></span><br><span class="line">                        <span class="keyword">else</span>:</span><br><span class="line">                            nextNT = item[newindex+<span class="number">1</span>]  <span class="comment"># 后面的符号</span></span><br><span class="line"></span><br><span class="line">                            <span class="keyword">if</span> nextNT <span class="keyword">in</span> self.Tset:  <span class="comment"># 终结符</span></span><br><span class="line">                                self.followset[nt].append(nextNT)</span><br><span class="line">                                self.followset[nt] = list(</span><br><span class="line">                                    set(self.followset[nt]))</span><br><span class="line">                            <span class="keyword">else</span>:</span><br><span class="line">                                i = newindex + <span class="number">2</span></span><br><span class="line">                                <span class="keyword">while</span> i &lt; len(item):</span><br><span class="line">                                    <span class="keyword">if</span> item[i] == <span class="string">"'"</span>:</span><br><span class="line">                                        nextNT += <span class="string">"'"</span></span><br><span class="line">                                    <span class="keyword">else</span>:</span><br><span class="line">                                        <span class="keyword">break</span></span><br><span class="line">                                    i = i+<span class="number">1</span></span><br><span class="line">                                <span class="comment"># 后面是非终结符</span></span><br><span class="line">                                <span class="comment"># first集去除空字加到follow</span></span><br><span class="line"></span><br><span class="line">                                add_list = [</span><br><span class="line">                                    x <span class="keyword">for</span> x <span class="keyword">in</span> self.firstset[nextNT] <span class="keyword">if</span> x != <span class="string">'ε'</span>]</span><br><span class="line">                                self.followset[nt].extend(add_list)</span><br><span class="line">                                self.followset[nt] = list(</span><br><span class="line">                                    set(self.followset[nt]))</span><br><span class="line">                                <span class="keyword">if</span> <span class="string">'ε'</span> <span class="keyword">in</span> self.firstset[nextNT]:</span><br><span class="line">                                    self.followset[nt].extend(</span><br><span class="line">                                        self.followset[key])</span><br><span class="line">                                    self.followset[nt] = list(</span><br><span class="line">                                        set(self.followset[nt]))</span><br><span class="line">                    <span class="comment"># print("&#123;&#125;-&gt;&#123;&#125;,非终结符为：&#123;&#125;".format(key,item,nt))</span></span><br><span class="line">                    <span class="comment"># print("规则为：",self.followset)</span></span><br><span class="line">        <span class="comment"># print("==========", self.followset['S'])</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">createFollowSet</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">for</span> nt <span class="keyword">in</span> self.NTset:</span><br><span class="line">            self.followset[nt] = []</span><br><span class="line">        self.followset[<span class="string">"S"</span>].append(<span class="string">'#'</span>)</span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            <span class="string">"""            </span></span><br><span class="line"><span class="string">            # 判断坑了我5小时。。。</span></span><br><span class="line"><span class="string">            # 不能f1 = self.followset 执行函数  f2 = self.followset，</span></span><br><span class="line"><span class="string">            # 然后判断f1 == f2？</span></span><br><span class="line"><span class="string">            # f1随着self.followset变化而变化？？未解决！</span></span><br><span class="line"><span class="string">            """</span></span><br><span class="line">            size1 = <span class="number">0</span></span><br><span class="line">            <span class="keyword">for</span> item <span class="keyword">in</span> self.followset.values():</span><br><span class="line">                size1 += len(item)</span><br><span class="line">            <span class="comment"># print(size1)</span></span><br><span class="line">            self.createFollow()</span><br><span class="line">            size2 = <span class="number">0</span></span><br><span class="line">            <span class="keyword">for</span> item <span class="keyword">in</span> self.followset.values():</span><br><span class="line">                size2 += len(item)</span><br><span class="line">            <span class="keyword">if</span> size1 == size2:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">createTable</span><span class="params">(self)</span>:</span></span><br><span class="line">        ckey = self.Tset</span><br><span class="line">        ckey.append(<span class="string">"#"</span>)</span><br><span class="line"></span><br><span class="line">        value = list()</span><br><span class="line">        <span class="keyword">for</span> k <span class="keyword">in</span> self.NTset:            <span class="comment"># 初始化一个嵌套字典</span></span><br><span class="line">            <span class="keyword">for</span> ck <span class="keyword">in</span> ckey:</span><br><span class="line">                <span class="keyword">if</span> k <span class="keyword">in</span> self.Table:</span><br><span class="line">                    self.Table[k].update(&#123;ck: value&#125;)</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    self.Table.update(&#123;k: &#123;ck: value&#125;&#125;)</span><br><span class="line"></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        ERROR fromkeys少用！！</span></span><br><span class="line"><span class="string">        # cdict = dict.fromkeys(ckey, [])             # 初始化子字典 一维</span></span><br><span class="line"><span class="string">        # self.Table = dict.fromkeys(self.NTset, cdict)    # Table表     二维</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">for</span> key, values <span class="keyword">in</span> self.firstset.items():</span><br><span class="line">            <span class="keyword">for</span> value <span class="keyword">in</span> values:</span><br><span class="line">                <span class="keyword">if</span> value != <span class="string">"ε"</span>:</span><br><span class="line">                    <span class="keyword">if</span> len(self.Production[key]) == <span class="number">1</span>:           <span class="comment"># 该非终结符只有一个产生式</span></span><br><span class="line">                        str_pro = <span class="string">"&#123;&#125;-&gt;&#123;&#125;"</span>.format(key, self.Production[key][<span class="number">0</span>])</span><br><span class="line">                        <span class="keyword">if</span> len(self.Table[key][value]) == <span class="number">0</span>:</span><br><span class="line">                            self.Table[key][value] = [str_pro]</span><br><span class="line">                        <span class="keyword">else</span>:</span><br><span class="line">                            self.Table[key][value].append(str_pro)</span><br><span class="line">                    <span class="keyword">else</span>:</span><br><span class="line">                        <span class="keyword">for</span> i <span class="keyword">in</span> self.Production[key]:          <span class="comment"># 看首字符</span></span><br><span class="line">                            <span class="keyword">if</span> value[<span class="number">0</span>] == i[<span class="number">0</span>]:                <span class="comment"># 产生式首字符和first集的每个元素首字符</span></span><br><span class="line">                                str_pro = <span class="string">"&#123;&#125;-&gt;&#123;&#125;"</span>.format(key, i)</span><br><span class="line">                                <span class="keyword">if</span> len(self.Table[key][value]) == <span class="number">0</span>:</span><br><span class="line">                                    self.Table[key][value] = [str_pro]</span><br><span class="line">                                <span class="keyword">else</span>:</span><br><span class="line">                                    self.Table[key][value].append(str_pro)</span><br><span class="line">                                <span class="keyword">break</span></span><br><span class="line">                <span class="comment"># first集存在空字(产生式中有空字)</span></span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    <span class="keyword">for</span> k <span class="keyword">in</span> self.followset[key]:</span><br><span class="line">                        str_pro = <span class="string">"&#123;&#125;-&gt;&#123;&#125;"</span>.format(key, <span class="string">'ε'</span>)</span><br><span class="line">                        <span class="keyword">if</span> len(self.Table[key][k]) == <span class="number">0</span>:</span><br><span class="line">                            self.Table[key][k] = [str_pro]</span><br><span class="line">                        <span class="keyword">else</span>:</span><br><span class="line">                            self.Table[key][k].append(str_pro)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">readFile</span><span class="params">(filename)</span>:</span></span><br><span class="line">    Tset = set()                <span class="comment"># 终结符集</span></span><br><span class="line">    NTset = set()               <span class="comment"># 非终结符集</span></span><br><span class="line">    S = <span class="string">'S'</span>                     <span class="comment"># 文法开始符</span></span><br><span class="line">    Production = dict()         <span class="comment"># 产生式</span></span><br><span class="line">    <span class="keyword">with</span> open(filename, encoding=<span class="string">'utf-8'</span>, mode=<span class="string">'r'</span>) <span class="keyword">as</span> f:</span><br><span class="line">        lines = [x.strip() <span class="keyword">for</span> x <span class="keyword">in</span> f.readlines() <span class="keyword">if</span> <span class="keyword">not</span> x.isspace()]</span><br><span class="line">        <span class="keyword">for</span> line <span class="keyword">in</span> lines:</span><br><span class="line">            line = line.split(<span class="string">'-&gt;'</span>, <span class="number">1</span>)              <span class="comment"># 分割</span></span><br><span class="line">            line = [x.strip() <span class="keyword">for</span> x <span class="keyword">in</span> line]        <span class="comment"># 去除空白符</span></span><br><span class="line">            line[<span class="number">1</span>] = line[<span class="number">1</span>].split(<span class="string">'|'</span>)            <span class="comment"># 分割</span></span><br><span class="line">            line[<span class="number">1</span>] = [x.strip() <span class="keyword">for</span> x <span class="keyword">in</span> line[<span class="number">1</span>]]</span><br><span class="line">            <span class="keyword">if</span> line[<span class="number">0</span>] <span class="keyword">not</span> <span class="keyword">in</span> Production.keys():    <span class="comment"># 判断非终结符是否存在</span></span><br><span class="line">                addDict = &#123;line[<span class="number">0</span>]: line[<span class="number">1</span>]&#125;</span><br><span class="line">                Production.update(addDict)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                Production[line[<span class="number">0</span>]].extend(line[<span class="number">1</span>])  <span class="comment"># 存在，追加</span></span><br><span class="line">            <span class="comment"># 11 -&gt; 11|221 产生式</span></span><br><span class="line">            <span class="comment"># &#123;'11': ['11', '221']&#125;</span></span><br><span class="line">    NTset = list(set(Production.keys()))            <span class="comment"># 字典的key作为非终结符</span></span><br><span class="line">    NTset.remove(<span class="string">'S'</span>)</span><br><span class="line">    NTset.append(<span class="string">'S'</span>)                               <span class="comment"># 保证文法开始符在最后，消除左递归方便点</span></span><br><span class="line">    <span class="comment"># 遍历字典的values，判断每个字符如果不是非终结符，那么就是终结符,使用集合推导式，</span></span><br><span class="line">    Tset = list(set([c <span class="keyword">for</span> item <span class="keyword">in</span> Production.values()</span><br><span class="line">                     <span class="keyword">for</span> ch <span class="keyword">in</span> item <span class="keyword">for</span> c <span class="keyword">in</span> ch <span class="keyword">if</span> c <span class="keyword">not</span> <span class="keyword">in</span> NTset <span class="keyword">and</span> c != <span class="string">'ε'</span> <span class="keyword">and</span> c != <span class="string">"'"</span>]))</span><br><span class="line">    <span class="keyword">return</span> Tset, NTset, S, Production</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># “打开文件”按键函数</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">btn1</span><span class="params">(LB_txt1, x)</span>:</span></span><br><span class="line">    LB_txt1.delete(<span class="number">1</span>, tkinter.END)        <span class="comment"># 清空列表框</span></span><br><span class="line">    filename = tkinter.filedialog.askopenfilename()</span><br><span class="line">    x.Tset, x.NTset, x.S, x.Production = readFile(filename)</span><br><span class="line">    <span class="keyword">with</span> open(filename, <span class="string">'r'</span>, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> f:</span><br><span class="line">        lines = f.readlines()</span><br><span class="line">        <span class="keyword">for</span> line <span class="keyword">in</span> lines:</span><br><span class="line">            LB_txt1.insert(tkinter.END, line)</span><br><span class="line"></span><br><span class="line"><span class="comment"># “消除左递归”按键函数</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">btn2</span><span class="params">(LB_txt2, x)</span>:</span></span><br><span class="line">    LB_txt2.delete(<span class="number">1</span>, tkinter.END)</span><br><span class="line">    x.removeLeftRecursion()</span><br><span class="line">    <span class="keyword">for</span> key, value <span class="keyword">in</span> x.Production.items():</span><br><span class="line">        <span class="keyword">for</span> v <span class="keyword">in</span> value:</span><br><span class="line">            str_pro = <span class="string">"&#123;&#125;-&gt;&#123;&#125;"</span>.format(key, v)</span><br><span class="line">            LB_txt2.insert(tkinter.END, str_pro)</span><br><span class="line"></span><br><span class="line"><span class="comment"># "消除左公因子"按键函数</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">btn3</span><span class="params">(LB_txt3, x)</span>:</span></span><br><span class="line">    LB_txt3.delete(<span class="number">1</span>, tkinter.END)</span><br><span class="line">    x.removeLeftCommonFactor()</span><br><span class="line">    <span class="keyword">for</span> key, value <span class="keyword">in</span> x.Production.items():</span><br><span class="line">        <span class="keyword">for</span> v <span class="keyword">in</span> value:</span><br><span class="line">            str_pro = <span class="string">"&#123;&#125;-&gt;&#123;&#125;"</span>.format(key, v)</span><br><span class="line">            LB_txt3.insert(tkinter.END, str_pro)</span><br><span class="line"></span><br><span class="line"><span class="comment"># "生成first集"的按键函数</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">btn4</span><span class="params">(LB_first,x)</span>:</span></span><br><span class="line">    LB_first.delete(<span class="number">1</span>,tkinter.END)</span><br><span class="line">    x.createFirstSet()</span><br><span class="line">    <span class="keyword">for</span> key,values <span class="keyword">in</span> x.firstset.items():</span><br><span class="line">        <span class="keyword">if</span> key <span class="keyword">in</span> x.NTset:          <span class="comment"># 防止用户没进行消除左递归操作就生成first集</span></span><br><span class="line">            str_firstset_right = <span class="string">""</span></span><br><span class="line">            <span class="keyword">for</span> v <span class="keyword">in</span> values:</span><br><span class="line">                str_firstset_right = str_firstset_right + v + <span class="string">", "</span></span><br><span class="line">            str_first = <span class="string">"first(&#123;&#125;) : ( &#123;&#125; )"</span>.format(key,str_firstset_right)</span><br><span class="line">            LB_first.insert(tkinter.END,str_first)</span><br><span class="line"></span><br><span class="line"><span class="comment"># "生成follow集"的按键函数</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">btn5</span><span class="params">(LB_follow,x)</span>:</span></span><br><span class="line">    LB_follow.delete(<span class="number">1</span>,tkinter.END)</span><br><span class="line">    x.createFollowSet()</span><br><span class="line">    <span class="keyword">for</span> key,values <span class="keyword">in</span> x.followset.items():</span><br><span class="line">        <span class="keyword">if</span> key <span class="keyword">in</span> x.NTset:          <span class="comment"># 防止用户没进行消除左递归,消除左因子操作就生成follow集</span></span><br><span class="line">            str_followset_right = <span class="string">""</span></span><br><span class="line">            <span class="keyword">for</span> v <span class="keyword">in</span> values:</span><br><span class="line">                str_followset_right =  str_followset_right + v + <span class="string">", "</span></span><br><span class="line">            str_follow = <span class="string">"follow(&#123;&#125;) : ( &#123;&#125; )"</span>.format(key,str_followset_right)</span><br><span class="line">            LB_follow.insert(tkinter.END,str_follow)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 给定输入串，输出该输入串的分析过程</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">is_legal</span><span class="params">(input_text,x)</span>:</span></span><br><span class="line">    input_str = input_text.get()  <span class="comment"># input_text为输入框对象</span></span><br><span class="line">    table_root = tkinter.Tk()</span><br><span class="line">    table_root.title(<span class="string">"输入串的判断情况"</span>)</span><br><span class="line">    table_root.geometry(<span class="string">'1200x500'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建表格</span></span><br><span class="line">    table_table = tkinter.ttk.Treeview(table_root,height=<span class="number">200</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 定义列</span></span><br><span class="line">    table_table[<span class="string">"columns"</span>] = [<span class="string">"符号栈"</span>, <span class="string">"当前输入符号"</span>, <span class="string">"输入串"</span>,<span class="string">"说明"</span>]</span><br><span class="line">    table_table.pack()</span><br><span class="line">    table_table.column(<span class="string">"#0"</span>,width=<span class="number">0</span>,anchor=<span class="string">'center'</span>)</span><br><span class="line">    <span class="comment"># 设置列宽度  </span></span><br><span class="line">    table_table.column(<span class="string">"符号栈"</span>, width=<span class="number">200</span>,anchor=<span class="string">'center'</span>)</span><br><span class="line">    table_table.column(<span class="string">"当前输入符号"</span>, width=<span class="number">200</span>,anchor=<span class="string">'center'</span>)</span><br><span class="line">    table_table.column(<span class="string">"输入串"</span>, width=<span class="number">200</span>,anchor=<span class="string">'center'</span>)</span><br><span class="line">    table_table.column(<span class="string">"说明"</span>, width=<span class="number">600</span>,anchor=<span class="string">'center'</span>)</span><br><span class="line">    <span class="comment"># 设置列名</span></span><br><span class="line">    table_table.heading(<span class="string">"符号栈"</span>,text=<span class="string">"符号栈"</span>)</span><br><span class="line">    table_table.heading(<span class="string">"当前输入符号"</span>,text=<span class="string">"当前输入符号"</span>)</span><br><span class="line">    table_table.heading(<span class="string">"输入串"</span>,text=<span class="string">"输入串"</span>)</span><br><span class="line">    table_table.heading(<span class="string">"说明"</span>,text=<span class="string">"说明"</span>)</span><br><span class="line"></span><br><span class="line">    stack = []</span><br><span class="line">    stack.append(<span class="string">"#"</span>)</span><br><span class="line">    stack.append(<span class="string">"S"</span>)</span><br><span class="line">    input_str += <span class="string">"#"</span></span><br><span class="line">    i = <span class="number">0</span></span><br><span class="line">    colindex = <span class="number">0</span>   <span class="comment"># gui 表格的行数</span></span><br><span class="line">    a = input_str[i]        <span class="comment"># 当前输入符号</span></span><br><span class="line">    top = stack[len(stack)<span class="number">-1</span>]</span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    str1,str2都是相同的，但是懒得改了...</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">while</span> stack[len(stack)<span class="number">-1</span>] != <span class="string">"#"</span>:</span><br><span class="line">        top = stack[len(stack)<span class="number">-1</span>]</span><br><span class="line">        cur_stack_str = <span class="string">""</span>.join(stack)</span><br><span class="line">        stack.pop()     <span class="comment"># 弹出栈顶</span></span><br><span class="line">        a = input_str[i]</span><br><span class="line">        <span class="keyword">if</span> a <span class="keyword">not</span> <span class="keyword">in</span> x.NTset <span class="keyword">and</span> a <span class="keyword">not</span> <span class="keyword">in</span> x.Tset:</span><br><span class="line">            str1 = cur_stack_str</span><br><span class="line">            str2 = a</span><br><span class="line">            str3 = input_str[i+<span class="number">1</span>:]</span><br><span class="line">            str4 = <span class="string">"ERROR"</span></span><br><span class="line">            insert_tablelist = [str1,str2,str3,str4]</span><br><span class="line">            table_table.insert(<span class="string">''</span>,colindex,values=insert_tablelist)</span><br><span class="line">            print(<span class="string">"Error!!"</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">if</span> top <span class="keyword">in</span> x.Tset:</span><br><span class="line">            <span class="keyword">if</span> top == a:</span><br><span class="line">                <span class="keyword">if</span> a != <span class="string">"#"</span>:</span><br><span class="line">                    i = i+<span class="number">1</span></span><br><span class="line">                    insert_tablelist = []</span><br><span class="line">                    str1 = cur_stack_str</span><br><span class="line">                    str2 = a</span><br><span class="line">                    str3 = input_str[i:]    <span class="comment"># 注意这里是i，不是i+1</span></span><br><span class="line">                    str4 = <span class="string">"匹配，弹出栈顶符号&#123;&#125;并读出输入串的下一个输入符号&#123;&#125;"</span>.format(top,input_str[i])</span><br><span class="line">                    insert_tablelist = [str1,str2,str3,str4]</span><br><span class="line">                    table_table.insert(<span class="string">''</span>,colindex,values=insert_tablelist)</span><br><span class="line">                    colindex = colindex+<span class="number">1</span></span><br><span class="line">                    <span class="keyword">continue</span></span><br><span class="line">                <span class="comment"># else:</span></span><br><span class="line">                <span class="comment">#     print("succeed")</span></span><br><span class="line">                <span class="comment">#     return True</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            table_item = x.Table[top][a]</span><br><span class="line">            <span class="comment"># print("查表为",table_item)</span></span><br><span class="line">            <span class="keyword">if</span> table_item:              <span class="comment"># []或者['A-&gt;i']</span></span><br><span class="line">                table_item = x.Table[top][a][<span class="number">0</span>]</span><br><span class="line">                table_item = table_item.split(<span class="string">'-&gt;'</span>)[<span class="number">1</span>]</span><br><span class="line">                <span class="keyword">if</span> table_item != <span class="string">'ε'</span>:       <span class="comment"># T'S 分离成 T' S</span></span><br><span class="line">                    j = <span class="number">0</span></span><br><span class="line">                    table_item += <span class="string">'#'</span></span><br><span class="line">                    insert_stack = []</span><br><span class="line">                    <span class="keyword">while</span> j &lt; len(table_item)<span class="number">-1</span>:</span><br><span class="line">                        ch = table_item[j]             <span class="comment"># 表示单个字符</span></span><br><span class="line">                        <span class="keyword">if</span> ch <span class="keyword">in</span> x.Tset:</span><br><span class="line">                            insert_stack.append(ch)</span><br><span class="line">                            j = j+<span class="number">1</span></span><br><span class="line">                        <span class="keyword">else</span>:</span><br><span class="line">                            <span class="keyword">while</span> table_item[j+<span class="number">1</span>] == <span class="string">"'"</span> <span class="keyword">and</span> j &lt; len(table_item):</span><br><span class="line">                                ch += <span class="string">"'"</span></span><br><span class="line">                                j = j+<span class="number">1</span></span><br><span class="line">                            j = j+<span class="number">1</span></span><br><span class="line">                            insert_stack.append(ch)</span><br><span class="line">                    insert_stack.reverse()          <span class="comment"># 翻转，逆序入栈</span></span><br><span class="line">                    stack.extend(insert_stack)</span><br><span class="line">                    <span class="comment"># gui 打印</span></span><br><span class="line">                    str1 = cur_stack_str</span><br><span class="line">                    str2 = a</span><br><span class="line">                    str3 = input_str[i+<span class="number">1</span>:]</span><br><span class="line">                    str4 = <span class="string">"弹出栈顶符号&#123;&#125;，将M[&#123;&#125;,&#123;&#125;]中&#123;&#125;的&#123;&#125;压入栈中"</span>.format(top,top,a,x.Table[top][a][<span class="number">0</span>],<span class="string">""</span>.join(insert_stack))</span><br><span class="line">                    insert_tablelist = [str1,str2,str3,str4]</span><br><span class="line">                    table_table.insert(<span class="string">''</span>,colindex,values=insert_tablelist)</span><br><span class="line">                    <span class="comment"># ######</span></span><br><span class="line">                <span class="keyword">else</span>:       <span class="comment"># 空字不压入</span></span><br><span class="line">                    str1 = cur_stack_str</span><br><span class="line">                    str2 = a</span><br><span class="line">                    str3 = input_str[i+<span class="number">1</span>:]</span><br><span class="line">                    str4 = <span class="string">"弹出栈顶符号&#123;&#125;，因为M[&#123;&#125;,&#123;&#125;]中为&#123;&#125;-&gt;'ε'，故不压入栈中"</span>.format(top,top,a,top)</span><br><span class="line">                    insert_tablelist = [str1,str2,str3,str4]</span><br><span class="line">                    table_table.insert(<span class="string">''</span>,colindex,values=insert_tablelist)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">else</span>:   <span class="comment"># 表中无此项</span></span><br><span class="line">                <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        colindex = colindex+<span class="number">1</span></span><br><span class="line">    str1 = cur_stack_str</span><br><span class="line">    str2 = a</span><br><span class="line">    str3 = input_str[i+<span class="number">1</span>:]</span><br><span class="line">    str4 = <span class="string">"匹配，分析成功！"</span></span><br><span class="line">    insert_tablelist = [str1,str2,str3,str4]</span><br><span class="line">    table_table.insert(<span class="string">''</span>,colindex,values=insert_tablelist)</span><br><span class="line">    print(<span class="string">"成功！！！"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># "生成table表"的按键函数</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">btn6</span><span class="params">(x)</span>:</span></span><br><span class="line">    x.createTable()</span><br><span class="line">    table_root = tkinter.Tk()</span><br><span class="line">    table_root.title(<span class="string">"table表"</span>)</span><br><span class="line">    table_root.geometry(<span class="string">'710x170'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建表格</span></span><br><span class="line">    table_table = tkinter.ttk.Treeview(table_root)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 定义列</span></span><br><span class="line">    column_list = x.Tset</span><br><span class="line">    <span class="comment"># print("非终结符：",column_list)</span></span><br><span class="line">    table_table[<span class="string">"columns"</span>] = column_list</span><br><span class="line">    table_table.pack()</span><br><span class="line">    table_table.column(<span class="string">"#0"</span>,width=<span class="number">100</span>,anchor=<span class="string">'center'</span>)</span><br><span class="line">    <span class="comment"># 设置列宽度，列名</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> column_list:</span><br><span class="line">        table_table.column(i, width=<span class="number">100</span>,anchor=<span class="string">'center'</span>)</span><br><span class="line">        table_table.heading(i, text=i)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 给表格添加数据</span></span><br><span class="line">    i = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> key,values <span class="keyword">in</span> x.Table.items():</span><br><span class="line">        column_tup = list()</span><br><span class="line">        <span class="keyword">for</span> v <span class="keyword">in</span> values.values():</span><br><span class="line">            <span class="keyword">if</span> v:</span><br><span class="line">                column_tup.append(v)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                column_tup.append(<span class="string">""</span>)</span><br><span class="line">        table_table.insert(<span class="string">''</span>,i,text=key,values=column_tup)</span><br><span class="line">        i = i+<span class="number">1</span></span><br><span class="line">           </span><br><span class="line"></span><br><span class="line"><span class="comment"># gui界面</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    Tset = []</span><br><span class="line">    NTset = []</span><br><span class="line">    S = <span class="string">"S"</span></span><br><span class="line">    Production = dict()</span><br><span class="line">    firstset = &#123;&#125;</span><br><span class="line">    followset = &#123;&#125;</span><br><span class="line">    Table = &#123;&#125;</span><br><span class="line">    x = LL1(Tset, NTset, S, Production, firstset,</span><br><span class="line">            followset, Table)   <span class="comment"># 一个窗体，对应一个LL1类</span></span><br><span class="line"></span><br><span class="line">    root = tkinter.Tk()</span><br><span class="line">    root.title(<span class="string">"LL(1)分析器"</span>)</span><br><span class="line">    root.geometry(<span class="string">'600x500'</span>)</span><br><span class="line">    root.resizable(<span class="number">0</span>, <span class="number">0</span>)  <span class="comment"># 防止用户调整尺寸</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 词法文件框</span></span><br><span class="line">    LB_txt1 = tkinter.Listbox(root, height=<span class="number">19</span>, width=<span class="number">23</span>, bd=<span class="number">2.5</span>)</span><br><span class="line">    LB_txt1.insert(<span class="number">0</span>, <span class="string">"文法产生式:"</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 消除左递归框</span></span><br><span class="line">    LB_txt2 = tkinter.Listbox(root, bd=<span class="number">2.5</span>, height=<span class="number">12</span>, width=<span class="number">28</span>)</span><br><span class="line">    LB_txt2.insert(<span class="number">0</span>, <span class="string">"消除左递归后的文法产生式："</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 消除左因子框</span></span><br><span class="line">    LB_txt3 = tkinter.Listbox(root, bd=<span class="number">2.5</span>, height=<span class="number">12</span>, width=<span class="number">28</span>)</span><br><span class="line">    LB_txt3.insert(<span class="number">0</span>, <span class="string">"消除左因子后的文法产生式："</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># first集合框</span></span><br><span class="line">    LB_first = tkinter.Listbox(root, bd=<span class="number">2.5</span>, height=<span class="number">12</span>, width=<span class="number">28</span>)</span><br><span class="line">    LB_first.insert(<span class="number">0</span>, <span class="string">"FIRST集:"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># follow集合框</span></span><br><span class="line">    LB_follow = tkinter.Listbox(root, bd=<span class="number">2.5</span>, height=<span class="number">12</span>, width=<span class="number">28</span>)</span><br><span class="line">    LB_follow.insert(<span class="number">0</span>, <span class="string">"FOLLOW集:"</span>)</span><br><span class="line">    <span class="comment"># LB_follow.insert(1,"FOLLOW集:")</span></span><br><span class="line">    <span class="comment"># LB_follow.delete(1, tkinter.END)           # 删除列表的内容</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 输入框</span></span><br><span class="line">    input_text = tkinter.Entry(root, bd=<span class="number">2</span>, width=<span class="number">50</span>,fg=<span class="string">'red'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># btn width 85, height 35</span></span><br><span class="line">    </span><br><span class="line">    Btn_1 = tkinter.Button(root, command=<span class="keyword">lambda</span>: btn1(</span><br><span class="line">        LB_txt1, x), text=<span class="string">"打开文件"</span>, activebackground=<span class="string">"green"</span>, activeforeground=<span class="string">"white"</span>, bd=<span class="number">4</span>, width=<span class="number">10</span>)</span><br><span class="line">    Btn_2 = tkinter.Button(root, command=<span class="keyword">lambda</span>: btn2(</span><br><span class="line">        LB_txt2, x), text=<span class="string">"消除左递归"</span>, activebackground=<span class="string">"green"</span>, activeforeground=<span class="string">"white"</span>, bd=<span class="number">4</span>, width=<span class="number">10</span>)</span><br><span class="line">    Btn_3 = tkinter.Button(root, command=<span class="keyword">lambda</span>: btn3(</span><br><span class="line">        LB_txt3, x), text=<span class="string">"消除左因子"</span>, activebackground=<span class="string">"green"</span>,activeforeground=<span class="string">"white"</span>, bd=<span class="number">4</span>, width=<span class="number">10</span>)</span><br><span class="line">    Btn_4 = tkinter.Button(root, command=<span class="keyword">lambda</span>: btn4(</span><br><span class="line">        LB_first,x),text=<span class="string">"生成first集"</span>, activebackground=<span class="string">"green"</span>,activeforeground=<span class="string">"white"</span>, bd=<span class="number">4</span>, width=<span class="number">10</span>)</span><br><span class="line">    Btn_5 = tkinter.Button(root, command=<span class="keyword">lambda</span>: btn5(</span><br><span class="line">        LB_follow,x),text=<span class="string">"生成follow集"</span>, activebackground=<span class="string">"green"</span>,</span><br><span class="line">                           activeforeground=<span class="string">"white"</span>, bd=<span class="number">4</span>, width=<span class="number">10</span>)</span><br><span class="line">    Btn_6 = tkinter.Button(root, text=<span class="string">"生成Table表"</span>, activebackground=<span class="string">"green"</span>,</span><br><span class="line">            command=<span class="keyword">lambda</span>:btn6(x),activeforeground=<span class="string">"white"</span>, bd=<span class="number">4</span>, width=<span class="number">10</span>)</span><br><span class="line">    </span><br><span class="line">    Btn_7 = tkinter.Button(root, command=<span class="keyword">lambda</span>: is_legal(</span><br><span class="line">        input_text,x),text=<span class="string">"判定栈情况"</span>, activebackground=<span class="string">"green"</span>,activeforeground=<span class="string">"white"</span>, bd=<span class="number">4</span>, width=<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 定位</span></span><br><span class="line">    input_text.place(x=<span class="number">200</span>, y=<span class="number">460</span>,height=<span class="number">30</span>)</span><br><span class="line">    LB_txt1.place(x=<span class="number">5</span>, y=<span class="number">0</span>)</span><br><span class="line">    LB_txt2.place(x=<span class="number">172</span>, y=<span class="number">0</span>)</span><br><span class="line">    LB_txt3.place(x=<span class="number">377</span>, y=<span class="number">0</span>)</span><br><span class="line">    LB_first.place(x=<span class="number">172</span>, y=<span class="number">230</span>)</span><br><span class="line">    LB_follow.place(x=<span class="number">377</span>, y=<span class="number">230</span>)</span><br><span class="line">    Btn_1.place(x=<span class="number">5</span>, y=<span class="number">350</span>)</span><br><span class="line">    Btn_2.place(x=<span class="number">5</span>, y=<span class="number">385</span>)</span><br><span class="line">    Btn_3.place(x=<span class="number">90</span>, y=<span class="number">385</span>)</span><br><span class="line">    Btn_4.place(x=<span class="number">5</span>, y=<span class="number">420</span>)</span><br><span class="line">    Btn_5.place(x=<span class="number">90</span>, y=<span class="number">420</span>)</span><br><span class="line">    Btn_6.place(x=<span class="number">5</span>, y=<span class="number">455</span>)</span><br><span class="line">    Btn_7.place(x=<span class="number">90</span>, y=<span class="number">455</span>)</span><br><span class="line"></span><br><span class="line">    root.mainloop()</span><br><span class="line">    print(x.Table)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    main()</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    <span class="comment"># dict不支持下标索引</span></span><br><span class="line"></span><br><span class="line">    <span class="string">"""    </span></span><br><span class="line"><span class="string">    测试样例</span></span><br><span class="line"><span class="string">    S-&gt;Qc|c</span></span><br><span class="line"><span class="string">    Q-&gt;Rb|b</span></span><br><span class="line"><span class="string">    R-&gt;Sa|a</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    S-&gt;S+S|S-S|S*S|S/S| (S) | I</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    S-&gt;TS'</span></span><br><span class="line"><span class="string">    S'-&gt;+TS'|ε</span></span><br><span class="line"><span class="string">    T-&gt;FT'</span></span><br><span class="line"><span class="string">    T'-&gt;*FT'|ε</span></span><br><span class="line"><span class="string">    F-&gt;(S)|i</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    A-&gt;ab1 | ab2 | Dc | Ac |Acc  ==&gt;消除左递归新生成的生成式，还有可能存在最左公因子</span></span><br><span class="line"><span class="string">    D-&gt;ad                             #消除所以消除左递归新的终结符为A',最左公因子用A''</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    A-&gt;aB|abD|abDE ==》这种情况公因子怎么提取。。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    S-&gt;ac|abd|cc|cce</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    S-&gt;LA</span></span><br><span class="line"><span class="string">    L-&gt;i:|ε</span></span><br><span class="line"><span class="string">    A-&gt;i=e</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    注意！！！：</span></span><br><span class="line"><span class="string">    文法开始符一定要以S开头！！！！！！</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    """</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="测试文件（-txt）"><a href="#测试文件（-txt）" class="headerlink" title="测试文件（.txt）"></a>测试文件（.txt）</h3><p>==注意，一定文法开始符一定是要S，不能是其他字符==。<del>忘记优化了</del></p>
+<figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">S-&gt;TS'</span><br><span class="line">S'-&gt;+TS'|<span class="type">ε</span></span><br><span class="line"><span class="type">T</span>-&gt;FT'</span><br><span class="line">T'-&gt;*FT'|<span class="type">ε</span></span><br><span class="line"><span class="type">F</span>-&gt;(S)|<span class="type">i</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>实验原理还易理解，但是后期突然加上界面化，就导致设计的函数不太合理，存在冗余，所以还是要好好思考项目的架构，各个函数模块的功能。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div id="reward-container">
+  <div>你可以对我打赏de~阿里嘎多~</div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+
+    
+      
+      
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/微信收款码.jpg" alt="陈小坚(｀・ω・´) 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+      
+      
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/支付宝收款码.jpg" alt="陈小坚(｀・ω・´) 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+    <div>
+        <p id="div-border-left-red">
+       <b>本文基于<a target="_blank" title="Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)" href="http://creativecommons.org/licenses/by-sa/4.0/"> 知识共享署名-相同方式共享 4.0 </a>国际许可协议发布</b><br>
+        <span>
+        <b>本文地址：</b><a href="/编译原理-python实现LL1分析法/" title="编译原理-python实现LL1分析法">http://chenchenxiaojian.github.io/编译原理-python实现LL1分析法/</a><br><b>转载请注明出处，谢谢！</b>
+        </span>
+        </p>
+    </div>
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/编译原理/" rel="tag"><i class="fa fa-google"></i> 编译原理</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/javascript-原生javascript实现节奏大师小游戏/" rel="next" title="javascript-原生javascript实现节奏大师小游戏">
+                <i class="fa fa-chevron-left"></i> javascript-原生javascript实现节奏大师小游戏
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+            <a href="/">
+              <img class="site-author-image" itemprop="image" src="/images/头像.jpg" alt="陈小坚(｀・ω・´)">
+                </a>
+            
+              <p class="site-author-name" itemprop="name">陈小坚(｀・ω・´)</p>
+              <div class="site-description motion-element" itemprop="description">你我只是个普通人，活着就好</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">145</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">41</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/chenchenxiaojian" title="GitHub &rarr; https://github.com/chenchenxiaojian" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://me.csdn.net/weixin_42100456" title="CSDN &rarr; https://me.csdn.net/weixin_42100456" rel="noopener" target="_blank"><i class="fa fa-fw fa-copyright"></i>CSDN</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://github.com/chenchenxiaojian" title="https://github.com/chenchenxiaojian" rel="noopener" target="_blank">github链接</a>
+                  </li>
+                
+              </ul>
+          <div id="days"></div>
+<script>
+function show_date_time(){
+    window.setTimeout("show_date_time()", 1000);
+    BirthDay=new Date("07/09/2019 15:13:14");
+    today=new Date();
+    timeold=(today.getTime()-BirthDay.getTime());
+    sectimeold=timeold/1000
+    secondsold=Math.floor(sectimeold);
+    msPerDay=24*60*60*1000
+    e_daysold=timeold/msPerDay
+    daysold=Math.floor(e_daysold);
+    e_hrsold=(e_daysold-daysold)*24;
+    hrsold=setzero(Math.floor(e_hrsold));
+    e_minsold=(e_hrsold-hrsold)*60;
+    minsold=setzero(Math.floor((e_hrsold-hrsold)*60));
+    seconds=setzero(Math.floor((e_minsold-minsold)*60));
+    document.getElementById('days').innerHTML="已运行 "+daysold+" 天 "+hrsold+" 小时 "+minsold+" 分 "+seconds+" 秒";
+}
+function setzero(i) {
+    if (i<10) {
+        i="0" + i
+    };
+    return i;
+}
+show_date_time();
+</script>
+
+            </div>
+          
+
+           <div id="days"></div>
+<script>
+function show_date_time(){
+    window.setTimeout("show_date_time()", 1000);
+    BirthDay=new Date("07/09/2019 15:13:14");
+    today=new Date();
+    timeold=(today.getTime()-BirthDay.getTime());
+    sectimeold=timeold/1000
+    secondsold=Math.floor(sectimeold);
+    msPerDay=24*60*60*1000
+    e_daysold=timeold/msPerDay
+    daysold=Math.floor(e_daysold);
+    e_hrsold=(e_daysold-daysold)*24;
+    hrsold=setzero(Math.floor(e_hrsold));
+    e_minsold=(e_hrsold-hrsold)*60;
+    minsold=setzero(Math.floor((e_hrsold-hrsold)*60));
+    seconds=setzero(Math.floor((e_minsold-minsold)*60));
+    document.getElementById('days').innerHTML="已运行 "+daysold+" 天 "+hrsold+" 小时 "+minsold+" 分 "+seconds+" 秒";
+}
+function setzero(i) {
+    if (i<10) {
+        i="0" + i
+    };
+    return i;
+}
+show_date_time();
+</script>
+
+          
+            
+          
+          <div id="days"></div>
+<script>
+function show_date_time(){
+    window.setTimeout("show_date_time()", 1000);
+    BirthDay=new Date("07/09/2019 15:13:14");
+    today=new Date();
+    timeold=(today.getTime()-BirthDay.getTime());
+    sectimeold=timeold/1000
+    secondsold=Math.floor(sectimeold);
+    msPerDay=24*60*60*1000
+    e_daysold=timeold/msPerDay
+    daysold=Math.floor(e_daysold);
+    e_hrsold=(e_daysold-daysold)*24;
+    hrsold=setzero(Math.floor(e_hrsold));
+    e_minsold=(e_hrsold-hrsold)*60;
+    minsold=setzero(Math.floor((e_hrsold-hrsold)*60));
+    seconds=setzero(Math.floor((e_minsold-minsold)*60));
+    document.getElementById('days').innerHTML="已运行 "+daysold+" 天 "+hrsold+" 小时 "+minsold+" 分 "+seconds+" 秒";
+}
+function setzero(i) {
+    if (i<10) {
+        i="0" + i
+    };
+    return i;
+}
+show_date_time();
+</script>
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理"><span class="nav-number">1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验效果"><span class="nav-number">2.</span> <span class="nav-text">实验效果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#源代码（main-py）"><span class="nav-number">3.</span> <span class="nav-text">源代码（main.py）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试文件（-txt）"><span class="nav-number">4.</span> <span class="nav-text">测试文件（.txt）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈小坚(｀・ω・´)</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">386k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">5:51</span>
+  
+</div>
+
+
+
+
+
+
+
+
+<span id="busuanzi_container_site_uv">
+  本站访问次数：<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+</span>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.2.0"></script>
+
+  <script src="/js/motion.js?v=7.2.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.2.0"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.2.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.2.0"></script>
+<script src="/js/post-details.js?v=7.2.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.2.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'I6YGjUHQLjiei2DzlORmqtUI-gzGzoHsz',
+    appKey: '6PIjsl6GHSsO2HM0dSIcTXcS',
+    placeholder: 'gogogogo!!!',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn'
+  });
+</script>
+
+
+
+
+  
+
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+        // ref: https://github.com/ForbesLindesay/unescape-html
+        var unescapeHtml = function(html) {
+          return String(html)
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, '\'')
+            .replace(/&#x3A;/g, ':')
+            // replace all the other &#x; chars
+            .replace(/&#(\d+);/g, function (m, p) { return String.fromCharCode(p); })
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&amp;/g, '&');
+        };
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                content = unescapeHtml(content);
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+  <script>
+    
+    
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+<script>
+  $('.highlight').not('.gist .highlight').each(function(i, e) {
+    var $wrap = $('<div>').addClass('highlight-wrap');
+    $(e).after($wrap);
+    $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+      var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+        return $(e).text();
+      }).toArray().join('\n');
+      var ta = document.createElement('textarea');
+      var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+      ta.style.top = yPosition + 'px'; // Prevent page scroll
+      ta.style.position = 'absolute';
+      ta.style.opacity = '0';
+      ta.readOnly = true;
+      ta.value = code;
+      document.body.appendChild(ta);
+      const selection = document.getSelection();
+      const selected = selection.rangeCount > 0 ? selection.getRangeAt(0) : false;
+      ta.select();
+      ta.setSelectionRange(0, code.length);
+      ta.readOnly = false;
+      var result = document.execCommand('copy');
+      
+        if (result) $(this).text('复制成功');
+        else $(this).text('复制失败');
+      
+      ta.blur(); // For iOS
+      $(this).blur();
+      if (selected) {
+        selection.removeAllRanges();
+        selection.addRange(selected);
+      }
+    })).on('mouseleave', function(e) {
+      var $b = $(this).find('.copy-btn');
+      setTimeout(function() {
+        $b.text('复制');
+      }, 300);
+    }).append(e);
+  })
+</script>
+
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>

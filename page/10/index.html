@@ -277,7 +277,7 @@
       
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">37</span></a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">41</span></a>
 
   </li>
         
@@ -295,7 +295,7 @@
       
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">51</span></a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">53</span></a>
 
   </li>
         
@@ -313,7 +313,7 @@
       
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">131</span></a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">145</span></a>
 
   </li>
         
@@ -412,7 +412,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://chenchenxiaojian.github.io/python-numpy基础01/">
+    <link itemprop="mainEntityOfPage" href="http://chenchenxiaojian.github.io/读者写者问题-读者优先/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="陈小坚(｀・ω・´)">
@@ -432,7 +432,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/python-numpy基础01/" class="post-title-link" itemprop="url">python——numpy基础01</a>
+                <a href="/读者写者问题-读者优先/" class="post-title-link" itemprop="url">读者写者问题</a>
               
             
           </h1>
@@ -457,7 +457,7 @@
                 
               
 
-              <time title="创建时间：2019-10-01 20:50:23" itemprop="dateCreated datePublished" datetime="2019-10-01T20:50:23+08:00">2019-10-01</time>
+              <time title="创建时间：2019-11-29 12:48:50" itemprop="dateCreated datePublished" datetime="2019-11-29T12:48:50+08:00">2019-11-29</time>
             </span>
           
 
@@ -472,7 +472,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-10-09 16:25:51" itemprop="dateModified" datetime="2019-10-09T16:25:51+08:00">2019-10-09</time>
+                <time title="修改时间：2019-12-27 10:27:37" itemprop="dateModified" datetime="2019-12-27T10:27:37+08:00">2019-12-27</time>
               </span>
             
           
@@ -486,14 +486,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python数据分析/" itemprop="url" rel="index"><span itemprop="name">Python数据分析</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/操作系统/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python数据分析/numpy/" itemprop="url" rel="index"><span itemprop="name">numpy</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/操作系统/进程管理/" itemprop="url" rel="index"><span itemprop="name">进程管理</span></a></span>
 
                 
                 
@@ -511,8 +511,8 @@
                 </span>
             
                 <span class="post-meta-item-text">评论数：</span>
-                <a href="/python-numpy基础01/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/python-numpy基础01/" itemprop="commentCount"></span>
+                <a href="/读者写者问题-读者优先/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/读者写者问题-读者优先/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -532,7 +532,7 @@
               
                 <span class="post-meta-item-text">本文字数：</span>
               
-              <span title="本文字数">12k</span>
+              <span title="本文字数">3.3k</span>
             </span>
           
 
@@ -544,7 +544,7 @@
               
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
               
-              <span title="阅读时长">11 分钟</span>
+              <span title="阅读时长">3 分钟</span>
             </span>
           
 
@@ -566,37 +566,22 @@
         
           
             <p>
-              数组对象常用属性
+              读者写者问题
+进程互斥访问有限资源的同步问题
 
+问题：允许多个进程同时读取文件， 但是如果有一个进程在写文件，那么就不允许其他进程写或者是读这个文件
+读者优先
+读者优先就是只有当所有的读者都完成了读文件的操作后，才能让写进程访问文件
 
-属性
-说明
-
-
-
-dtype
-返回数组中元素的类型
-
-
-shape
-返回由整数组成的元组，元组中的每个整数依次对应数组的每个轴的元素个数
-
-
-size
-返回数组中元素的个数
-
-
-ndim
-返回数组的维度
-
-
-函数创建数组array()data = np.array([1,2,3
+实现方法：
+readcount:读者计数器，初值为0
+rmute
               ...
             </p>
           <!--noindex-->
           
             <div class="post-button text-center">
-              <a class="btn" href="/python-numpy基础01/#more" rel="contents">
+              <a class="btn" href="/读者写者问题-读者优先/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -664,7 +649,7 @@ ndim
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://chenchenxiaojian.github.io/linux下jupyter-notebook的使用出现的问题/">
+    <link itemprop="mainEntityOfPage" href="http://chenchenxiaojian.github.io/背包问题/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="陈小坚(｀・ω・´)">
@@ -684,7 +669,7 @@ ndim
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/linux下jupyter-notebook的使用出现的问题/" class="post-title-link" itemprop="url">linux下jupyter_notebook的使用出现的问题</a>
+                <a href="/背包问题/" class="post-title-link" itemprop="url">背包问题</a>
               
             
           </h1>
@@ -709,7 +694,7 @@ ndim
                 
               
 
-              <time title="创建时间：2019-10-01 09:01:06" itemprop="dateCreated datePublished" datetime="2019-10-01T09:01:06+08:00">2019-10-01</time>
+              <time title="创建时间：2019-11-21 10:55:28" itemprop="dateCreated datePublished" datetime="2019-11-21T10:55:28+08:00">2019-11-21</time>
             </span>
           
 
@@ -724,239 +709,7 @@ ndim
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-10-02 00:03:36" itemprop="dateModified" datetime="2019-10-02T00:03:36+08:00">2019-10-02</time>
-              </span>
-            
-          
-
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python数据分析/" itemprop="url" rel="index"><span itemprop="name">Python数据分析</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python数据分析/配置问题/" itemprop="url" rel="index"><span itemprop="name">配置问题</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/linux下jupyter-notebook的使用出现的问题/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/linux下jupyter-notebook的使用出现的问题/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          <br>
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">本文字数：</span>
-              
-              <span title="本文字数">121</span>
-            </span>
-          
-
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              
-              <span title="阅读时长">1 分钟</span>
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>
-              针对鱼linux,首先这个jupyter ntebook新建一个python3的文件出现error,可能是由于防火墙的原因，关闭防火墙，或者开放8888端口
-systemctl stop firewall.service
-
-啊啊啊啊啊啊啊啊
-
-              
-            </p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/linux下jupyter-notebook的使用出现的问题/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-    <div>
-        <p id="div-border-left-red">
-       <b>本文基于<a target="_blank" title="Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)" href="http://creativecommons.org/licenses/by-sa/4.0/"> 知识共享署名-相同方式共享 4.0 </a>国际许可协议发布</b><br>
-        <span>
-        <b>本文地址：</b><a href="/page/10/index.html" title></a><br><b>转载请注明出处，谢谢！</b>
-        </span>
-        </p>
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://chenchenxiaojian.github.io/高精度算法/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="陈小坚(｀・ω・´)">
-      <meta itemprop="description" content="你我只是个普通人，活着就好">
-      <meta itemprop="image" content="/images/头像.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="陈小坚の博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/高精度算法/" class="post-title-link" itemprop="url">高精度算法</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-
-          
-          
-          
-
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-09-28 22:12:15" itemprop="dateCreated datePublished" datetime="2019-09-28T22:12:15+08:00">2019-09-28</time>
-            </span>
-          
-
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-09-29 18:42:20" itemprop="dateModified" datetime="2019-09-29T18:42:20+08:00">2019-09-29</time>
+                <time title="修改时间：2019-11-24 21:08:00" itemprop="dateModified" datetime="2019-11-24T21:08:00+08:00">2019-11-24</time>
               </span>
             
           
@@ -977,7 +730,14 @@ systemctl stop firewall.service
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/算法/高精度/" itemprop="url" rel="index"><span itemprop="name">高精度</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/算法/动态规划/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/算法/动态规划/背包问题/" itemprop="url" rel="index"><span itemprop="name">背包问题</span></a></span>
 
                 
                 
@@ -995,8 +755,486 @@ systemctl stop firewall.service
                 </span>
             
                 <span class="post-meta-item-text">评论数：</span>
-                <a href="/高精度算法/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/高精度算法/" itemprop="commentCount"></span>
+                <a href="/背包问题/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/背包问题/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          <br>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">本文字数：</span>
+              
+              <span title="本文字数">1.2k</span>
+            </span>
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              
+              <span title="阅读时长">1 分钟</span>
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>
+              定义
+背包问题（Knapsack problem）是一种组合优化的NP完全问题，而NP完全问题暂时还看不懂。问题 可以描述为：给定一组物品，每种物品都有自己的重量和价格，在限定的总重量内，我们如何选择，才能使得物品的总价格最高。 
+
+01背包
+特点是每种物品仅有一件，选择放或者不放
+
+f[i][v]
+              ...
+            </p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/背包问题/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+    <div>
+        <p id="div-border-left-red">
+       <b>本文基于<a target="_blank" title="Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)" href="http://creativecommons.org/licenses/by-sa/4.0/"> 知识共享署名-相同方式共享 4.0 </a>国际许可协议发布</b><br>
+        <span>
+        <b>本文地址：</b><a href="/page/10/index.html" title></a><br><b>转载请注明出处，谢谢！</b>
+        </span>
+        </p>
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://chenchenxiaojian.github.io/python网络爬虫之正则表达式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="陈小坚(｀・ω・´)">
+      <meta itemprop="description" content="你我只是个普通人，活着就好">
+      <meta itemprop="image" content="/images/头像.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="陈小坚の博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/python网络爬虫之正则表达式/" class="post-title-link" itemprop="url">python网络爬虫之正则表达式</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-11-16 14:44:46" itemprop="dateCreated datePublished" datetime="2019-11-16T14:44:46+08:00">2019-11-16</time>
+            </span>
+          
+
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-01-04 09:51:42" itemprop="dateModified" datetime="2020-01-04T09:51:42+08:00">2020-01-04</time>
+              </span>
+            
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/python网络爬虫/" itemprop="url" rel="index"><span itemprop="name">python网络爬虫</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/python网络爬虫之正则表达式/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/python网络爬虫之正则表达式/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          <br>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">本文字数：</span>
+              
+              <span title="本文字数">3.5k</span>
+            </span>
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              
+              <span title="阅读时长">3 分钟</span>
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>
+              常用的正则表达式符号
+
+
+符号
+含义
+例子
+匹配结果
+
+
+
+*
+匹配前面的字符，子表达式或者括号里的字符0次或者多次
+a*b*
+aaaaaa, aaabbbb,bbbbb
+
+
++
+匹配前面的字符，子表达式或者括号里的字符至少一次
+a+b+
+aaaaaaaaaaabb,aaabbbbb,abbbbbb
+              ...
+            </p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/python网络爬虫之正则表达式/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+    <div>
+        <p id="div-border-left-red">
+       <b>本文基于<a target="_blank" title="Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)" href="http://creativecommons.org/licenses/by-sa/4.0/"> 知识共享署名-相同方式共享 4.0 </a>国际许可协议发布</b><br>
+        <span>
+        <b>本文地址：</b><a href="/page/10/index.html" title></a><br><b>转载请注明出处，谢谢！</b>
+        </span>
+        </p>
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://chenchenxiaojian.github.io/【洛谷】P1316丢瓶盖/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="陈小坚(｀・ω・´)">
+      <meta itemprop="description" content="你我只是个普通人，活着就好">
+      <meta itemprop="image" content="/images/头像.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="陈小坚の博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/【洛谷】P1316丢瓶盖/" class="post-title-link" itemprop="url">【洛谷】P1316丢瓶盖</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-11-15 10:06:19 / 修改时间：10:26:10" itemprop="dateCreated datePublished" datetime="2019-11-15T10:06:19+08:00">2019-11-15</time>
+            </span>
+          
+
+          
+            
+
+            
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/OJ/" itemprop="url" rel="index"><span itemprop="name">OJ</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/OJ/洛谷/" itemprop="url" rel="index"><span itemprop="name">洛谷</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/算法/" itemprop="url" rel="index"><span itemprop="name">算法</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/算法/二分答案/" itemprop="url" rel="index"><span itemprop="name">二分答案</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/【洛谷】P1316丢瓶盖/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/【洛谷】P1316丢瓶盖/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1050,16 +1288,15 @@ systemctl stop firewall.service
         
           
             <p>
-              高精度乘法（无符号）
-算法的过程就是模拟我们手算乘法的过程
-
-#include &lt;iostream&gt;#include &lt;string&gt;using namespace std;//高精度乘法int main()&#123;	string a, b;	int arr[200];	
+              题目描述陶陶是个贪玩的孩子，他在地上丢了A个瓶盖，为了简化问题，我们可以当作这A个瓶盖丢在一条直线上，现在他想从这些瓶盖里找出B个，使得距离最近的2个距离最大，他想知道，最大可以到多少呢？
+输入格式第一行，两个整数，A,B。（B&lt;=A&lt;=100000）
+第二行，A个整数，分别为这A个瓶盖
               ...
             </p>
           <!--noindex-->
           
             <div class="post-button text-center">
-              <a class="btn" href="/高精度算法/#more" rel="contents">
+              <a class="btn" href="/【洛谷】P1316丢瓶盖/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1127,7 +1364,7 @@ systemctl stop firewall.service
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://chenchenxiaojian.github.io/linux的http服务/">
+    <link itemprop="mainEntityOfPage" href="http://chenchenxiaojian.github.io/python-pandas-常用方法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="陈小坚(｀・ω・´)">
@@ -1147,7 +1384,7 @@ systemctl stop firewall.service
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/linux的http服务/" class="post-title-link" itemprop="url">linux的http服务</a>
+                <a href="/python-pandas-常用方法/" class="post-title-link" itemprop="url">python-pandas-常用方法</a>
               
             
           </h1>
@@ -1172,13 +1409,23 @@ systemctl stop firewall.service
                 
               
 
-              <time title="创建时间：2019-09-27 23:07:32 / 修改时间：23:32:30" itemprop="dateCreated datePublished" datetime="2019-09-27T23:07:32+08:00">2019-09-27</time>
+              <time title="创建时间：2019-11-01 16:47:33" itemprop="dateCreated datePublished" datetime="2019-11-01T16:47:33+08:00">2019-11-01</time>
             </span>
           
 
           
             
 
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-11-04 19:51:45" itemprop="dateModified" datetime="2019-11-04T19:51:45+08:00">2019-11-04</time>
+              </span>
             
           
 
@@ -1191,14 +1438,14 @@ systemctl stop firewall.service
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python数据分析/" itemprop="url" rel="index"><span itemprop="name">Python数据分析</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/http/" itemprop="url" rel="index"><span itemprop="name">http</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python数据分析/pandas/" itemprop="url" rel="index"><span itemprop="name">pandas</span></a></span>
 
                 
                 
@@ -1216,8 +1463,8 @@ systemctl stop firewall.service
                 </span>
             
                 <span class="post-meta-item-text">评论数：</span>
-                <a href="/linux的http服务/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/linux的http服务/" itemprop="commentCount"></span>
+                <a href="/python-pandas-常用方法/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/python-pandas-常用方法/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1237,7 +1484,7 @@ systemctl stop firewall.service
               
                 <span class="post-meta-item-text">本文字数：</span>
               
-              <span title="本文字数">524</span>
+              <span title="本文字数">5.4k</span>
             </span>
           
 
@@ -1249,7 +1496,7 @@ systemctl stop firewall.service
               
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
               
-              <span title="阅读时长">1 分钟</span>
+              <span title="阅读时长">5 分钟</span>
             </span>
           
 
@@ -1271,25 +1518,13 @@ systemctl stop firewall.service
         
           
             <p>
-              http服务
-配置文件：/etc/httpd/conf/httpd.conf
-
-
-配置文件内容：
-
-ServerRoot “/etc/httpd”  表示主要配置文件
-
-DocumentRoot “/var/www/html”  表示访问主目录的路径
-
-Listen 80    监听端口
-
-&lt;
+              reindex重新索引import numpy as np  import pandas as pd obj = pd.Series([1,2,3,4],index=['a','c','d','b'])print(obj)"""a    1c    2d    3b    4dtype: int64
               ...
             </p>
           <!--noindex-->
           
             <div class="post-button text-center">
-              <a class="btn" href="/linux的http服务/#more" rel="contents">
+              <a class="btn" href="/python-pandas-常用方法/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1357,7 +1592,7 @@ Listen 80    监听端口
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://chenchenxiaojian.github.io/进程管理/">
+    <link itemprop="mainEntityOfPage" href="http://chenchenxiaojian.github.io/【洛谷】P1025数的划分/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="陈小坚(｀・ω・´)">
@@ -1377,7 +1612,7 @@ Listen 80    监听端口
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/进程管理/" class="post-title-link" itemprop="url">Linux进程管理</a>
+                <a href="/【洛谷】P1025数的划分/" class="post-title-link" itemprop="url">【洛谷】P1025数的划分</a>
               
             
           </h1>
@@ -1402,7 +1637,7 @@ Listen 80    监听端口
                 
               
 
-              <time title="创建时间：2019-09-24 08:45:18" itemprop="dateCreated datePublished" datetime="2019-09-24T08:45:18+08:00">2019-09-24</time>
+              <time title="创建时间：2019-11-01 13:45:14" itemprop="dateCreated datePublished" datetime="2019-11-01T13:45:14+08:00">2019-11-01</time>
             </span>
           
 
@@ -1417,7 +1652,7 @@ Listen 80    监听端口
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-10-03 20:07:38" itemprop="dateModified" datetime="2019-10-03T20:07:38+08:00">2019-10-03</time>
+                <time title="修改时间：2019-11-15 10:07:58" itemprop="dateModified" datetime="2019-11-15T10:07:58+08:00">2019-11-15</time>
               </span>
             
           
@@ -1431,14 +1666,28 @@ Listen 80    监听端口
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/OJ/" itemprop="url" rel="index"><span itemprop="name">OJ</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/Linux进程管理/" itemprop="url" rel="index"><span itemprop="name">Linux进程管理</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/OJ/洛谷/" itemprop="url" rel="index"><span itemprop="name">洛谷</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/算法/" itemprop="url" rel="index"><span itemprop="name">算法</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/算法/递推与递归/" itemprop="url" rel="index"><span itemprop="name">递推与递归</span></a></span>
 
                 
                 
@@ -1456,701 +1705,8 @@ Listen 80    监听端口
                 </span>
             
                 <span class="post-meta-item-text">评论数：</span>
-                <a href="/进程管理/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/进程管理/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          <br>
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">本文字数：</span>
-              
-              <span title="本文字数">7k</span>
-            </span>
-          
-
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              
-              <span title="阅读时长">6 分钟</span>
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>
-              进程管理进程是运行中的可执行程序，一个程序有一个或多个进程进程：内存地址空间，安全属性，一个或多个线程，状态父进程可以创建子进程
-红帽7的第一个进程是systemd，所有进程都是第一个进程的后代，PID（进程id）,systemd的PID是1，PPID（父进程id）
-
-
-ps aux 查看所有终端，
-              ...
-            </p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/进程管理/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-    <div>
-        <p id="div-border-left-red">
-       <b>本文基于<a target="_blank" title="Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)" href="http://creativecommons.org/licenses/by-sa/4.0/"> 知识共享署名-相同方式共享 4.0 </a>国际许可协议发布</b><br>
-        <span>
-        <b>本文地址：</b><a href="/page/10/index.html" title></a><br><b>转载请注明出处，谢谢！</b>
-        </span>
-        </p>
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://chenchenxiaojian.github.io/Linux红帽比赛需要注意的问题/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="陈小坚(｀・ω・´)">
-      <meta itemprop="description" content="你我只是个普通人，活着就好">
-      <meta itemprop="image" content="/images/头像.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="陈小坚の博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/Linux红帽比赛需要注意的问题/" class="post-title-link" itemprop="url">Linux红帽比赛需要注意的问题</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-
-          
-          
-          
-
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-09-21 15:50:00" itemprop="dateCreated datePublished" datetime="2019-09-21T15:50:00+08:00">2019-09-21</time>
-            </span>
-          
-
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-10-06 20:25:57" itemprop="dateModified" datetime="2019-10-06T20:25:57+08:00">2019-10-06</time>
-              </span>
-            
-          
-
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/Linux需要注意的问题/" itemprop="url" rel="index"><span itemprop="name">Linux需要注意的问题</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/Linux红帽比赛需要注意的问题/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/Linux红帽比赛需要注意的问题/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          <br>
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">本文字数：</span>
-              
-              <span title="本文字数">1.6k</span>
-            </span>
-          
-
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              
-              <span title="阅读时长">1 分钟</span>
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>
-              查看本机的语言 echo $LANG，locale （查看本机安装的语言包）也可以设置ssh工具的语言编码第0道题
-需要注意touch /.autorelabel的拼写
-修改网卡的网络连接的配置信息，如果网卡的名字是system eth0,那么nmcli con modify时 要加双引号”
-con
-              ...
-            </p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/Linux红帽比赛需要注意的问题/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-    <div>
-        <p id="div-border-left-red">
-       <b>本文基于<a target="_blank" title="Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)" href="http://creativecommons.org/licenses/by-sa/4.0/"> 知识共享署名-相同方式共享 4.0 </a>国际许可协议发布</b><br>
-        <span>
-        <b>本文地址：</b><a href="/page/10/index.html" title></a><br><b>转载请注明出处，谢谢！</b>
-        </span>
-        </p>
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://chenchenxiaojian.github.io/Linux网络配置/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="陈小坚(｀・ω・´)">
-      <meta itemprop="description" content="你我只是个普通人，活着就好">
-      <meta itemprop="image" content="/images/头像.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="陈小坚の博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/Linux网络配置/" class="post-title-link" itemprop="url">Linux网络配置</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-
-          
-          
-          
-
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-09-21 09:31:23" itemprop="dateCreated datePublished" datetime="2019-09-21T09:31:23+08:00">2019-09-21</time>
-            </span>
-          
-
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-09-22 20:29:20" itemprop="dateModified" datetime="2019-09-22T20:29:20+08:00">2019-09-22</time>
-              </span>
-            
-          
-
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/网络配置/" itemprop="url" rel="index"><span itemprop="name">网络配置</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/Linux网络配置/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/Linux网络配置/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          <br>
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">本文字数：</span>
-              
-              <span title="本文字数">11k</span>
-            </span>
-          
-
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              
-              <span title="阅读时长">10 分钟</span>
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>
-              网络配置device 设备：有物理设备（ens33） 虚拟设备 （virbr0）一个设备可以有多个connect（连接），但是同一个时间只能激活一个连接，相当于一个网卡可以切换不同的网络配置
-
-网络管理 NetworkManager工具有nmcli , nmtui, nm-connection-ed
-              ...
-            </p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/Linux网络配置/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-    <div>
-        <p id="div-border-left-red">
-       <b>本文基于<a target="_blank" title="Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)" href="http://creativecommons.org/licenses/by-sa/4.0/"> 知识共享署名-相同方式共享 4.0 </a>国际许可协议发布</b><br>
-        <span>
-        <b>本文地址：</b><a href="/page/10/index.html" title></a><br><b>转载请注明出处，谢谢！</b>
-        </span>
-        </p>
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://chenchenxiaojian.github.io/时钟同步和定时任务/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="陈小坚(｀・ω・´)">
-      <meta itemprop="description" content="你我只是个普通人，活着就好">
-      <meta itemprop="image" content="/images/头像.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="陈小坚の博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/时钟同步和定时任务/" class="post-title-link" itemprop="url">时钟同步和定时任务</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-
-          
-          
-          
-
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-09-20 16:55:47" itemprop="dateCreated datePublished" datetime="2019-09-20T16:55:47+08:00">2019-09-20</time>
-            </span>
-          
-
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-09-27 22:24:29" itemprop="dateModified" datetime="2019-09-27T22:24:29+08:00">2019-09-27</time>
-              </span>
-            
-          
-
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/时钟同步和定时任务/" itemprop="url" rel="index"><span itemprop="name">时钟同步和定时任务</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/时钟同步和定时任务/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/时钟同步和定时任务/" itemprop="commentCount"></span>
+                <a href="/【洛谷】P1025数的划分/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/【洛谷】P1025数的划分/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -2204,20 +1760,19 @@ con
         
           
             <p>
-              时钟同步日志，多系统协作，分布式
-NTP（网络时钟协议）使用图形化连接到时钟服务器
-
-安装软件包 yum -y install system-config-date
-运行system-config-date system-config-date
-
-使用命令行连接到时钟服务器
-vim /etc/chr
+              题目描述将整数n分成k份，且每份不能为空，任意两个方案不相同(不考虑顺序)。
+例如：n=7，k=3，下面三种分法被认为是相同的。
+1,1,5 1,5,1 5,1,1
+问有多少种不同的分法。
+输入格式n,k (6&lt;n≤200，2≤k≤62  2≤k≤6)
+输出格式1个整数，即不同的分法。
+输入输
               ...
             </p>
           <!--noindex-->
           
             <div class="post-button text-center">
-              <a class="btn" href="/时钟同步和定时任务/#more" rel="contents">
+              <a class="btn" href="/【洛谷】P1025数的划分/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -2285,7 +1840,7 @@ vim /etc/chr
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://chenchenxiaojian.github.io/【洛谷】P1498南蛮图腾与杨辉三角的应用/">
+    <link itemprop="mainEntityOfPage" href="http://chenchenxiaojian.github.io/python-pandas-常用数据对象/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="陈小坚(｀・ω・´)">
@@ -2305,7 +1860,7 @@ vim /etc/chr
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/【洛谷】P1498南蛮图腾与杨辉三角的应用/" class="post-title-link" itemprop="url">【洛谷】P1498南蛮图腾与杨辉三角的应用</a>
+                <a href="/python-pandas-常用数据对象/" class="post-title-link" itemprop="url">python-pandas-常用数据对象</a>
               
             
           </h1>
@@ -2330,7 +1885,7 @@ vim /etc/chr
                 
               
 
-              <time title="创建时间：2019-09-19 22:16:22" itemprop="dateCreated datePublished" datetime="2019-09-19T22:16:22+08:00">2019-09-19</time>
+              <time title="创建时间：2019-10-29 22:34:45" itemprop="dateCreated datePublished" datetime="2019-10-29T22:34:45+08:00">2019-10-29</time>
             </span>
           
 
@@ -2345,7 +1900,7 @@ vim /etc/chr
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-10-03 20:00:53" itemprop="dateModified" datetime="2019-10-03T20:00:53+08:00">2019-10-03</time>
+                <time title="修改时间：2019-11-02 10:58:55" itemprop="dateModified" datetime="2019-11-02T10:58:55+08:00">2019-11-02</time>
               </span>
             
           
@@ -2359,14 +1914,14 @@ vim /etc/chr
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/OJ/" itemprop="url" rel="index"><span itemprop="name">OJ</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python数据分析/" itemprop="url" rel="index"><span itemprop="name">Python数据分析</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/OJ/洛谷/" itemprop="url" rel="index"><span itemprop="name">洛谷</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python数据分析/pandas/" itemprop="url" rel="index"><span itemprop="name">pandas</span></a></span>
 
                 
                 
@@ -2384,8 +1939,8 @@ vim /etc/chr
                 </span>
             
                 <span class="post-meta-item-text">评论数：</span>
-                <a href="/【洛谷】P1498南蛮图腾与杨辉三角的应用/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/【洛谷】P1498南蛮图腾与杨辉三角的应用/" itemprop="commentCount"></span>
+                <a href="/python-pandas-常用数据对象/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/python-pandas-常用数据对象/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -2405,7 +1960,7 @@ vim /etc/chr
               
                 <span class="post-meta-item-text">本文字数：</span>
               
-              <span title="本文字数">3.8k</span>
+              <span title="本文字数">6.1k</span>
             </span>
           
 
@@ -2417,7 +1972,7 @@ vim /etc/chr
               
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
               
-              <span title="阅读时长">3 分钟</span>
+              <span title="阅读时长">6 分钟</span>
             </span>
           
 
@@ -2439,13 +1994,16 @@ vim /etc/chr
         
           
             <p>
-              打印杨辉三角// P1498 南蛮图腾.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。//#include "pch.h"#include &lt;iostream&gt;using namespace std;int yhsj[15][15];int main()&#12
+              pandas常用数据对象Series
+表示一维数据
+
+import pandas as pdimport numpy as np data = np.array([1,2,3])data1 = pd.Series(data=data,index=['guangzhou','shenzhen','sh
               ...
             </p>
           <!--noindex-->
           
             <div class="post-button text-center">
-              <a class="btn" href="/【洛谷】P1498南蛮图腾与杨辉三角的应用/#more" rel="contents">
+              <a class="btn" href="/python-pandas-常用数据对象/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -2513,7 +2071,7 @@ vim /etc/chr
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://chenchenxiaojian.github.io/归并排序-逆序对/">
+    <link itemprop="mainEntityOfPage" href="http://chenchenxiaojian.github.io/python-numpy基础04/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="陈小坚(｀・ω・´)">
@@ -2533,7 +2091,7 @@ vim /etc/chr
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/归并排序-逆序对/" class="post-title-link" itemprop="url">归并排序--逆序对</a>
+                <a href="/python-numpy基础04/" class="post-title-link" itemprop="url">python-numpy基础04</a>
               
             
           </h1>
@@ -2558,7 +2116,7 @@ vim /etc/chr
                 
               
 
-              <time title="创建时间：2019-09-19 11:49:57" itemprop="dateCreated datePublished" datetime="2019-09-19T11:49:57+08:00">2019-09-19</time>
+              <time title="创建时间：2019-10-19 11:19:34" itemprop="dateCreated datePublished" datetime="2019-10-19T11:19:34+08:00">2019-10-19</time>
             </span>
           
 
@@ -2573,7 +2131,240 @@ vim /etc/chr
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-10-03 20:08:03" itemprop="dateModified" datetime="2019-10-03T20:08:03+08:00">2019-10-03</time>
+                <time title="修改时间：2019-10-20 11:25:03" itemprop="dateModified" datetime="2019-10-20T11:25:03+08:00">2019-10-20</time>
+              </span>
+            
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python数据分析/" itemprop="url" rel="index"><span itemprop="name">Python数据分析</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python数据分析/numpy/" itemprop="url" rel="index"><span itemprop="name">numpy</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/python-numpy基础04/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/python-numpy基础04/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          <br>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">本文字数：</span>
+              
+              <span title="本文字数">6.6k</span>
+            </span>
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              
+              <span title="阅读时长">6 分钟</span>
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>
+              矩阵创建矩阵的方式
+字符串作为参数
+矩阵作为参数
+数组作为参数
+
+import numpy as np a  = np.mat([1,2,3])print(a)print(a.shape)"""[[1 2 3]](1, 3)"""# 一个是矩阵,一个数组a = np.array([1,2,3])pr
+              ...
+            </p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/python-numpy基础04/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+    <div>
+        <p id="div-border-left-red">
+       <b>本文基于<a target="_blank" title="Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)" href="http://creativecommons.org/licenses/by-sa/4.0/"> 知识共享署名-相同方式共享 4.0 </a>国际许可协议发布</b><br>
+        <span>
+        <b>本文地址：</b><a href="/page/10/index.html" title></a><br><b>转载请注明出处，谢谢！</b>
+        </span>
+        </p>
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://chenchenxiaojian.github.io/【洛谷】P1045麦森数/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="陈小坚(｀・ω・´)">
+      <meta itemprop="description" content="你我只是个普通人，活着就好">
+      <meta itemprop="image" content="/images/头像.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="陈小坚の博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/【洛谷】P1045麦森数/" class="post-title-link" itemprop="url">【洛谷】P1045麦森数</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-10-17 22:30:54" itemprop="dateCreated datePublished" datetime="2019-10-17T22:30:54+08:00">2019-10-17</time>
+            </span>
+          
+
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-01-15 13:12:30" itemprop="dateModified" datetime="2020-01-15T13:12:30+08:00">2020-01-15</time>
               </span>
             
           
@@ -2594,13 +2385,6 @@ vim /etc/chr
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/算法/" itemprop="url" rel="index"><span itemprop="name">算法</span></a></span>
-
-                
-                
-                  ，
-                
-              
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/OJ/洛谷/" itemprop="url" rel="index"><span itemprop="name">洛谷</span></a></span>
 
                 
@@ -2608,14 +2392,14 @@ vim /etc/chr
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/算法/排序算法/" itemprop="url" rel="index"><span itemprop="name">排序算法</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/算法/" itemprop="url" rel="index"><span itemprop="name">算法</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/算法/排序算法/归并排序/" itemprop="url" rel="index"><span itemprop="name">归并排序</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/算法/数论/" itemprop="url" rel="index"><span itemprop="name">数论</span></a></span>
 
                 
                 
@@ -2633,8 +2417,8 @@ vim /etc/chr
                 </span>
             
                 <span class="post-meta-item-text">评论数：</span>
-                <a href="/归并排序-逆序对/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/归并排序-逆序对/" itemprop="commentCount"></span>
+                <a href="/【洛谷】P1045麦森数/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/【洛谷】P1045麦森数/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -2654,7 +2438,7 @@ vim /etc/chr
               
                 <span class="post-meta-item-text">本文字数：</span>
               
-              <span title="本文字数">1.7k</span>
+              <span title="本文字数">2.4k</span>
             </span>
           
 
@@ -2688,19 +2472,243 @@ vim /etc/chr
         
           
             <p>
-              归并排序将两个或两个以上的有序表合并成一个有序表的过程
-
-时间复杂度：O(nlog2n)
-空间复杂度：需要一个辅助数组空间，复杂度为O(n)
-
-
-题目描述猫猫TOM和小老鼠JERRY最近又较量上了，但是毕竟都是成年人，他们已经不喜欢再玩那种你追我赶的游戏，现在他们喜欢玩统计。最近，TOM老猫查阅到一
+              题目描述形如2P−12^{P}-12P−1的素数称为麦森数，这时PPP一定也是个素数。但反过来不一定，即如果PPP是个素数，2P−12^{P}-12P−1不一定也是素数。到1998年底，人们已找到了37个麦森数。最大的一个是P=3021377P=3021377P=3021377，它有909526位。
               ...
             </p>
           <!--noindex-->
           
             <div class="post-button text-center">
-              <a class="btn" href="/归并排序-逆序对/#more" rel="contents">
+              <a class="btn" href="/【洛谷】P1045麦森数/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+    <div>
+        <p id="div-border-left-red">
+       <b>本文基于<a target="_blank" title="Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)" href="http://creativecommons.org/licenses/by-sa/4.0/"> 知识共享署名-相同方式共享 4.0 </a>国际许可协议发布</b><br>
+        <span>
+        <b>本文地址：</b><a href="/page/10/index.html" title></a><br><b>转载请注明出处，谢谢！</b>
+        </span>
+        </p>
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://chenchenxiaojian.github.io/python网络爬虫/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="陈小坚(｀・ω・´)">
+      <meta itemprop="description" content="你我只是个普通人，活着就好">
+      <meta itemprop="image" content="/images/头像.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="陈小坚の博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/python网络爬虫/" class="post-title-link" itemprop="url">python网络爬虫</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-10-11 18:04:45" itemprop="dateCreated datePublished" datetime="2019-10-11T18:04:45+08:00">2019-10-11</time>
+            </span>
+          
+
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-10-22 17:33:49" itemprop="dateModified" datetime="2019-10-22T17:33:49+08:00">2019-10-22</time>
+              </span>
+            
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/python网络爬虫/" itemprop="url" rel="index"><span itemprop="name">python网络爬虫</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/python网络爬虫/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/python网络爬虫/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          <br>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">本文字数：</span>
+              
+              <span title="本文字数">122</span>
+            </span>
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              
+              <span title="阅读时长">1 分钟</span>
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>
+              请求头
+accept:文本的格式
+accept-coding:文本的编码格式
+connection:长链接，短链接
+cookie:做验证用的
+host：域名
+referer:表示从哪个网页跳转过来的
+user-agent:浏览器和用户的信息
+
+
+              
+            </p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/python网络爬虫/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -2757,7 +2765,7 @@ vim /etc/chr
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/9/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/11/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/9/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/11/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2803,7 +2811,7 @@ vim /etc/chr
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">131</span>
+                    <span class="site-state-item-count">145</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2922,7 +2930,11 @@ vim /etc/chr
                     
                       
                     
-                    <span class="site-state-item-count">51</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">53</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -3013,7 +3025,15 @@ vim /etc/chr
                     
                       
                     
-                    <span class="site-state-item-count">37</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">41</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -3203,7 +3223,7 @@ show_date_time();
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">316k</span>
+    <span title="站点总字数">386k</span>
   
 
   
@@ -3212,7 +3232,7 @@ show_date_time();
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">4:48</span>
+    <span title="站点阅读时长">5:51</span>
   
 </div>
 
@@ -3737,6 +3757,8 @@ show_date_time();
       
     
       
+        
+      
     
       
     
@@ -3750,6 +3772,46 @@ show_date_time();
     
   
 
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      document.getElementById(all[i].inputID + '-Frame').parentNode.className += ' has-jax';
+    }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
   
 
 
